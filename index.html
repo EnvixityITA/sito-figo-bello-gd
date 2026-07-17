@@ -216,7 +216,7 @@
             color: #fff; display: inline-flex; align-items: center; gap: 10px; margin: 10px 0;
         }
 
-        /* Nuova Roulette Casinò Slot */
+        /* Roulette Casinò Slot */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 2, 6, 0.9);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 1000;
@@ -266,11 +266,7 @@
 
 <div id="listPage" class="page active">
     <div class="card">
-        <div class="stats-bar">
-            <div><span style="opacity:0.5; display:block;" id="stLvlLabel">DEMONI</span><strong id="stTotal" style="font-size:1.2rem; color:var(--accent);">0</strong></div>
-            <div><span style="opacity:0.5; display:block;" id="stVerLabel">VERIFICATI</span><strong id="stVer" style="font-size:1.2rem;">0</strong></div>
-            <div><span style="opacity:0.5; display:block;" id="stFavLabel">PREFERITI</span><strong id="stFav" style="font-size:1.2rem; color:#ff4d6d;">0</strong></div>
-            <button id="btnAccountToggle" onclick="toggleAccountModal()" class="btn-custom" style="width: 100%; padding: 12px; margin-bottom: 15px; font-size: 0.85rem; border-radius: 14px; box-shadow: 0 4px 12px var(--accent-glow);">
+        <button id="btnAccountToggle" onclick="toggleAccountModal()" class="btn-custom" style="width: 100%; padding: 12px; margin-bottom: 15px; font-size: 0.85rem; border-radius: 14px; box-shadow: 0 4px 12px var(--accent-glow);">
             🌐 ACCOUNT: DISCONNESSO
         </button>
 
@@ -308,273 +304,13 @@
                 <p id="auth-msg" style="margin: 15px 0 0 0; font-size: 0.8rem; font-family: 'Syne', sans-serif; font-weight: 500; min-height: 16px; text-align: center;"></p>
             </div>
         </div>
-        ```
 
----
-
-### ⚡ PUNTO 2: Dove inserire lo Script (JavaScript)
-
-Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo script aggiornato **subito prima** di esso:
-
-```html
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { 
-        getAuth, 
-        createUserWithEmailAndPassword, 
-        signInWithEmailAndPassword, 
-        signOut, 
-        onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyBH2sXzuOfOpY2rOQNlS2zwyQnyfWy0DvA",
-        authDomain: "global-list-inv.firebaseapp.com",
-        projectId: "global-list-inv",
-        storageBucket: "global-list-inv.firebasestorage.app",
-        messagingSenderId: "517402636532",
-        appId: "1:517402636532:web:02c81482fe8b6367782ea1"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Elementi UI
-    const emailInput = document.getElementById('auth-email');
-    const passwordInput = document.getElementById('auth-password');
-    const authForm = document.getElementById('auth-form');
-    const loggedInfo = document.getElementById('user-logged-info');
-    const userEmailSpan = document.getElementById('user-display-email');
-    const msgEl = document.getElementById('auth-msg');
-    const btnAccountToggle = document.getElementById('btnAccountToggle');
-    const accountModal = document.getElementById('accountModal');
-
-    // Funzione globale per aprire/chiudere la finestra popup
-    window.toggleAccountModal = function() {
-        if (accountModal.style.display === 'none' || accountModal.style.display === '') {
-            accountModal.style.display = 'flex';
-        } else {
-            accountModal.style.display = 'none';
-            msgEl.innerText = ""; // Pulisce i messaggi alla chiusura
-        }
-    }
-
-    function mostraMessaggio(testo, isSuccesso) {
-        msgEl.innerText = testo;
-        msgEl.style.color = isSuccesso ? "#39ff14" : "#ff003c";
-        setTimeout(() => { msgEl.innerText = ""; }, 5000);
-    }
-
-    // Registrazione
-    window.registraUtente = async function() {
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-        if(!email || !password) return mostraMessaggio("❌ Inserisci email e password!", false);
-        if(password.length < 6) return mostraMessaggio("❌ Password di almeno 6 caratteri!", false);
-
-        try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            mostraMessaggio("✅ Registrato con successo!", true);
-            emailInput.value = ""; passwordInput.value = "";
-            setTimeout(() => toggleAccountModal(), 1500); // Chiude il popup dopo il successo
-        } catch (error) {
-            if(error.code === 'auth/email-already-in-use') mostraMessaggio("❌ Email già registrata!", false);
-            else if(error.code === 'auth/invalid-email') mostraMessaggio("❌ Formato email errato!", false);
-            else mostraMessaggio("❌ Errore di registrazione.", false);
-        }
-    }
-
-    // Login
-    window.accediUtente = async function() {
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-        if(!email || !password) return mostraMessaggio("❌ Inserisci dati!", false);
-
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            mostraMessaggio("⚡ Accesso eseguito!", true);
-            emailInput.value = ""; passwordInput.value = "";
-            setTimeout(() => toggleAccountModal(), 1500);
-        } catch (error) {
-            if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                mostraMessaggio("❌ Email o password errate!", false);
-            } else {
-                mostraMessaggio("❌ Errore di accesso.", false);
-            }
-        }
-    }
-
-    // Logout
-    window.disconnettiUtente = async function() {
-        try {
-            await signOut(auth);
-            mostraMessaggio("👋 Disconnesso/a!", true);
-            setTimeout(() => toggleAccountModal(), 1000);
-        } catch (error) {
-            mostraMessaggio("❌ Errore logout.", false);
-        }
-    }
-
-    // Cambia il testo del bottone principale in base allo stato dell'utente
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            authForm.style.display = 'none';
-            loggedInfo.style.display = 'flex';
-            userEmailSpan.innerText = user.email;
-            // Estrae l'username tagliando la parte dopo la chiocciola @ per renderlo pulito sul tasto
-            const username = user.email.split('@')[0];
-            btnAccountToggle.innerHTML = `👤 UTENTE: ${username.toUpperCase()}`;
-            btnAccountToggle.style.border = "1px solid #39ff14";
-            btnAccountToggle.style.boxShadow = "0 4px 12px rgba(57, 255, 20, 0.2)";
-        } else {
-            authForm.style.display = 'flex';
-            loggedInfo.style.display = 'none';
-            userEmailSpan.innerText = '';
-            btnAccountToggle.innerHTML = `🌐 ACCOUNT: DISCONNESSO`;
-            btnAccountToggle.style.border = "none";
-            btnAccountToggle.style.boxShadow = "0 4px 12px var(--accent-glow)";
-        }
-    });
-</script>
+        <div class="stats-bar">
+            <div><span style="opacity:0.5; display:block;" id="stLvlLabel">DEMONI</span><strong id="stTotal" style="font-size:1.2rem; color:var(--accent);">0</strong></div>
+            <div><span style="opacity:0.5; display:block;" id="stVerLabel">VERIFICATI</span><strong id="stVer" style="font-size:1.2rem;">0</strong></div>
+            <div><span style="opacity:0.5; display:block;" id="stFavLabel">PREFERITI</span><strong id="stFav" style="font-size:1.2rem; color:#ff4d6d;">0</strong></div>
         </div>
 
-        <div style="background: rgba(0,0,0,0.2); padding: 14px; border-radius: 18px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
-            <div style="font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 900; color: var(--accent); letter-spacing: 1px;">🌐 AREA ACCOUNT CLOUD</div>
-            
-            <div id="auth-form" style="display: flex; flex-direction: column; gap: 8px;">
-                <input type="email" id="auth-email" placeholder="Inserisci Email" 
-                       style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 12px; font-family: 'Syne', sans-serif; font-size: 0.85rem; outline: none; transition: 0.3s;"
-                       onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 10px var(--accent-glow)'" 
-                       onblur="this.style.borderColor='var(--border)'; this.style.boxShadow='none'">
-                <input type="password" id="auth-password" placeholder="Inserisci Password" 
-                       style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 12px; font-family: 'Syne', sans-serif; font-size: 0.85rem; outline: none; transition: 0.3s;"
-                       onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 10px var(--accent-glow)'" 
-                       onblur="this.style.borderColor='var(--border)'; this.style.boxShadow='none'">
-                
-                <div style="display: flex; gap: 8px;">
-                    <button onclick="accediUtente()" class="btn-custom" style="flex: 1; padding: 10px; font-size: 0.8rem; border-radius: 12px; box-shadow: 0 4px 12px var(--accent-glow);">ACCEDI</button>
-                    <button onclick="registraUtente()" class="btn-secondary" style="flex: 1; padding: 10px; font-size: 0.8rem; border-radius: 12px;">REGISTRATI</button>
-                </div>
-            </div>
-
-            <div id="user-logged-info" style="display: none; flex-direction: column; gap: 8px;">
-                <p style="margin: 0; font-size: 0.85rem; color: var(--text);">Benvenuto/a,<br><span id="user-display-email" style="color: var(--accent); font-weight: 700; word-break: break-all;"></span></p>
-                <button onclick="disconnettiUtente()" class="btn-custom" style="background: linear-gradient(135deg, #ff003c, #b3002a); box-shadow: 0 4px 12px rgba(255,0,60,0.3); padding: 8px; font-size: 0.8rem; border-radius: 12px;">LOGOUT</button>
-            </div>
-
-            <p id="auth-msg" style="margin: 0; font-size: 0.8rem; font-family: 'Syne', sans-serif; font-weight: 500; min-height: 16px; text-align: center;"></p>
-        </div>
-    </footer>
-        <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { 
-        getAuth, 
-        createUserWithEmailAndPassword, 
-        signInWithEmailAndPassword, 
-        signOut, 
-        onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-    // Configurazione con le tue chiavi reali
-    const firebaseConfig = {
-        apiKey: "AIzaSyBH2sXzuOfOpY2rOQNlS2zwyQnyfWy0DvA",
-        authDomain: "global-list-inv.firebaseapp.com",
-        projectId: "global-list-inv",
-        storageBucket: "global-list-inv.firebasestorage.app",
-        messagingSenderId: "517402636532",
-        appId: "1:517402636532:web:02c81482fe8b6367782ea1"
-    };
-
-    // Inizializzazione Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Elementi della UI
-    const emailInput = document.getElementById('auth-email');
-    const passwordInput = document.getElementById('auth-password');
-    const authForm = document.getElementById('auth-form');
-    const loggedInfo = document.getElementById('user-logged-info');
-    const userEmailSpan = document.getElementById('user-display-email');
-    const msgEl = document.getElementById('auth-msg');
-
-    function mostraMessaggio(testo, isSuccesso) {
-        msgEl.innerText = testo;
-        msgEl.style.color = isSuccesso ? "#39ff14" : "#ff003c";
-        setTimeout(() => { msgEl.innerText = ""; }, 5000);
-    }
-
-    // Funzione Registrazione
-    window.registraUtente = async function() {
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-
-        if(!email || !password) return mostraMessaggio("❌ Inserisci email e password!", false);
-        if(password.length < 6) return mostraMessaggio("❌ Password di almeno 6 caratteri!", false);
-
-        try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            mostraMessaggio("Registrat* con successo!", true);
-            emailInput.value = "";
-            passwordInput.value = "";
-        } catch (error) {
-            console.error(error);
-            if(error.code === 'auth/email-already-in-use') {
-                mostraMessaggio("❌ Email già registrata!", false);
-            } else if(error.code === 'auth/invalid-email') {
-                mostraMessaggio("❌ Formato email errato!", false);
-            } else {
-                mostraMessaggio("❌ Errore di registrazione.", false);
-            }
-        }
-    }
-
-    // Funzione Login
-    window.accediUtente = async function() {
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-
-        if(!email || !password) return mostraMessaggio("❌ Inserisci dati!", false);
-
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            mostraMessaggio("Accesso eseguito!", true);
-            emailInput.value = "";
-            passwordInput.value = "";
-        } catch (error) {
-            console.error(error);
-            if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                mostraMessaggio("❌ Email o password errate!", false);
-            } else {
-                mostraMessaggio("❌ Errore di accesso.", false);
-            }
-        }
-    }
-
-    // Funzione Logout
-    window.disconnettiUtente = async function() {
-        try {
-            await signOut(auth);
-            mostraMessaggio("Disconness*!", true);
-        } catch (error) {
-            mostraMessaggio("Errore logout.", false);
-        }
-    }
-
-    // Monitoraggio dello stato dell'utente in tempo reale
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            authForm.style.display = 'none';
-            loggedInfo.style.display = 'flex';
-            userEmailSpan.innerText = user.email;
-        } else {
-            authForm.style.display = 'flex';
-            loggedInfo.style.display = 'none';
-            userEmailSpan.innerText = '';
-        }
-    });
-</script>
-</body>
-</html>
         <input type="text" id="search" placeholder="Cerca demone per nome..." oninput="renderList()">
 
         <div style="display: flex; gap: 8px;">
@@ -747,7 +483,119 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
     </div>
 </div>
 
-<script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+        getAuth, 
+        createUserWithEmailAndPassword, 
+        signInWithEmailAndPassword, 
+        signOut, 
+        onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBH2sXzuOfOpY2rOQNlS2zwyQnyfWy0DvA",
+        authDomain: "global-list-inv.firebaseapp.com",
+        projectId: "global-list-inv",
+        storageBucket: "global-list-inv.firebasestorage.app",
+        messagingSenderId: "517402636532",
+        appId: "1:517402636532:web:02c81482fe8b6367782ea1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Elementi UI Authentication
+    const emailInput = document.getElementById('auth-email');
+    const passwordInput = document.getElementById('auth-password');
+    const authForm = document.getElementById('auth-form');
+    const loggedInfo = document.getElementById('user-logged-info');
+    const userEmailSpan = document.getElementById('user-display-email');
+    const msgEl = document.getElementById('auth-msg');
+    const btnAccountToggle = document.getElementById('btnAccountToggle');
+    const accountModal = document.getElementById('accountModal');
+
+    window.toggleAccountModal = function() {
+        if (accountModal.style.display === 'none' || accountModal.style.display === '') {
+            accountModal.style.display = 'flex';
+        } else {
+            accountModal.style.display = 'none';
+            if (msgEl) msgEl.innerText = "";
+        }
+    }
+
+    function mostraMessaggio(testo, isSuccesso) {
+        msgEl.innerText = testo;
+        msgEl.style.color = isSuccesso ? "#39ff14" : "#ff003c";
+        setTimeout(() => { if (msgEl) msgEl.innerText = ""; }, 5000);
+    }
+
+    window.registraUtente = async function() {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        if(!email || !password) return mostraMessaggio("❌ Inserisci email e password!", false);
+        if(password.length < 6) return mostraMessaggio("❌ Password di almeno 6 caratteri!", false);
+
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            mostraMessaggio("✅ Registrato con successo!", true);
+            emailInput.value = ""; passwordInput.value = "";
+            setTimeout(() => toggleAccountModal(), 1500);
+        } catch (error) {
+            if(error.code === 'auth/email-already-in-use') mostraMessaggio("❌ Email già registrata!", false);
+            else if(error.code === 'auth/invalid-email') mostraMessaggio("❌ Formato email errato!", false);
+            else mostraMessaggio("❌ Errore di registrazione.", false);
+        }
+    }
+
+    window.accediUtente = async function() {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        if(!email || !password) return mostraMessaggio("❌ Inserisci dati!", false);
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            mostraMessaggio("⚡ Accesso eseguito!", true);
+            emailInput.value = ""; passwordInput.value = "";
+            setTimeout(() => toggleAccountModal(), 1500);
+        } catch (error) {
+            if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                mostraMessaggio("❌ Email o password errate!", false);
+            } else {
+                mostraMessaggio("❌ Errore di accesso.", false);
+            }
+        }
+    }
+
+    window.disconnettiUtente = async function() {
+        try {
+            await signOut(auth);
+            mostraMessaggio("👋 Disconnesso/a!", true);
+            setTimeout(() => toggleAccountModal(), 1000);
+        } catch (error) {
+            mostraMessaggio("❌ Errore logout.", false);
+        }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            authForm.style.display = 'none';
+            loggedInfo.style.display = 'flex';
+            userEmailSpan.innerText = user.email;
+            const username = user.email.split('@')[0];
+            btnAccountToggle.innerHTML = `👤 UTENTE: ${username.toUpperCase()}`;
+            btnAccountToggle.style.border = "1px solid #39ff14";
+            btnAccountToggle.style.boxShadow = "0 4px 12px rgba(57, 255, 20, 0.2)";
+        } else {
+            authForm.style.display = 'flex';
+            loggedInfo.style.display = 'none';
+            userEmailSpan.innerText = '';
+            btnAccountToggle.innerHTML = `🌐 ACCOUNT: DISCONNESSO`;
+            btnAccountToggle.style.border = "none";
+            btnAccountToggle.style.boxShadow = "0 4px 12px var(--accent-glow)";
+        }
+    });
+
     const mockLevels = [
         { rank: 1, name: "Tidal Wave", thumb: "https://i.ytimg.com/vi/4T3mZ9QG6W0/mqdefault.jpg", videoVerifier: "4T3mZ9QG6W0", videoShowcase: "P75R562qf9c", verified: true, creator: "OniLink", verifier: "Zoink", levelID: "95638150", song: "Shiawase VIP - Dion Timmer", desc: "L'Extreme Demon attuale Top 1. Difficoltà leggendaria guidata interamente dal wave.", skill: "🌊 Wave" },
         { rank: 2, name: "Avernus", thumb: "https://i.ytimg.com/vi/8n8q4g882c0/mqdefault.jpg", videoVerifier: "8n8q4g882c0", videoShowcase: "h5M0w8X7634", verified: true, creator: "PockeWindfish", verifier: "Diamond", levelID: "89012488", song: "Thermodynamix - dj-Nate", desc: "Verificato di recente! Ostacolo infernale che richiede precisione chirurgica nei salti e nel volo con la navicella.", skill: "🚀 Ship" },
@@ -814,7 +662,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
             rTitle: "🎰 Cyber-Slot Roulette", rSub: "Estrazione casuale estrema senza perdere il segno nella lista.", rSpin: "🎲 Gira Rullo", rRetry: "🎲 Riprova", rCancel: "Annulla", rOpen: "Apri Livello",
             stUnplayed: "⚪ Non Giocato", stPractice: "🟡 In Pratica", stBeaten: "🟢 Completato", skillKey: "ABILITÀ CHIAVE:", diffTier: "Tier Difficoltà:", share: "📤 Condividi", copied: "✔ Copiato!",
             lblCreat: "Creatore:", lblVerif: "Verificatore:", lblSong: "Canzone:", noVid: "Nessun video disponibile.", noRec: "Nessun record registrato per questa ricerca.", points: "Punti Totali", cleared: "Completati",
-            qTitle: "🏆 OBIETTIVI WEEKLY:", q1: "Avvia la scalata: Raggiungi almeno il 15%", q2: "Veterano della Pratica: Raggiungi almeno il 50%", q3: "Leggenda Assoluta: Completa il livello al 100%", wProg: "Progresso Registrato:", wEnter: "⚡ ENTRA IN PRATICA NOW",
+            qTitle: "🏆 OBIETTIVI WEEKLY:", q1: "Avvia la scalata: Raggiungi almeno il 15%", q2: "Veterano della Pratica: Raggiungi almeno il 50%", q3: "Leggenda Assoluta: Completa il livello al 100%", wProg: "Progresso Registrado:", wEnter: "⚡ ENTRA IN PRATICA NOW",
             tierGod: "🔴 God-Tier (Estremo Assoluto)", tierHigh: "🟠 High Extreme (Molto Duro)", tierMid: "🟡 Mid Extreme (Intermedio)", tierLow: "🟢 Entry Extreme (Accessibile)"
         },
         en: { 
@@ -838,7 +686,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
             lblTheme: "Tema Claro (Light Mode)", lblSfx: "Efectos de Sonido UI (SFX)", lblCompact: "Modo Compacto (Lista Densa)", lblAuto: "Autoplay Video de YouTube", lblDefVideo: "Iniciar videos en modo Showcase por defecto", lblPerf: "Modo Rendimiento (Desactivar animaciones pesadas)", lblReset: "Borrar favoritos y progreso guardados localmente", btnReset: "🗑 Restablecer Datos", 
             lblMyProg: "Progreso Personal (Práctica/Normal):", btnChal: "⚡ Reto de Práctica Aleatorio", stLvl: "DEMONIOS", stVer: "VERIFICADOS", stFav: "FAVORITOS", 
             rTitle: "🎰 Ruleta Cyber-Slot", rSub: "Selección aleatoria extrema sin perder tu lugar en la lista.", rSpin: "🎲 Girar Rodillo", rRetry: "🎲 Intentar de Nuevo", rCancel: "Cancelar", rOpen: "Abrir Nivel",
-            stUnplayed: "⚪ Sin Jugar", stPractice: "🟡 En Práctica", stBeaten: "🟢 Completado", skillKey: "HABILIDAD CLAVE:", diffTier: "Nivel de Dificultad:", share: "📤 Compartir", copied: "✔ ¡Copiado!",
+            stUnplayed: "⚪ Sin Jugar", stPractice: "🟡 En Práctica", stBeaten: "🟢 Completado", skillKey: "HABILIDADE CLAVE:", diffTier: "Nivel de Dificultad:", share: "📤 Compartir", copied: "✔ ¡Copiado!",
             lblCreat: "Creador:", lblVerif: "Verificador:", lblSong: "Canción:", noVid: "No hay video disponible.", noRec: "No se encontraron récords.", points: "Puntos Totales", cleared: "Completados",
             qTitle: "🏆 OBJETIVOS SEMANALES:", q1: "Comienza la escalada: Alcanza al menos 15%", q2: "Veterano de Práctica: Alcanza al menos 50%", q3: "Leyenda Absoluta: Completa el nivel al 100%", wProg: "Progreso Registrado:", wEnter: "⚡ ENTRAR EN PRÁCTICA AHORA",
             tierGod: "🔴 God-Tier (Extremo Absoluto)", tierHigh: "🟠 High Extreme (Muy Duro)", tierMid: "🟡 Mid Extreme (Intermedio)", tierLow: "🟢 Entry Extreme (Accesible)"
@@ -853,7 +701,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
             rTitle: "🎰 Roleta Cyber-Slot", rSub: "Seleção aleatória extrema sem perder seu lugar na lista.", rSpin: "🎲 Girar Rolo", rRetry: "🎲 Tentar Novamente", rCancel: "Cancelar", rOpen: "Abrir Nível",
             stUnplayed: "⚪ Não Jogado", stPractice: "🟡 Em Prática", stBeaten: "🟢 Concluído", skillKey: "HABILIDADE CHAVE:", diffTier: "Nível de Dificuldade:", share: "📤 Compartilhar", copied: "✔ Copiado!",
             lblCreat: "Criador:", lblVerif: "Verificador:", lblSong: "Música:", noVid: "Nenhum vídeo disponível.", noRec: "Nenhum recorde encontrado.", points: "Pontos Totais", cleared: "Concluídos",
-            qTitle: "🏆 ALVOS SEMANAIS:", q1: "Comece a subida: Alcance pelo menos 15%", q2: "Veterano do Treino: Alcance pelo menos 50%", q3: "Lenda Absoluta: Complete o nível 100%", wProg: "Progreso Registrado:", wEnter: "⚡ ENTRAR NA PRÁTICA AGORA",
+            qTitle: "🏆 ALVOS SEMANAIS:", q1: "Comece a subida: Alcance pelo menos 15%", q2: "Veterano do Treino: Alcance pelo menos 50%", q3: "Lenda Absoluta: Complete o nível 100%", wProg: "Progresso Registrado:", wEnter: "⚡ ENTRAR NA PRÁTICA AGORA",
             tierGod: "🔴 God-Tier (Extremo Absoluto)", tierHigh: "🟠 High Extreme (Muito Difícil)", tierMid: "🟡 Mid Extreme (Intermediário)", tierLow: "🟢 Entry Extreme (Acessível)"
         },
         fr: { 
@@ -888,7 +736,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         document.getElementById('stFav').innerText = DB.favs.length;
     }
 
-    function toggleFav(name, event) {
+    window.toggleFav = function(name, event) {
         event.stopPropagation(); playSfx('click');
         if(DB.favs.includes(name)) DB.favs = DB.favs.filter(f => f !== name);
         else DB.favs.push(name);
@@ -896,7 +744,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         updateStats(); renderList(); if(DB.currentLvl && DB.currentLvl.name === name) renderWeekly();
     }
 
-    function renderList() {
+    window.renderList = function() {
         const body = document.getElementById('listBody');
         const query = document.getElementById('search').value.toLowerCase();
         body.innerHTML = "";
@@ -945,7 +793,6 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         document.getElementById("lvlSkillBadge").innerText = lvl.skill ? `${d.skillKey} ${lvl.skill.toUpperCase()}` : "EXTREME DEMON";
         document.getElementById("lvlDesc").innerText = lvl.desc || "No description available.";
         
-        // Skill Analyzer Difficulty Calculation
         document.getElementById("analyzerBox").style.display = "flex";
         let tierText = d.tierLow;
         if(lvl.rank <= 5) tierText = d.tierGod;
@@ -976,7 +823,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         renderLeaderboard();
     }
 
-    function renderLeaderboard() {
+    window.renderLeaderboard = function() {
         if(!DB.currentLvl) return;
         const d = dict[DB.currentLang] || dict['it'];
         const queryP = document.getElementById('searchPlayer').value.toLowerCase();
@@ -1008,7 +855,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         }
     }
 
-    function switchVideoMode(mode) {
+    window.switchVideoMode = function(mode) {
         if (!DB.currentLvl) return;
         DB.currentVideoMode = mode;
         const d = dict[DB.currentLang] || dict['it'];
@@ -1035,17 +882,17 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         document.getElementById("videoContainer").innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}${auto}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="border-radius:18px;"></iframe>`;
     }
 
-    function updateDefaultVideo() {
+    window.updateDefaultVideo = function() {
         const isShowcase = document.getElementById('defVideoCheck').checked;
         DB.defaultVideoMode = isShowcase ? 'showcase' : 'verifier';
     }
 
-    function updateProgressUI(val) {
+    window.updateProgressUI = function(val) {
         document.getElementById("progVal").innerText = val + "%";
         document.documentElement.style.setProperty('--track-fill', val + "%");
     }
 
-    function saveProgress(val) {
+    window.saveProgress = function(val) {
         if(!DB.currentLvl) return;
         playSfx('tick');
         const numVal = parseInt(val);
@@ -1068,16 +915,15 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         renderWeekly();
     }
 
-    function generateChallenge() {
+    window.generateChallenge = function() {
         playSfx('click');
         const start = Math.floor(Math.random() * 55);
         const end = Math.min(100, start + Math.floor(Math.random() * 35) + 10);
         document.getElementById("chalResult").innerText = `🎯 Goal: ${start}% ➔ ${end}%`;
     }
 
-    // Nuova Roulette Cyber-Slot con scorrimento reale
     let selectedRouletteLvl = null;
-    function openRoulette() {
+    window.openRoulette = function() {
         playSfx('click');
         document.getElementById('rouletteModal').classList.add('active');
         document.getElementById('btnSpin').style.display = 'inline-flex';
@@ -1089,9 +935,9 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         track.innerHTML = `<div class="slot-card"><img src="${DB.levels[0].thumb}"><span>${DB.levels[0].name}</span></div>`;
     }
 
-    function closeRoulette() { playSfx('click'); document.getElementById('rouletteModal').classList.remove('active'); }
+    window.closeRoulette = function() { playSfx('click'); document.getElementById('rouletteModal').classList.remove('active'); }
 
-    function startSpin() {
+    window.startSpin = function() {
         if(DB.levels.length === 0) return;
         playSfx('click');
         document.getElementById('btnSpin').style.display = 'none';
@@ -1101,9 +947,8 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         const perfMode = document.getElementById('perfCheck').checked;
         const d = dict[DB.currentLang] || dict['it'];
         
-        // Genera sequenza per il rullo (20 carte fitte)
         let reelHtml = "";
-        const winIdx = 16; // Posizione della vittoria
+        const winIdx = 16; 
         let winLvl = null;
         for(let i = 0; i < 20; i++) {
             const rndLvl = DB.levels[Math.floor(Math.random() * DB.levels.length)];
@@ -1114,16 +959,13 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         track.style.transition = 'none';
         track.style.transform = 'translateY(0px)';
         
-        // Forza reflow
         void track.offsetWidth;
         
-        // Avvia transizione easing out
         const cardHeight = 140;
         const targetY = -(winIdx * cardHeight);
         track.style.transition = 'transform 3.2s cubic-bezier(0.1, 0.9, 0.2, 1)';
         track.style.transform = `translateY(${targetY}px)`;
 
-        // Suoni ad intercapedine durante il rollio
         let ticks = 0;
         const interval = setInterval(() => {
             playSfx('tick');
@@ -1141,7 +983,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         }, 3200);
     }
 
-    function confirmRouletteLvl() {
+    window.confirmRouletteLvl = function() {
         closeRoulette();
         if(selectedRouletteLvl) { showDetails(selectedRouletteLvl); showPage('list', document.querySelectorAll('.nav-icon')[0]); }
     }
@@ -1216,7 +1058,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         `;
     }
 
-    function openWeeklyLevel(lvlName) {
+    window.openWeeklyLevel = function(lvlName) {
         playSfx('click');
         const lvl = DB.levels.find(l => l.name === lvlName);
         if(lvl) { showDetails(lvl); showPage('list', document.querySelectorAll('.nav-icon')[0]); }
@@ -1243,7 +1085,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         });
     }
 
-    function showPage(pageId, navEl) {
+    window.showPage = function(pageId, navEl) {
         playSfx('click');
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-icon').forEach(n => n.classList.remove('active'));
@@ -1251,16 +1093,16 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         if(navEl) navEl.classList.add('active');
     }
 
-    function toggleFilter(type) {
+    window.toggleFilter = function(type) {
         playSfx('click');
         if(type === 'unv') { DB.hideUnv = !DB.hideUnv; document.getElementById('btnFilter').classList.toggle('active', DB.hideUnv); }
         else if(type === 'fav') { DB.showFavsOnly = !DB.showFavsOnly; document.getElementById('btnFavFilter').classList.toggle('active', DB.showFavsOnly); }
         renderList();
     }
 
-    function toggleTheme() { playSfx('click'); document.body.classList.toggle('light'); }
+    window.toggleTheme = function() { playSfx('click'); document.body.classList.toggle('light'); }
 
-    function setThemeColor(color, glow, el) {
+    window.setThemeColor = function(color, glow, el) {
         playSfx('click');
         document.documentElement.style.setProperty('--accent', color);
         document.documentElement.style.setProperty('--accent-glow', glow);
@@ -1268,7 +1110,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         el.classList.add('active');
     }
 
-    function setLang(lang, el) {
+    window.setLang = function(lang, el) {
         playSfx('click');
         DB.currentLang = lang;
         document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
@@ -1320,7 +1162,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         renderWeekly(); renderHall();
     }
 
-    function shareLevel() {
+    window.shareLevel = function() {
         if(!DB.currentLvl) return;
         playSfx('click');
         const d = dict[DB.currentLang] || dict['it'];
@@ -1335,7 +1177,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         }
     }
 
-    function resetAllData() {
+    window.resetAllData = function() {
         playSfx('click');
         if(confirm("Sei sicuro di voler resettare? / Are you sure?")) {
             localStorage.clear(); DB.favs = []; DB.progress = {};
@@ -1343,7 +1185,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         }
     }
 
-    function copyID() {
+    window.copyID = function() {
         if(!DB.currentLvl || !DB.currentLvl.levelID) return;
         navigator.clipboard.writeText(DB.currentLvl.levelID);
         playSfx('click');
@@ -1353,7 +1195,7 @@ Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo
         setTimeout(() => btn.innerText = "📋 Copia ID", 1500);
     }
 
-    function triggerConfetti(e) {
+    window.triggerConfetti = function(e) {
         e.preventDefault(); playSfx('win');
         const perfMode = document.getElementById('perfCheck').checked;
         if(!perfMode) confetti({ particleCount: 200, spread: 360, origin: { y: 0.6 } });
