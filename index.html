@@ -347,7 +347,7 @@
 
         try {
             await createUserWithEmailAndPassword(auth, email, password);
-            mostraMessaggio("✅ Registrato con successo!", true);
+            mostraMessaggio("Registrat* con successo!", true);
             emailInput.value = "";
             passwordInput.value = "";
         } catch (error) {
@@ -371,7 +371,7 @@
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            mostraMessaggio("⚡ Accesso eseguito!", true);
+            mostraMessaggio("Accesso eseguito!", true);
             emailInput.value = "";
             passwordInput.value = "";
         } catch (error) {
@@ -388,9 +388,9 @@
     window.disconnettiUtente = async function() {
         try {
             await signOut(auth);
-            mostraMessaggio("👋 Disconnesso/a!", true);
+            mostraMessaggio("Disconness*!", true);
         } catch (error) {
-            mostraMessaggio("❌ Errore logout.", false);
+            mostraMessaggio("Errore logout.", false);
         }
     }
 
