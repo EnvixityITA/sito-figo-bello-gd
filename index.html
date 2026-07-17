@@ -93,7 +93,7 @@
         }
         @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.7; } }
 
-        /* Layout */
+        /* Modernized Layout */
         .page {
             display: none; width: 100%; height: 100vh; padding: 25px;
             grid-template-columns: 430px 1fr 360px; gap: 20px; z-index: 2;
@@ -111,11 +111,12 @@
         }
         .card:hover { border-color: var(--border-hover); }
 
-        input[type="text"], input[type="email"], input[type="password"] {
+        /* Modern UI Controls */
+        input[type="text"] {
             background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); color: var(--text);
             padding: 14px 18px; border-radius: 16px; font-family: 'Syne', sans-serif; font-size: 0.9rem; outline: none; transition: 0.3s;
         }
-        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); background: rgba(0,0,0,0.6); }
+        input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); background: rgba(0,0,0,0.6); }
         
         .btn-custom {
             background: linear-gradient(135deg, var(--accent), #7b2cbf); color: white; border: none; padding: 14px 20px; border-radius: 16px;
@@ -123,6 +124,7 @@
             box-shadow: 0 6px 20px var(--accent-glow); text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
         }
         .btn-custom:hover { transform: translateY(-3px); filter: brightness(1.2); box-shadow: 0 10px 25px var(--accent-glow); }
+        .btn-custom:active { transform: translateY(-1px); }
         
         .btn-secondary {
             background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); color: var(--text);
@@ -132,6 +134,7 @@
         .btn-secondary:hover { background: rgba(157, 78, 221, 0.1); border-color: var(--accent); }
         .btn-secondary.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
 
+        /* Slider UI */
         .custom-slider-container { width: 100%; padding: 4px 0; }
         .custom-slider {
             -webkit-appearance: none; width: 100%; height: 8px; border-radius: 10px;
@@ -143,7 +146,9 @@
             background: #ffffff; border: 4px solid var(--accent); cursor: pointer;
             box-shadow: 0 0 10px var(--accent); transition: transform 0.1s;
         }
+        .custom-slider::-webkit-slider-thumb:hover { transform: scale(1.25); }
 
+        /* Lists and Elements */
         .lvl-item {
             display: flex; align-items: center; gap: 14px; padding: var(--item-pad) 14px; border-radius: 18px;
             border: 1px solid transparent; background: rgba(255, 255, 255, 0.01); cursor: pointer;
@@ -152,25 +157,98 @@
         .lvl-item:hover { background: rgba(157, 78, 221, 0.06); border-color: rgba(157, 78, 221, 0.2); transform: translateX(4px); }
         .lvl-item.selected { background: rgba(157, 78, 221, 0.15); border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); }
 
+        .thumb { width: 64px; height: 36px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); }
+        .fav-btn { font-size: 1.2rem; color: rgba(255, 255, 255, 0.1); transition: 0.2s; cursor: pointer; }
+        .fav-btn:hover { transform: scale(1.25); color: #ff4d6d; }
+        .fav-active { color: #ff4d6d; filter: drop-shadow(0 0 8px #ff4d6d); }
+
         .status-badge { font-size: 0.75rem; padding: 5px 10px; border-radius: 10px; font-weight: 700; text-transform: uppercase; }
         .st-unplayed { background: rgba(255,255,255,0.04); color: var(--text-muted); }
         .st-practice { background: rgba(255, 193, 7, 0.12); color: #ffb703; border: 1px solid rgba(255, 193, 7, 0.25); }
-        .st-beaten { background: rgba(57, 255, 20, 0.12); color: #39ff14; border: 1px solid rgba(57, 255, 20, 0.25); }
+        .st-beaten { background: rgba(57, 255, 20, 0.12); color: #39ff14; border: 1px solid rgba(57, 255, 20, 0.25); filter: drop-shadow(0 0 5px rgba(57,255,20,0.15)); }
 
+        .top1-text { color: #ffd700; font-weight: 900; text-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
+
+        /* Premium Leaderboard Redesign */
         .leaderboard-title-box { border-bottom: 1px solid var(--border); padding-bottom: 12px; display:flex; flex-direction:column; gap:10px; }
+        .lb-row {
+            display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; 
+            background: rgba(255, 255, 255, 0.015); border-radius: 14px; border: 1px solid rgba(255,255,255,0.03);
+            font-size: 0.9rem; transition: 0.2s ease;
+        }
+        .lb-row:hover { background: rgba(157, 78, 221, 0.06); border-color: rgba(157, 78, 221, 0.3); transform: scale(1.02); }
+        .lb-rank { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; margin-right: 10px; }
+        .lb-rank-1 { background: linear-gradient(135deg, #ffe47e, #ffd700); color: #000; box-shadow: 0 0 15px rgba(255,215,0,0.5); }
+        .lb-rank-2 { background: linear-gradient(135deg, #ffffff, #b0bec5); color: #000; box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .lb-rank-3 { background: linear-gradient(135deg, #ffb38a, #ff7043); color: #000; box-shadow: 0 0 10px rgba(255,112,67,0.3); }
+        .lb-rank-other { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+        
+        /* Stats Dashboard Bar */
         .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 18px; font-size: 0.75rem; border: 1px solid var(--border); text-align: center; }
         .meta-tag { background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         
+        /* Interactive Weekly Board */
+        .quest-box {
+            background: rgba(157, 78, 221, 0.03); border: 1px solid var(--border);
+            border-radius: 16px; padding: 15px; width: 100%; max-width: 500px; text-align: left;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .quest-item { display: flex; align-items: center; gap: 12px; font-size: 0.88rem; opacity: 0.7; transition: 0.3s; }
+        .quest-item.completed { opacity: 1; color: #39ff14; text-decoration: line-through rgba(57, 255, 20, 0.4); }
+        .quest-check { width: 18px; height: 18px; border-radius: 6px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; }
+        .quest-item.completed .quest-check { background: #39ff14; border-color: #39ff14; color: #000; }
+
+        /* Grids & Framework settings */
         .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .lang-card { background: rgba(255,255,255,0.01); border: 1px solid var(--border); border-radius: 14px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .lang-card:hover { border-color: var(--accent); background: rgba(157, 78, 221, 0.05); }
         .lang-card.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
         
         .color-grid { display: flex; gap: 12px; }
         .color-swatch { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); transition: 0.2s; }
-        .color-swatch.active { transform: scale(1.15); border-color: white; box-shadow: 0 0 15px currentColor; }
+        .color-swatch:hover, .color-swatch.active { transform: scale(1.15); border-color: white; box-shadow: 0 0 15px currentColor; }
+
         .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px solid var(--border); }
-        .timer-badge { background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border); border-radius: 16px; padding: 12px 24px; font-family: monospace; font-size: 1.2rem; font-weight: 700; color: #fff; display: inline-flex; align-items: center; gap: 10px; margin: 10px 0; }
-        .analyzer-box { display: flex; justify-content: space-between; align-items: center; background: rgba(157, 78, 221, 0.08); border: 1px dashed var(--accent); padding: 10px 16px; border-radius: 14px; font-size: 0.8rem; }
+
+        .timer-badge {
+            background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border); border-radius: 16px;
+            padding: 12px 24px; font-family: monospace; font-size: 1.2rem; font-weight: 700;
+            color: #fff; display: inline-flex; align-items: center; gap: 10px; margin: 10px 0;
+        }
+
+        /* Roulette Casinò Slot */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 2, 6, 0.9);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 1000;
+            display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        
+        .roulette-box {
+            background: var(--panel-solid); border: 2px solid var(--accent); border-radius: 28px;
+            padding: 35px; width: 480px; text-align: center; box-shadow: 0 0 60px rgba(157, 78, 221, 0.4);
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .slot-window {
+            height: 140px; background: rgba(0, 0, 0, 0.85); border: 2px solid var(--accent); border-radius: 20px;
+            display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;
+            box-shadow: inset 0 0 35px rgba(0,0,0,0.9);
+        }
+        .slot-window::before, .slot-window::after {
+            content: ""; position: absolute; left:0; width:100%; height:30px; z-index: 2; pointer-events:none;
+        }
+        .slot-window::before { top:0; background: linear-gradient(to bottom, rgba(0,0,0,1), transparent); }
+        .slot-window::after { bottom:0; background: linear-gradient(to top, rgba(0,0,0,1), transparent); }
+
+        .slot-track { display: flex; flex-direction: column; align-items: center; transition: transform 0.1s linear; width: 100%; }
+        .slot-card { height: 140px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 15px; font-size: 1.5rem; font-weight: 900; color: #fff; font-family: 'Orbitron', sans-serif; flex-shrink: 0; }
+        .slot-card img { width: 100px; height: 56px; border-radius: 10px; border: 2px solid var(--accent); object-fit: cover; box-shadow: 0 0 10px var(--accent-glow); }
+
+        /* Analyzer Badge */
+        .analyzer-box {
+            display: flex; justify-content: space-between; align-items: center; background: rgba(157, 78, 221, 0.08); border: 1px dashed var(--accent); padding: 10px 16px; border-radius: 14px; font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -179,15 +257,54 @@
     <div class="brand-logo" onclick="showPage('list', document.querySelectorAll('.nav-icon')[0])" title="Home OS">
         <img src="logo.png" alt="Logo" onerror="this.src='https://via.placeholder.com/48/9d4edd/ffffff?text=OS'">
     </div>
+
     <div class="nav-icon active" onclick="showPage('list', this)" title="Lista">📊</div>
     <div class="nav-icon" onclick="showPage('weekly', this)" title="Weekly Demon">🗓️<div class="live-dot"></div></div>
     <div class="nav-icon" onclick="showPage('hall', this)" title="Hall of Fame">🏆</div>
     <div class="nav-icon" onclick="showPage('settings', this)" title="Impostazioni">⚙️</div>
-    <div class="nav-icon" onclick="showPage('account', this)" title="Account" style="margin-top: auto; margin-bottom: 5px;">👤</div>
 </nav>
 
 <div id="listPage" class="page active">
     <div class="card">
+        <button id="btnAccountToggle" onclick="toggleAccountModal()" class="btn-custom" style="width: 100%; padding: 12px; margin-bottom: 15px; font-size: 0.85rem; border-radius: 14px; box-shadow: 0 4px 12px var(--accent-glow);">
+            🌐 ACCOUNT: DISCONNESSO
+        </button>
+
+        <div id="accountModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 2, 6, 0.85); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center;">
+            <div style="background: var(--panel-solid); border: 1px solid var(--border); padding: 25px; border-radius: 24px; width: 90%; max-width: 360px; box-shadow: 0 0 30px rgba(157, 78, 221, 0.2); position: relative;">
+                
+                <button onclick="toggleAccountModal()" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">✕</button>
+
+                <div style="font-family: 'Orbitron', sans-serif; font-size: 0.95rem; font-weight: 900; color: var(--accent); letter-spacing: 1px; margin-bottom: 20px; text-align: center;">🌐 AREA ACCOUNT CLOUD</div>
+                
+                <div id="auth-form" style="display: flex; flex-direction: column; gap: 10px;">
+                    <input type="email" id="auth-email" placeholder="Inserisci Email" 
+                           style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); color: var(--text); padding: 12px 14px; border-radius: 12px; font-family: 'Syne', sans-serif; font-size: 0.85rem; outline: none; transition: 0.3s;"
+                           onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 10px var(--accent-glow)'" 
+                           onblur="this.style.borderColor='var(--border)'; this.style.boxShadow='none'">
+                    <input type="password" id="auth-password" placeholder="Inserisci Password" 
+                           style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); color: var(--text); padding: 12px 14px; border-radius: 12px; font-family: 'Syne', sans-serif; font-size: 0.85rem; outline: none; transition: 0.3s;"
+                           onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 10px var(--accent-glow)'" 
+                           onblur="this.style.borderColor='var(--border)'; this.style.boxShadow='none'">
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 5px;">
+                        <button onclick="accediUtente()" class="btn-custom" style="flex: 1; padding: 12px; font-size: 0.85rem; border-radius: 12px; box-shadow: 0 4px 12px var(--accent-glow);">ACCEDI</button>
+                        <button onclick="registraUtente()" class="btn-secondary" style="flex: 1; padding: 12px; font-size: 0.85rem; border-radius: 12px;">REGISTRATI</button>
+                    </div>
+                </div>
+
+                <div id="user-logged-info" style="display: none; flex-direction: column; gap: 12px; text-align: center;">
+                    <div style="background: rgba(157, 78, 221, 0.05); padding: 15px; border-radius: 14px; border: 1px solid rgba(157, 78, 221, 0.15);">
+                        <p style="margin: 0 0 5px 0; font-size: 0.8rem; color: var(--text-muted);">Sessione attiva come:</p>
+                        <p id="user-display-email" style="margin: 0; color: var(--text); font-weight: 700; font-size: 0.9rem; word-break: break-all; font-family: 'Syne', sans-serif;"></p>
+                    </div>
+                    <button onclick="disconnettiUtente()" class="btn-custom" style="background: linear-gradient(135deg, #ff003c, #b3002a); box-shadow: 0 4px 12px rgba(255,0,60,0.3); padding: 10px; font-size: 0.85rem; border-radius: 12px; width: 100%;">EFFETTUA LOGOUT</button>
+                </div>
+
+                <p id="auth-msg" style="margin: 15px 0 0 0; font-size: 0.8rem; font-family: 'Syne', sans-serif; font-weight: 500; min-height: 16px; text-align: center;"></p>
+            </div>
+        </div>
+
         <div class="stats-bar">
             <div><span style="opacity:0.5; display:block;" id="stLvlLabel">DEMONI</span><strong id="stTotal" style="font-size:1.2rem; color:var(--accent);">0</strong></div>
             <div><span style="opacity:0.5; display:block;" id="stVerLabel">VERIFICATI</span><strong id="stVer" style="font-size:1.2rem;">0</strong></div>
@@ -199,6 +316,7 @@
         <div style="display: flex; gap: 8px;">
             <button id="btnFilter" class="btn-secondary" style="flex:1;" onclick="toggleFilter('unv')">✔ Verificati</button>
             <button id="btnFavFilter" class="btn-secondary" style="flex:1;" onclick="toggleFilter('fav')">♥ Preferiti</button>
+            <button class="btn-custom" style="padding: 12px 16px; font-size:1.1rem; box-shadow:none;" onclick="openRoulette()" title="Apri Cyber-Slot Roulette">🎰</button>
         </div>
 
         <div id="listBody" style="display:flex; flex-direction:column; gap:8px; overflow-y:auto; padding-right:4px;"></div>
@@ -218,6 +336,11 @@
             <button class="btn-secondary" style="padding: 6px 12px; font-size:0.75rem;" onclick="shareLevel()" id="btnShare">📤 Condividi</button>
         </div>
         
+        <div id="videoToggles" style="display:none; justify-content:flex-end; gap:8px;">
+            <button id="btnVerifVid" class="btn-secondary active" onclick="switchVideoMode('verifier')">🎥 Verificatore</button>
+            <button id="btnShowVid" class="btn-secondary" onclick="switchVideoMode('showcase')">🎬 Showcase</button>
+        </div>
+
         <div id="videoContainer" style="aspect-ratio:16/9; background:#000; border-radius:20px; overflow:hidden; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-weight:600;">
             Seleziona un livello dalla lista per visualizzare i dettagli
         </div>
@@ -227,8 +350,14 @@
                 <strong id="lblMyProg" style="color:var(--text);">Progresso Personale (Pratica/Normal):</strong>
                 <span id="progVal" style="color:var(--accent); font-weight:900; font-size:1.2rem;">0%</span>
             </div>
+            
             <div class="custom-slider-container">
                 <input type="range" id="progSlider" min="0" max="100" value="0" class="custom-slider" oninput="updateProgressUI(this.value)" onchange="saveProgress(this.value)">
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+                <button class="btn-secondary" style="padding: 10px 14px; font-size:0.8rem; border-color:var(--accent);" onclick="generateChallenge()" id="btnChal">⚡ Sfida di Pratica Casuale</button>
+                <span id="chalResult" style="font-size:0.88rem; font-weight:700; color:#39ff14; font-family:monospace;"></span>
             </div>
         </div>
         
@@ -236,13 +365,19 @@
             <div class="meta-tag"><span id="lblCreat" style="opacity:0.6;">Creatore:</span> <strong id="mCreator">-</strong></div>
             <div class="meta-tag"><span id="lblVerif" style="opacity:0.6;">Verificatore:</span> <strong id="mVerifier">-</strong></div>
             <div class="meta-tag" style="grid-column: span 2;"><span id="lblSong" style="opacity:0.6;">Canzone:</span> <strong id="mSong" style="color:var(--accent);">-</strong></div>
+            <div class="meta-tag" style="grid-column: span 2;">
+                <span>ID: <strong id="mID">-</strong></span>
+                <button class="btn-secondary" style="padding:6px 12px; font-size:0.78rem;" onclick="copyID()" id="btnCopy">📋 Copia ID</button>
+            </div>
         </div>
+
         <p id="lvlDesc" style="font-size:0.88rem; opacity:0.75; line-height:1.6; margin:0;"></p>
     </div>
     
     <div class="card">
         <div class="leaderboard-title-box">
             <h3 id="hSub" style="margin:0; font-weight:900; font-size: 1.1rem; color: #fff;">Classifica Record</h3>
+            <input type="text" id="searchPlayer" placeholder="Cerca player nel livello..." style="padding:8px 12px; font-size:0.8rem;" oninput="renderLeaderboard()">
         </div>
         <div id="leaderboard" style="display:flex; flex-direction:column; gap:8px; overflow-y:auto;">
             <p style="opacity:0.4; text-align:center; font-size:0.85rem; padding: 20px 0;">Seleziona un demone per vedere i record</p>
@@ -251,154 +386,143 @@
     </div>
 </div>
 
-<div id="accountPage" class="page">
-    <div class="card" style="grid-column: span 3; max-width: 700px; margin: 0 auto; width: 100%; text-align: center; justify-content: center;">
-        <h2 style="margin:0 0 20px 0; font-weight:900; color:var(--accent);">🌐 Centro Account Cloud</h2>
-        
-        <div id="auth-form" style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto; width: 100%;">
-            <p style="color:var(--text-muted); font-size: 0.9rem;">Accedi per salvare i tuoi record e personalizzare il tuo profilo.</p>
-            <input type="email" id="auth-email" placeholder="Inserisci Email">
-            <input type="password" id="auth-password" placeholder="Inserisci Password">
-            
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button onclick="accediUtente()" class="btn-custom" style="flex: 1;">ACCEDI</button>
-                <button onclick="registraUtente()" class="btn-secondary" style="flex: 1;">REGISTRATI</button>
-            </div>
-        </div>
-
-        <div id="user-profile-section" style="display: none; flex-direction: column; align-items: center; gap: 20px;">
-            <div style="position: relative;">
-                <img id="profile-avatar" src="https://via.placeholder.com/120/1a1a24/9d4edd?text=USER" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); box-shadow: 0 0 20px var(--accent-glow);">
-            </div>
-            
-            <div>
-                <h3 id="profile-username" style="margin: 0; font-size: 1.8rem;">Utente</h3>
-                <p id="profile-email" style="margin: 5px 0 0 0; color: var(--text-muted); font-size: 0.9rem;"></p>
-            </div>
-
-            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border); padding: 20px; border-radius: 16px; width: 100%; max-width: 450px; text-align: left; display: flex; flex-direction: column; gap: 15px;">
-                <h4 style="margin: 0; color: var(--accent); font-family: 'Orbitron', sans-serif;">⚙️ Modifica Profilo</h4>
-                <div>
-                    <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">Nuovo Username</label>
-                    <input type="text" id="edit-username" placeholder="Es. DemonSlayer99" style="width: 100%;">
-                </div>
-                <div>
-                    <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">URL Foto Profilo Custom (Link Immagine)</label>
-                    <input type="text" id="edit-avatar-url" placeholder="https://i.imgur.com/..." style="width: 100%;">
-                </div>
-                <button onclick="aggiornaProfilo()" class="btn-secondary" style="width: 100%; border-color: var(--accent); justify-content: center;">💾 Salva Cambiamenti</button>
-            </div>
-
-            <button onclick="disconnettiUtente()" class="btn-custom" style="background: linear-gradient(135deg, #ff003c, #b3002a); box-shadow: 0 4px 12px rgba(255,0,60,0.3); padding: 12px 30px;">EFFETTUA LOGOUT</button>
-        </div>
-
-        <p id="auth-msg" style="margin: 20px 0 0 0; font-size: 0.9rem; font-family: 'Syne', sans-serif; font-weight: 700; min-height: 20px;"></p>
-    </div>
-</div>
-<div id="accountPage" class="page">
-    <div class="card" style="grid-column: span 3; max-width: 650px; margin: 0 auto; width: 100%; text-align: center; justify-content: center; align-items: center; gap: 20px;">
-        <h2 style="margin:0; color:var(--accent);">🌐 CLOUD OS ACCOUNT</h2>
-        
-        <div id="auth-form" style="display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 380px;">
-            <p style="color:var(--text-muted); font-size: 0.9rem; margin: 0;">Accedi per personalizzare il tuo profilo e cambiare foto.</p>
-            <input type="email" id="auth-email" placeholder="Inserisci Email">
-            <input type="password" id="auth-password" placeholder="Inserisci Password">
-            
-            <div style="display: flex; gap: 10px; margin-top: 5px;">
-                <button onclick="accediUtente()" class="btn-custom" style="flex: 1;">ACCEDI</button>
-                <button onclick="registraUtente()" class="btn-secondary" style="flex: 1;">REGISTRATI</button>
-            </div>
-        </div>
-
-        <div id="user-profile-section" style="display: none; flex-direction: column; align-items: center; gap: 20px; width: 100%;">
-            <div style="position: relative;">
-                <img id="profile-avatar" src="" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); box-shadow: 0 0 20px var(--accent-glow);">
-            </div>
-            
-            <div>
-                <h3 id="profile-username" style="margin: 0; font-size: 1.8rem;">-</h3>
-                <p id="profile-email" style="margin: 5px 0 0 0; color: var(--text-muted); font-size: 0.9rem;"></p>
-            </div>
-
-            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border); padding: 20px; border-radius: 18px; width: 100%; max-width: 420px; text-align: left; display: flex; flex-direction: column; gap: 12px;">
-                <span style="font-size: 0.8rem; color: var(--accent); font-weight: 700; font-family: 'Orbitron'; display: block;">⚙️ MODIFICA PROFILO</span>
-                
-                <div>
-                    <label style="font-size: 0.75rem; color: var(--text-muted); display:block; margin-bottom:4px;">Nuovo Username</label>
-                    <input type="text" id="edit-username" placeholder="Es. CyberPlayer" style="width: 100%;">
-                </div>
-                
-                <div>
-                    <label style="font-size: 0.75rem; color: var(--text-muted); display:block; margin-bottom:4px;">URL Foto Profilo (Link internet dell'immagine)</label>
-                    <input type="text" id="edit-avatar-url" placeholder="https://sito.com/tua-foto.png" style="width: 100%;">
-                </div>
-                
-                <button onclick="aggiornaProfilo()" class="btn-secondary" style="width: 100%; border-color: var(--accent); margin-top: 5px; justify-content: center;">💾 Salva Modifiche</button>
-            </div>
-
-            <button onclick="disconnettiUtente()" class="btn-custom" style="background: linear-gradient(135deg, #ff0055, #b3003b); box-shadow: 0 4px 15px rgba(255,0,85,0.3); padding: 12px 30px;">EFFETTUA LOGOUT</button>
-        </div>
-
-        <p id="auth-msg" style="margin: 0; font-size: 0.9rem; font-weight: 700; min-height: 20px;"></p>
-    </div>
-</div>
 <div id="weeklyPage" class="page">
-    <div class="card" style="grid-column: span 3; text-align:center; align-items:center; justify-content:center;">
-        <h2>Weekly Demon</h2>
+    <div class="card" style="grid-column: span 3; text-align:center; align-items:center; justify-content:center; max-width:800px; margin:0 auto; width:100%;">
+        <span id="weeklyBadge" style="font-size:0.8rem; letter-spacing:2px; font-weight:800; color:var(--accent); background:rgba(157,78,221,0.12); padding:6px 16px; border-radius:20px; border:1px solid var(--border); margin-bottom:4px;">⏰ EVENTO SETTIMANALE</span>
+        <h2 id="weeklyTitle" style="font-size:2.5rem; margin:0; font-weight:900; color:#fff; text-shadow:0 0 20px var(--accent-glow);">Weekly Demon</h2>
+        <p id="weeklySub" style="color:var(--text-muted); max-width:520px; margin: 8px 0; font-size:0.95rem;">Completa gli obiettivi del demone della settimana per testare la tua costanza!</p>
+        
+        <div class="timer-badge">
+            <span id="lblTimerPrefix" style="opacity:0.6; font-size:0.85rem;">⏳ SCADE TRA:</span>
+            <span id="weekly-timer-val" style="color:var(--accent); text-shadow: 0 0 10px var(--accent-glow);">Calcolo...</span>
+        </div>
+        
+        <div id="weeklyContent" style="width:100%; margin:15px 0; background:rgba(0,0,0,0.4); border:1px solid var(--border); border-radius:28px; padding:25px; display:flex; flex-direction:column; align-items:center; gap:20px; box-shadow:0 15px 35px rgba(0,0,0,0.5);"></div>
     </div>
 </div>
+
 <div id="hallPage" class="page">
     <div class="card" style="grid-column: span 3;">
-        <h2>🏆 Hall of Fame</h2>
+        <h2 id="hallTitle" style="margin:0; font-weight:900; color:var(--accent);">🏆 Hall of Fame</h2>
+        <p id="hallSub" style="color:var(--text-muted); margin-top:4px;">I giocatori leggendari classificati in base alle performance generali nella lista.</p>
+        <div id="hofContent" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px; margin-top:16px;"></div>
     </div>
 </div>
+
 <div id="settingsPage" class="page">
-    <div class="card" style="grid-column: span 3;">
-        <h2>Impostazioni & OS</h2>
+    <div class="card" style="grid-column: span 3; max-width:850px; margin: 0 auto; width:100%;">
+        <h2 id="sTitle" style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem;">Impostazioni & OS</h2>
+        
+        <label id="tLang" style="font-weight:700; margin-top:10px;">Lingua di Sistema:</label>
+        <div class="lang-grid">
+            <div class="lang-card active" onclick="setLang('it', this)">🇮🇹<br><strong>Italiano</strong></div>
+            <div class="lang-card" onclick="setLang('en', this)">🇬🇧<br><strong>English</strong></div>
+            <div class="lang-card" onclick="setLang('es', this)">🇪🇸<br><strong>Español</strong></div>
+            <div class="lang-card" onclick="setLang('pt', this)">🇧🇷 / 🇵🇹<br><strong>Português</strong></div>
+            <div class="lang-card" onclick="setLang('fr', this)">🇫🇷<br><strong>Français</strong></div>
+        </div>
+
+        <label id="tColor" style="font-weight:700; margin-top:15px;">Colore Neon Principale:</label>
+        <div class="color-grid">
+            <div class="color-swatch active" style="background:#9d4edd; color:#9d4edd;" onclick="setThemeColor('#9d4edd', 'rgba(157, 78, 221, 0.4)', this)" title="Void Purple"></div>
+            <div class="color-swatch" style="background:#39ff14; color:#39ff14;" onclick="setThemeColor('#39ff14', 'rgba(57, 255, 20, 0.4)', this)" title="Cyber Green"></div>
+            <div class="color-swatch" style="background:#00f0ff; color:#00f0ff;" onclick="setThemeColor('#00f0ff', 'rgba(0, 240, 255, 0.4)', this)" title="Neon Cyan"></div>
+            <div class="color-swatch" style="background:#ff003c; color:#ff003c;" onclick="setThemeColor('#ff003c', 'rgba(255, 0, 60, 0.4)', this)" title="Blood Red"></div>
+            <div class="color-swatch" style="background:#ffd700; color:#ffd700;" onclick="setThemeColor('#ffd700', 'rgba(255, 215, 0, 0.4)', this)" title="Luxury Gold"></div>
+        </div>
+
+        <label style="font-weight:700; margin-top:15px;" id="tPref">Preferenze Interfaccia:</label>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="setting-row">
+                <span id="lblTheme">Tema Chiaroscuro (Light Mode)</span>
+                <input type="checkbox" id="themeCheck" onchange="toggleTheme()" style="width:20px; height:20px; cursor:pointer;">
+            </div>
+            <div class="setting-row">
+                <span id="lblSfx">Effetti Sonori UI (SFX)</span>
+                <input type="checkbox" id="sfxCheck" checked style="width:20px; height:20px; cursor:pointer;">
+            </div>
+            <div class="setting-row">
+                <span id="lblCompact">Modalità Compatta (Lista Densa)</span>
+                <input type="checkbox" id="compactCheck" onchange="document.body.classList.toggle('compact')" style="width:20px; height:20px; cursor:pointer;">
+            </div>
+            <div class="setting-row">
+                <span id="lblAuto">Autoplay Video YouTube</span>
+                <input type="checkbox" id="autoCheck" checked style="width:20px; height:20px; cursor:pointer;">
+            </div>
+            <div class="setting-row">
+                <span id="lblDefVideo">Avvia Video di default in modalità Showcase</span>
+                <input type="checkbox" id="defVideoCheck" onchange="updateDefaultVideo()" style="width:20px; height:20px; cursor:pointer;">
+            </div>
+            <div class="setting-row">
+                <span id="lblPerf">Modalità Prestazioni (Disabilita animazioni pesanti)</span>
+                <input type="checkbox" id="perfCheck" style="width:20px; height:20px; cursor:pointer;">
+            </div>
+        </div>
+
+        <div style="margin-top:15px; padding-top:15px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+            <span id="lblReset" style="font-size:0.85rem; opacity:0.6;">Cancella preferiti e progressi salvati localmente</span>
+            <button class="btn-custom" style="background:#ff003c; box-shadow:none; padding:10px 20px;" onclick="resetAllData()" id="btnReset">🗑 Resetta Dati</button>
+        </div>
+    </div>
+</div>
+
+<div id="rouletteModal" class="modal-overlay">
+    <div class="roulette-box">
+        <h3 id="rTitle" style="margin:0; font-size:1.5rem; color:var(--accent); font-weight:900;">🎰 Cyber-Slot Roulette</h3>
+        <p id="rSub" style="margin:0; font-size:0.85rem; opacity:0.7;">Estrazione casuale estrema senza perdere il segno nella lista.</p>
+        
+        <div class="slot-window">
+            <div id="slotTrack" class="slot-track"></div>
+        </div>
+
+        <div style="display:flex; gap:12px; justify-content:center; margin-top:10px;">
+            <button class="btn-secondary" style="flex:1; padding:14px;" onclick="closeRoulette()" id="btnCancelR">Annulla</button>
+            <button class="btn-custom" style="flex:1; padding:14px;" id="btnSpin" onclick="startSpin()">🎲 Gira Rullo</button>
+            <button class="btn-custom" style="flex:1; padding:14px; display:none; background:#39ff14; color:#000;" id="btnOpenLvl" onclick="confirmRouletteLvl()">Apri Livello</button>
+        </div>
     </div>
 </div>
 
 <script type="module">
-    // Inizializzazione Firebase e Moduli Auth avanzati
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { 
         getAuth, 
         createUserWithEmailAndPassword, 
         signInWithEmailAndPassword, 
         signOut, 
-        onAuthStateChanged,
-        updateProfile 
+        onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // Configura qui le tue chiavi Firebase
     const firebaseConfig = {
-        apiKey: "LA_TUA_API_KEY",
-        authDomain: "IL_TUO_AUTH_DOMAIN",
-        projectId: "IL_TUO_PROJECT_ID",
-        storageBucket: "IL_TUO_STORAGE_BUCKET",
-        messagingSenderId: "IL_TUO_SENDER_ID",
-        appId: "IL_TUO_APP_ID"
+        apiKey: "AIzaSyBH2sXzuOfOpY2rOQNlS2zwyQnyfWy0DvA",
+        authDomain: "global-list-inv.firebaseapp.com",
+        projectId: "global-list-inv",
+        storageBucket: "global-list-inv.firebasestorage.app",
+        messagingSenderId: "517402636532",
+        appId: "1:517402636532:web:02c81482fe8b6367782ea1"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Sistema di Navigazione Pagine OS
-    window.showPage = function(pageId, element) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active'));
-        
-        const targetPage = document.getElementById(pageId + 'Page');
-        if(targetPage) targetPage.classList.add('active');
-        if(element) element.classList.add('active');
-    };
-
-    // UI Auth Elements
+    // Elementi UI Authentication
     const emailInput = document.getElementById('auth-email');
     const passwordInput = document.getElementById('auth-password');
     const authForm = document.getElementById('auth-form');
-    const profileSection = document.getElementById('user-profile-section');
+    const loggedInfo = document.getElementById('user-logged-info');
+    const userEmailSpan = document.getElementById('user-display-email');
     const msgEl = document.getElementById('auth-msg');
+    const btnAccountToggle = document.getElementById('btnAccountToggle');
+    const accountModal = document.getElementById('accountModal');
+
+    window.toggleAccountModal = function() {
+        if (accountModal.style.display === 'none' || accountModal.style.display === '') {
+            accountModal.style.display = 'flex';
+        } else {
+            accountModal.style.display = 'none';
+            if (msgEl) msgEl.innerText = "";
+        }
+    }
 
     function mostraMessaggio(testo, isSuccesso) {
         msgEl.innerText = testo;
@@ -410,17 +534,19 @@
         const email = emailInput.value.trim();
         const password = passwordInput.value;
         if(!email || !password) return mostraMessaggio("❌ Inserisci email e password!", false);
+        if(password.length < 6) return mostraMessaggio("❌ Password di almeno 6 caratteri!", false);
 
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            await updateProfile(userCredential.user, {
-                displayName: email.split('@')[0]
-            });
+            await createUserWithEmailAndPassword(auth, email, password);
             mostraMessaggio("✅ Registrato con successo!", true);
+            emailInput.value = ""; passwordInput.value = "";
+            setTimeout(() => toggleAccountModal(), 1500);
         } catch (error) {
-            mostraMessaggio("❌ Errore durante la registrazione.", false);
+            if(error.code === 'auth/email-already-in-use') mostraMessaggio("❌ Email già registrata!", false);
+            else if(error.code === 'auth/invalid-email') mostraMessaggio("❌ Formato email errato!", false);
+            else mostraMessaggio("❌ Errore di registrazione.", false);
         }
-    };
+    }
 
     window.accediUtente = async function() {
         const email = emailInput.value.trim();
@@ -430,69 +556,653 @@
         try {
             await signInWithEmailAndPassword(auth, email, password);
             mostraMessaggio("⚡ Accesso eseguito!", true);
+            emailInput.value = ""; passwordInput.value = "";
+            setTimeout(() => toggleAccountModal(), 1500);
         } catch (error) {
-            mostraMessaggio("❌ Email o password errate!", false);
+            if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                mostraMessaggio("❌ Email o password errate!", false);
+            } else {
+                mostraMessaggio("❌ Errore di accesso.", false);
+            }
         }
-    };
+    }
 
     window.disconnettiUtente = async function() {
         try {
             await signOut(auth);
-            mostraMessaggio("👋 Disconnesso con successo!", true);
+            mostraMessaggio("👋 Disconnesso/a!", true);
+            setTimeout(() => toggleAccountModal(), 1000);
         } catch (error) {
-            mostraMessaggio("❌ Errore durante il logout.", false);
-        }
-    };
-
-    // Funzione per salvare le modifiche di Username e URL Immagine del Profilo
-    window.aggiornaProfilo = async function() {
-        const user = auth.currentUser;
-        if(!user) return;
-
-        const newName = document.getElementById('edit-username').value.trim();
-        const newAvatar = document.getElementById('edit-avatar-url').value.trim();
-        
-        let updates = {};
-        if(newName) updates.displayName = newName;
-        if(newAvatar) updates.photoURL = newAvatar;
-
-        if(Object.keys(updates).length === 0) return mostraMessaggio("⚠️ Inserisci modifiche prima di salvare.", false);
-
-        try {
-            await updateProfile(user, updates);
-            mostraMessaggio("✅ Profilo aggiornato!", true);
-            aggiornaUIProfilo(auth.currentUser);
-            document.getElementById('edit-username').value = "";
-            document.getElementById('edit-avatar-url').value = "";
-        } catch(error) {
-            mostraMessaggio("❌ Errore durante l'aggiornamento.", false);
-        }
-    };
-
-    function aggiornaUIProfilo(user) {
-        if(!user) return;
-        document.getElementById('profile-email').innerText = user.email;
-        document.getElementById('profile-username').innerText = user.displayName || user.email.split('@')[0];
-        
-        const avatarImg = document.getElementById('profile-avatar');
-        if(user.photoURL) {
-            avatarImg.src = user.photoURL;
-        } else {
-            avatarImg.src = `https://via.placeholder.com/120/1a1a24/9d4edd?text=${(user.displayName || 'U').charAt(0).toUpperCase()}`;
+            mostraMessaggio("❌ Errore logout.", false);
         }
     }
 
-    // Monitoraggio dello stato dell'utente loggato
     onAuthStateChanged(auth, (user) => {
         if (user) {
             authForm.style.display = 'none';
-            profileSection.style.display = 'flex';
-            aggiornaUIProfilo(user);
+            loggedInfo.style.display = 'flex';
+            userEmailSpan.innerText = user.email;
+            const username = user.email.split('@')[0];
+            btnAccountToggle.innerHTML = `👤 UTENTE: ${username.toUpperCase()}`;
+            btnAccountToggle.style.border = "1px solid #39ff14";
+            btnAccountToggle.style.boxShadow = "0 4px 12px rgba(57, 255, 20, 0.2)";
         } else {
             authForm.style.display = 'flex';
-            profileSection.style.display = 'none';
+            loggedInfo.style.display = 'none';
+            userEmailSpan.innerText = '';
+            btnAccountToggle.innerHTML = `🌐 ACCOUNT: DISCONNESSO`;
+            btnAccountToggle.style.border = "none";
+            btnAccountToggle.style.boxShadow = "0 4px 12px var(--accent-glow)";
         }
     });
+
+    const mockLevels = [
+        { rank: 1, name: "Tidal Wave", thumb: "https://i.ytimg.com/vi/4T3mZ9QG6W0/mqdefault.jpg", videoVerifier: "4T3mZ9QG6W0", videoShowcase: "P75R562qf9c", verified: true, creator: "OniLink", verifier: "Zoink", levelID: "95638150", song: "Shiawase VIP - Dion Timmer", desc: "L'Extreme Demon attuale Top 1. Difficoltà leggendaria guidata interamente dal wave.", skill: "🌊 Wave" },
+        { rank: 2, name: "Avernus", thumb: "https://i.ytimg.com/vi/8n8q4g882c0/mqdefault.jpg", videoVerifier: "8n8q4g882c0", videoShowcase: "h5M0w8X7634", verified: true, creator: "PockeWindfish", verifier: "Diamond", levelID: "89012488", song: "Thermodynamix - dj-Nate", desc: "Verificato di recente! Ostacolo infernale che richiede precisione chirurgica nei salti e nel volo con la navicella.", skill: "🚀 Ship" },
+        { rank: 3, name: "Acheron", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: true, creator: "Ryamu", verifier: "Zoink", levelID: "83905761", song: "Thermaldynamix - dj-Nate", desc: "Ex Top 1 per lunghissimo tempo. Design oscuro, stretto e punitivo in ogni singola transizione.", skill: "⏱️ Timing" },
+        { rank: 4, name: "Silent Clubstep", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: false, creator: "TheRealSailent", verifier: "Paqoe", levelID: "79140416", song: "Clubstep - DJ-Nate", desc: "Il livello impossibile storico di GD, rigenerato con sezioni di memoria estreme e infine domato dopo anni di tentativi.", skill: "🧠 Memory" },
+        { rank: 5, name: "Zodiac", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: true, creator: "Biancoox & More", verifier: "Technical", levelID: "55866685", song: "Sphere - Creo", desc: "Un megacollab storico lunghissimo e snervante che testa ogni singola abilità di gioco.", skill: "⏱️ Timing" },
+        { rank: 6, name: "Slaughterhouse", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: true, creator: "IcedCave", verifier: "SpaceUK", levelID: "74480749", song: "Lost - Crim3s", desc: "La perfetta definizione di wave estremo e rilascio rapidissimo in spazi microscopici.", skill: "🌊 Wave" }
+    ];
+
+    const mockPlayers = {
+        "Tidal Wave": [{ name: "Zoink", percent: 100 }, { name: "Trick", percent: 98 }, { name: "Riot", percent: 85 }, { name: "Nexus", percent: 72 }, { name: "Doggie", percent: 65 }],
+        "Avernus": [{ name: "Diamond", percent: 100 }, { name: "SpaceUK", percent: 92 }, { name: "Viper", percent: 80 }],
+        "Acheron": [{ name: "Zoink", percent: 100 }, { name: "Viper", percent: 100 }, { name: "Doggie", percent: 96 }]
+    };
+
+    let DB = {
+        levels: [], players: {},
+        favs: JSON.parse(localStorage.getItem('gd_favs') || '[]'),
+        progress: JSON.parse(localStorage.getItem('gd_prog') || '{}'),
+        hideUnv: false, showFavsOnly: false, currentLvl: null, currentLang: 'it',
+        currentVideoMode: 'verifier', defaultVideoMode: 'verifier'
+    };
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSfx(type) {
+        if(!document.getElementById('sfxCheck').checked) return;
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        
+        if(type === 'click') {
+            osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.04);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.04);
+        } else if(type === 'tick') {
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.015);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.015);
+        } else if(type === 'win') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08);
+            osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.16);
+            osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.24);
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.45);
+        }
+    }
+
+    const dict = {
+        it: { 
+            search: "Cerca demone per nome...", unv: "✔ Verificati", fav: "♥ Preferiti", hSel: "Seleziona un Livello", hSub: "Classifica Record", btnSub: "🚩 Invia il tuo Record", searchP: "Cerca player nel livello...",
+            weekly: "⏰ Weekly Demon", weeklyBadge: "⏰ EVENTO SETTIMANALE", weeklySub: "Completa gli obiettivi del demone della settimana per testare la tua costanza!", timerPrefix: "⏳ SCADE TRA:", 
+            hall: "🏆 Hall of Fame", hallSub: "I giocatori leggendari classificati in base alle performance generali nella lista.", 
+            sTitle: "Impostazioni & OS", tLang: "Lingua di Sistema:", tColor: "Colore Neon Principale:", tPref: "Preferenze Interfaccia:", 
+            lblTheme: "Tema Chiaroscuro (Light Mode)", lblSfx: "Effetti Sonori UI (SFX)", lblCompact: "Modalità Compatta (Lista Densa)", lblAuto: "Autoplay Video YouTube", lblDefVideo: "Avvia Video di default in modalità Showcase", lblPerf: "Modalità Prestazioni (Disabilita animazioni pesanti)", lblReset: "Cancella preferiti e progressi salvati localmente", btnReset: "🗑 Resetta Dati", 
+            lblMyProg: "Progresso Personale (Pratica/Normal):", btnChal: "⚡ Sfida di Pratica Casuale", stLvl: "DEMONI", stVer: "VERIFICATI", stFav: "PREFERITI", 
+            rTitle: "🎰 Cyber-Slot Roulette", rSub: "Estrazione casuale estrema senza perdere il segno nella lista.", rSpin: "🎲 Gira Rullo", rRetry: "🎲 Riprova", rCancel: "Annulla", rOpen: "Apri Livello",
+            stUnplayed: "⚪ Non Giocato", stPractice: "🟡 In Pratica", stBeaten: "🟢 Completato", skillKey: "ABILITÀ CHIAVE:", diffTier: "Tier Difficoltà:", share: "📤 Condividi", copied: "✔ Copiato!",
+            lblCreat: "Creatore:", lblVerif: "Verificatore:", lblSong: "Canzone:", noVid: "Nessun video disponibile.", noRec: "Nessun record registrato per questa ricerca.", points: "Punti Totali", cleared: "Completati",
+            qTitle: "🏆 OBIETTIVI WEEKLY:", q1: "Avvia la scalata: Raggiungi almeno il 15%", q2: "Veterano della Pratica: Raggiungi almeno il 50%", q3: "Leggenda Assoluta: Completa il livello al 100%", wProg: "Progresso Registrado:", wEnter: "⚡ ENTRA IN PRATICA NOW",
+            tierGod: "🔴 God-Tier (Estremo Assoluto)", tierHigh: "🟠 High Extreme (Molto Duro)", tierMid: "🟡 Mid Extreme (Intermedio)", tierLow: "🟢 Entry Extreme (Accessibile)"
+        },
+        en: { 
+            search: "Search demon by name...", unv: "✔ Verified Only", fav: "♥ Favorites", hSel: "Select a Level", hSub: "Record Leaderboard", btnSub: "🚩 Submit Your Record", searchP: "Search player in level...",
+            weekly: "⏰ Weekly Demon", weeklyBadge: "⏰ WEEKLY EVENT", weeklySub: "Complete the weekly targets to prove your grinding consistency!", timerPrefix: "⏳ EXPIRES IN:", 
+            hall: "🏆 Hall of Fame", hallSub: "Legendary players ranked by overall leaderboards metrics.", 
+            sTitle: "Settings & OS", tLang: "System Language:", tColor: "Primary Neon Accent:", tPref: "Interface Preferences:", 
+            lblTheme: "Light Mode Theme", lblSfx: "UI Sound Effects (SFX)", lblCompact: "Compact Mode (Dense List)", lblAuto: "YouTube Video Autoplay", lblDefVideo: "Start videos in Showcase mode by default", lblPerf: "Performance Mode (Disable heavy animations)", lblReset: "Clear favorites and practice progress saved locally", btnReset: "🗑 Reset Data", 
+            lblMyProg: "Personal Progress (Practice/Normal):", btnChal: "⚡ Random Practice Challenge", stLvl: "DEMONS", stVer: "VERIFIED", stFav: "FAVORITES", 
+            rTitle: "🎰 Cyber-Slot Roulette", rSub: "Extreme random selection without losing your place in the list.", rSpin: "🎲 Spin Reel", rRetry: "🎲 Try Again", rCancel: "Cancel", rOpen: "Open Level",
+            stUnplayed: "⚪ Unplayed", stPractice: "🟡 In Practice", stBeaten: "🟢 Completed", skillKey: "KEY SKILL:", diffTier: "Difficulty Tier:", share: "📤 Share", copied: "✔ Copied!",
+            lblCreat: "Creator:", lblVerif: "Verifier:", lblSong: "Song:", noVid: "No video available.", noRec: "No records found for this search.", points: "Total Points", cleared: "Completed",
+            qTitle: "🏆 WEEKLY TARGETS:", q1: "Start the climb: Reach at least 15%", q2: "Practice Veteran: Reach at least 50%", q3: "Absolute Legend: Complete the level at 100%", wProg: "Recorded Progress:", wEnter: "⚡ ENTER PRACTICE NOW",
+            tierGod: "🔴 God-Tier (Absolute Extreme)", tierHigh: "🟠 High Extreme (Very Hard)", tierMid: "🟡 Mid Extreme (Intermediate)", tierLow: "🟢 Entry Extreme (Accessible)"
+        },
+        es: { 
+            search: "Buscar demonio por nombre...", unv: "✔ Verificados", fav: "♥ Favoritos", hSel: "Selecciona un Nivel", hSub: "Tabla de Récords", btnSub: "🚩 Enviar tu Récord", searchP: "Buscar jugador en nivel...",
+            weekly: "⏰ Demonio Semanal", weeklyBadge: "⏰ EVENTO SEMANAL", weeklySub: "¡Completa los objetivos semanales para demostrar tu constancia!", timerPrefix: "⏳ EXPIRA EN:", 
+            hall: "🏆 Salón de la Fama", hallSub: "Jugadores legendarios clasificados por su rendimiento general.", 
+            sTitle: "Configuración y OS", tLang: "Idioma del Sistema:", tColor: "Color Neón Principal:", tPref: "Preferencias de Interfaz:", 
+            lblTheme: "Tema Claro (Light Mode)", lblSfx: "Efectos de Sonido UI (SFX)", lblCompact: "Modo Compacto (Lista Densa)", lblAuto: "Autoplay Video de YouTube", lblDefVideo: "Iniciar videos en modo Showcase por defecto", lblPerf: "Modo Rendimiento (Desactivar animaciones pesadas)", lblReset: "Borrar favoritos y progreso guardados localmente", btnReset: "🗑 Restablecer Datos", 
+            lblMyProg: "Progreso Personal (Práctica/Normal):", btnChal: "⚡ Reto de Práctica Aleatorio", stLvl: "DEMONIOS", stVer: "VERIFICADOS", stFav: "FAVORITOS", 
+            rTitle: "🎰 Ruleta Cyber-Slot", rSub: "Selección aleatoria extrema sin perder tu lugar en la lista.", rSpin: "🎲 Girar Rodillo", rRetry: "🎲 Intentar de Nuevo", rCancel: "Cancelar", rOpen: "Abrir Nivel",
+            stUnplayed: "⚪ Sin Jugar", stPractice: "🟡 En Práctica", stBeaten: "🟢 Completado", skillKey: "HABILIDADE CLAVE:", diffTier: "Nivel de Dificultad:", share: "📤 Compartir", copied: "✔ ¡Copiado!",
+            lblCreat: "Creador:", lblVerif: "Verificador:", lblSong: "Canción:", noVid: "No hay video disponible.", noRec: "No se encontraron récords.", points: "Puntos Totales", cleared: "Completados",
+            qTitle: "🏆 OBJETIVOS SEMANALES:", q1: "Comienza la escalada: Alcanza al menos 15%", q2: "Veterano de Práctica: Alcanza al menos 50%", q3: "Leyenda Absoluta: Completa el nivel al 100%", wProg: "Progreso Registrado:", wEnter: "⚡ ENTRAR EN PRÁCTICA AHORA",
+            tierGod: "🔴 God-Tier (Extremo Absoluto)", tierHigh: "🟠 High Extreme (Muy Duro)", tierMid: "🟡 Mid Extreme (Intermedio)", tierLow: "🟢 Entry Extreme (Accesible)"
+        },
+        pt: { 
+            search: "Buscar demônio por nome...", unv: "✔ Verificados", fav: "♥ Favoritos", hSel: "Selecione um Nível", hSub: "Tabela de Recordes", btnSub: "🚩 Enviar seu Recorde", searchP: "Buscar jogador no nível...",
+            weekly: "⏰ Demônio Semanal", weeklyBadge: "⏰ EVENTO SEMANAL", weeklySub: "Complete os alvos semanais para provar sua consistência!", timerPrefix: "⏳ EXPIRA EM:", 
+            hall: "🏆 Hall da Fama", hallSub: "Jogadores lendários classificados pelo desempenho geral na lista.", 
+            sTitle: "Configurações e OS", tLang: "Idioma do Sistema:", tColor: "Cor Neon Principal:", tPref: "Preferências de Interface:", 
+            lblTheme: "Tema Claro (Light Mode)", lblSfx: "Efeitos Sonoros UI (SFX)", lblCompact: "Modo Compacto (Lista Densa)", lblAuto: "Autoplay Vídeo YouTube", lblDefVideo: "Iniciar vídeos no modo Showcase por padrão", lblPerf: "Modo Desempenho (Desativar animações pesadas)", lblReset: "Limpar favoritos e progresso salvos localmente", btnReset: "🗑 Resetar Dados", 
+            lblMyProg: "Progresso Pessoal (Prática/Normal):", btnChal: "⚡ Desafio de Prática Aleatório", stLvl: "DEMÔNIOS", stVer: "VERIFICADOS", stFav: "FAVORITOS", 
+            rTitle: "🎰 Roleta Cyber-Slot", rSub: "Seleção aleatória extrema sem perder seu lugar na lista.", rSpin: "🎲 Girar Rolo", rRetry: "🎲 Tentar Novamente", rCancel: "Cancelar", rOpen: "Abrir Nível",
+            stUnplayed: "⚪ Não Jogado", stPractice: "🟡 Em Prática", stBeaten: "🟢 Concluído", skillKey: "HABILIDADE CHAVE:", diffTier: "Nível de Dificuldade:", share: "📤 Compartilhar", copied: "✔ Copiado!",
+            lblCreat: "Criador:", lblVerif: "Verificador:", lblSong: "Música:", noVid: "Nenhum vídeo disponível.", noRec: "Nenhum recorde encontrado.", points: "Pontos Totais", cleared: "Concluídos",
+            qTitle: "🏆 ALVOS SEMANAIS:", q1: "Comece a subida: Alcance pelo menos 15%", q2: "Veterano do Treino: Alcance pelo menos 50%", q3: "Lenda Absoluta: Complete o nível 100%", wProg: "Progresso Registrado:", wEnter: "⚡ ENTRAR NA PRÁTICA AGORA",
+            tierGod: "🔴 God-Tier (Extremo Absoluto)", tierHigh: "🟠 High Extreme (Muito Difícil)", tierMid: "🟡 Mid Extreme (Intermediário)", tierLow: "🟢 Entry Extreme (Acessível)"
+        },
+        fr: { 
+            search: "Chercher démon par nom...", unv: "✔ Vérifiés", fav: "♥ Favoris", hSel: "Sélectionner un Niveau", hSub: "Classement des Records", btnSub: "🚩 Soumettre un Record", searchP: "Chercher joueur dans le niveau...",
+            weekly: "⏰ Démon de la Semaine", weeklyBadge: "⏰ ÉVÉNEMENT HEBDOMADAIRE", weeklySub: "Complète les objectifs de la semaine pour prouver ta constance !", timerPrefix: "⏳ EXPIRE DANS :", 
+            hall: "🏆 Panthéon", hallSub: "Les joueurs légendaires classés selon leurs performances globales.", 
+            sTitle: "Paramètres & OS", tLang: "Langue du Système :", tColor: "Couleur Néon Principale :", tPref: "Préférences d'Interface :", 
+            lblTheme: "Thème Clair (Light Mode)", lblSfx: "Effets Sonores UI (SFX)", lblCompact: "Mode Compact (Liste Dense)", lblAuto: "Lecture auto vidéo YouTube", lblDefVideo: "Lancer les vidéos en mode Showcase par défaut", lblPerf: "Mode Performance (Désactiver animations lourdes)", lblReset: "Effacer favoris et progression sauvegardés localement", btnReset: "🗑 Réinitialiser Données", 
+            lblMyProg: "Progression Personnelle (Entraînement/Normal) :", btnChal: "⚡ Défi d'Entraînement Aléatoire", stLvl: "DÉMONS", stVer: "VÉRIFIÉS", stFav: "FAVORIS", 
+            rTitle: "🎰 Roulette Cyber-Slot", rSub: "Sélection aléatoire extrême sans perdre votre place dans la liste.", rSpin: "🎲 Lancer Rouleau", rRetry: "🎲 Réessayer", rCancel: "Annuler", rOpen: "Ouvrir le Niveau",
+            stUnplayed: "⚪ Non Joué", stPractice: "🟡 En Pratique", stBeaten: "🟢 Terminé", skillKey: "COMPÉTENCE CLÉ :", diffTier: "Palier de Difficulté :", share: "📤 Partager", copied: "✔ Copié !",
+            lblCreat: "Créateur :", lblVerif: "Vérificateur :", lblSong: "Musique :", noVid: "Aucune vidéo disponible.", noRec: "Aucun record trouvé.", points: "Points Totaux", cleared: "Terminés",
+            qTitle: "🏆 OBJECTIFS HEBDOS :", q1: "Débute l'ascension : Atteins au moins 15%", q2: "Vétéran de Pratique : Atteins au moins 50%", q3: "Légende Absolue : Termine le niveau à 100%", wProg: "Progression Enregistrée :", wEnter: "⚡ ENTRER EN PRATIQUE MAINTENANT",
+            tierGod: "🔴 God-Tier (Extrême Absolu)", tierHigh: "🟠 High Extreme (Très Dur)", tierMid: "🟡 Mid Extreme (Intermédiaire)", tierLow: "🟢 Entry Extreme (Accessible)"
+        }
+    };
+
+    async function init() {
+        try {
+            DB.levels = await (await fetch('levels.json')).json();
+            DB.players = await (await fetch('players.json')).json();
+        } catch(e) {
+            DB.levels = mockLevels;
+            DB.players = mockPlayers;
+        }
+        updateStats(); renderList(); renderWeekly(); renderHall(); startWeeklyTimer();
+    }
+
+    function updateStats() {
+        document.getElementById('stTotal').innerText = DB.levels.length;
+        document.getElementById('stVer').innerText = DB.levels.filter(l => l.verified).length;
+        document.getElementById('stFav').innerText = DB.favs.length;
+    }
+
+    window.toggleFav = function(name, event) {
+        event.stopPropagation(); playSfx('click');
+        if(DB.favs.includes(name)) DB.favs = DB.favs.filter(f => f !== name);
+        else DB.favs.push(name);
+        localStorage.setItem('gd_favs', JSON.stringify(DB.favs));
+        updateStats(); renderList(); if(DB.currentLvl && DB.currentLvl.name === name) renderWeekly();
+    }
+
+    window.renderList = function() {
+        const body = document.getElementById('listBody');
+        const query = document.getElementById('search').value.toLowerCase();
+        body.innerHTML = "";
+
+        let filtered = DB.levels.filter(l => {
+            const matchQuery = l.name.toLowerCase().includes(query);
+            const matchUnv = !DB.hideUnv || l.verified;
+            const matchFav = !DB.showFavsOnly || DB.favs.includes(l.name);
+            return matchQuery && matchUnv && matchFav;
+        });
+
+        filtered.sort((a, b) => a.rank - b.rank);
+
+        filtered.forEach((lvl) => {
+            const el = document.createElement("div");
+            el.className = `lvl-item ${DB.currentLvl && DB.currentLvl.name === lvl.name ? 'selected' : ''}`;
+            
+            const isTop1 = (lvl.rank === 1);
+            const isFav = DB.favs.includes(lvl.name);
+            const myProg = DB.progress[lvl.name] || 0;
+            const statusColor = myProg === 100 ? '#39ff14' : (myProg > 0 ? '#ffd700' : 'var(--text-muted)');
+
+            el.innerHTML = `
+                <span class="fav-btn ${isFav ? 'fav-active' : ''}" onclick="toggleFav('${lvl.name}', event)">♥</span>
+                <strong style="width:30px; opacity:0.4; font-size:0.9rem;">#${lvl.rank}</strong>
+                <img src="${lvl.thumb}" class="thumb" onerror="this.src='https://via.placeholder.com/54x30/1a1a24/9d4edd?text=GD'">
+                <div style="flex:1;">
+                    <span class="${isTop1 ? 'top1-text' : ''}" style="font-weight:700; display:block;">${isTop1 ? '👑 ' : ''}${lvl.name}</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">${lvl.skill || '⚡ Normal'} • <strong style="color:${statusColor}">${myProg}%</strong></span>
+                </div>
+            `;
+
+            el.onclick = () => {
+                playSfx('click'); showDetails(lvl);
+                document.querySelectorAll('.lvl-item').forEach(item => item.classList.remove('selected'));
+                el.classList.add('selected');
+            };
+            body.appendChild(el);
+        });
+    }
+
+    function showDetails(lvl) {
+        DB.currentLvl = lvl;
+        const d = dict[DB.currentLang] || dict['it'];
+        document.getElementById("lvlName").innerText = (lvl.rank === 1 ? "👑 " : "") + lvl.name;
+        document.getElementById("lvlSkillBadge").innerText = lvl.skill ? `${d.skillKey} ${lvl.skill.toUpperCase()}` : "EXTREME DEMON";
+        document.getElementById("lvlDesc").innerText = lvl.desc || "No description available.";
+        
+        document.getElementById("analyzerBox").style.display = "flex";
+        let tierText = d.tierLow;
+        if(lvl.rank <= 5) tierText = d.tierGod;
+        else if(lvl.rank <= 25) tierText = d.tierHigh;
+        else if(lvl.rank <= 75) tierText = d.tierMid;
+        document.getElementById("valTier").innerText = tierText;
+
+        document.getElementById("progressSection").style.display = "flex";
+        const myVal = parseInt(DB.progress[lvl.name] || 0);
+        document.getElementById("progSlider").value = myVal;
+        updateProgressUI(myVal);
+        document.getElementById("chalResult").innerText = "";
+
+        const statusBadge = document.getElementById("lvlStatus");
+        if(myVal === 100) { statusBadge.className = "status-badge st-beaten"; statusBadge.innerText = d.stBeaten; }
+        else if(myVal > 0) { statusBadge.className = "status-badge st-practice"; statusBadge.innerText = d.stPractice; }
+        else { statusBadge.className = "status-badge st-unplayed"; statusBadge.innerText = d.stUnplayed; }
+
+        document.getElementById("lvlMeta").style.display = "grid";
+        document.getElementById("mCreator").innerText = lvl.creator || "-";
+        document.getElementById("mVerifier").innerText = lvl.verifierName || lvl.verifier || "-";
+        document.getElementById("mSong").innerText = lvl.song || "Audio Original";
+        document.getElementById("mID").innerText = lvl.levelID || "N/A";
+
+        document.getElementById("videoToggles").style.display = "flex";
+        switchVideoMode(DB.defaultVideoMode);
+        
+        renderLeaderboard();
+    }
+
+    window.renderLeaderboard = function() {
+        if(!DB.currentLvl) return;
+        const d = dict[DB.currentLang] || dict['it'];
+        const queryP = document.getElementById('searchPlayer').value.toLowerCase();
+        const recs = DB.players[DB.currentLvl.name] || [];
+        const lbContainer = document.getElementById("leaderboard");
+        
+        let filteredRecs = recs.filter(p => p.name.toLowerCase().includes(queryP));
+        filteredRecs.sort((a,b) => b.percent - a.percent);
+
+        if(filteredRecs.length === 0) {
+            lbContainer.innerHTML = `<p style="opacity:0.4; text-align:center; font-size:0.85rem; padding: 20px 0;">${d.noRec}</p>`;
+        } else {
+            lbContainer.innerHTML = filteredRecs.map((p, idx) => {
+                let rankClass = "lb-rank-other"; let medal = "";
+                if(idx === 0) { rankClass = "lb-rank-1"; medal = "🏆 "; }
+                else if(idx === 1) { rankClass = "lb-rank-2"; medal = "🥈 "; }
+                else if(idx === 2) { rankClass = "lb-rank-3"; medal = "🥉 "; }
+                
+                return `
+                    <div class="lb-row">
+                        <div style="display: flex; align-items: center;">
+                            <span class="lb-rank ${rankClass}">${idx + 1}</span>
+                            <span style="font-weight: ${idx < 3 ? '800' : '600'}; color: ${idx === 0 ? '#ffd700' : '#fff'};">${medal}${p.name}</span>
+                        </div>
+                        <span style="color:${p.percent === 100 ? '#39ff14' : 'var(--accent)'}; font-weight:900;">${p.percent}%</span>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+
+    window.switchVideoMode = function(mode) {
+        if (!DB.currentLvl) return;
+        DB.currentVideoMode = mode;
+        const d = dict[DB.currentLang] || dict['it'];
+        
+        document.getElementById('btnVerifVid').classList.toggle('active', mode === 'verifier');
+        document.getElementById('btnShowVid').classList.toggle('active', mode === 'showcase');
+        
+        let rawVideoId = mode === 'verifier' ? 
+            (DB.currentLvl.videoVerifier || DB.currentLvl.videoID) : 
+            (DB.currentLvl.videoShowcase || DB.currentLvl.verifierID || DB.currentLvl.videoID);
+        
+        if (!rawVideoId) {
+            document.getElementById("videoContainer").innerHTML = `<p style="opacity:0.4; text-align:center; font-size:0.85rem;">${d.noVid}</p>`;
+            return;
+        }
+
+        let id = '';
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = rawVideoId.match(regExp);
+        if (match && match[2].length === 11) { id = match[2]; } 
+        else { id = rawVideoId.split('v=').pop().split('&')[0].split('?')[0].split('/').pop(); }
+        
+        const auto = document.getElementById('autoCheck').checked ? "?autoplay=1&mute=0" : "?autoplay=0";
+        document.getElementById("videoContainer").innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}${auto}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="border-radius:18px;"></iframe>`;
+    }
+
+    window.updateDefaultVideo = function() {
+        const isShowcase = document.getElementById('defVideoCheck').checked;
+        DB.defaultVideoMode = isShowcase ? 'showcase' : 'verifier';
+    }
+
+    window.updateProgressUI = function(val) {
+        document.getElementById("progVal").innerText = val + "%";
+        document.documentElement.style.setProperty('--track-fill', val + "%");
+    }
+
+    window.saveProgress = function(val) {
+        if(!DB.currentLvl) return;
+        playSfx('tick');
+        const numVal = parseInt(val);
+        DB.progress[DB.currentLvl.name] = numVal;
+        localStorage.setItem('gd_prog', JSON.stringify(DB.progress));
+        updateProgressUI(numVal);
+        
+        const d = dict[DB.currentLang] || dict['it'];
+        const statusBadge = document.getElementById("lvlStatus");
+        const perfMode = document.getElementById('perfCheck').checked;
+
+        if(numVal === 100) { 
+            statusBadge.className = "status-badge st-beaten"; statusBadge.innerText = d.stBeaten; 
+            if(!perfMode) confetti({ particleCount: 80, origin: { y: 0.7 } }); 
+        }
+        else if(numVal > 0) { statusBadge.className = "status-badge st-practice"; statusBadge.innerText = d.stPractice; }
+        else { statusBadge.className = "status-badge st-unplayed"; statusBadge.innerText = d.stUnplayed; }
+        
+        renderList();
+        renderWeekly();
+    }
+
+    window.generateChallenge = function() {
+        playSfx('click');
+        const start = Math.floor(Math.random() * 55);
+        const end = Math.min(100, start + Math.floor(Math.random() * 35) + 10);
+        document.getElementById("chalResult").innerText = `🎯 Goal: ${start}% ➔ ${end}%`;
+    }
+
+    let selectedRouletteLvl = null;
+    window.openRoulette = function() {
+        playSfx('click');
+        document.getElementById('rouletteModal').classList.add('active');
+        document.getElementById('btnSpin').style.display = 'inline-flex';
+        document.getElementById('btnOpenLvl').style.display = 'none';
+        
+        const track = document.getElementById('slotTrack');
+        track.style.transition = 'none';
+        track.style.transform = 'translateY(0px)';
+        track.innerHTML = `<div class="slot-card"><img src="${DB.levels[0].thumb}"><span>${DB.levels[0].name}</span></div>`;
+    }
+
+    window.closeRoulette = function() { playSfx('click'); document.getElementById('rouletteModal').classList.remove('active'); }
+
+    window.startSpin = function() {
+        if(DB.levels.length === 0) return;
+        playSfx('click');
+        document.getElementById('btnSpin').style.display = 'none';
+        document.getElementById('btnOpenLvl').style.display = 'none';
+        
+        const track = document.getElementById('slotTrack');
+        const perfMode = document.getElementById('perfCheck').checked;
+        const d = dict[DB.currentLang] || dict['it'];
+        
+        let reelHtml = "";
+        const winIdx = 16; 
+        let winLvl = null;
+        for(let i = 0; i < 20; i++) {
+            const rndLvl = DB.levels[Math.floor(Math.random() * DB.levels.length)];
+            if(i === winIdx) winLvl = rndLvl;
+            reelHtml += `<div class="slot-card"><img src="${rndLvl.thumb}"><span>${rndLvl.name}</span></div>`;
+        }
+        track.innerHTML = reelHtml;
+        track.style.transition = 'none';
+        track.style.transform = 'translateY(0px)';
+        
+        void track.offsetWidth;
+        
+        const cardHeight = 140;
+        const targetY = -(winIdx * cardHeight);
+        track.style.transition = 'transform 3.2s cubic-bezier(0.1, 0.9, 0.2, 1)';
+        track.style.transform = `translateY(${targetY}px)`;
+
+        let ticks = 0;
+        const interval = setInterval(() => {
+            playSfx('tick');
+            ticks++;
+            if(ticks > 16) clearInterval(interval);
+        }, 150);
+
+        setTimeout(() => {
+            selectedRouletteLvl = winLvl;
+            playSfx('win');
+            if(!perfMode) confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            document.getElementById('btnSpin').style.display = 'inline-flex';
+            document.getElementById('btnSpin').innerText = d.rRetry;
+            document.getElementById('btnOpenLvl').style.display = 'inline-flex';
+        }, 3200);
+    }
+
+    window.confirmRouletteLvl = function() {
+        closeRoulette();
+        if(selectedRouletteLvl) { showDetails(selectedRouletteLvl); showPage('list', document.querySelectorAll('.nav-icon')[0]); }
+    }
+
+    let weeklyTimerInterval;
+    function startWeeklyTimer() {
+        if(weeklyTimerInterval) clearInterval(weeklyTimerInterval);
+        function updateTimer() {
+            const now = Date.now();
+            const weekMillis = 7 * 24 * 60 * 60 * 1000;
+            const currentWeek = Math.floor(now / weekMillis);
+            const nextWeekStart = (currentWeek + 1) * weekMillis;
+            const diff = nextWeekStart - now;
+            
+            if (diff <= 0) { renderWeekly(); return; }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            const mins = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            const secs = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+            
+            const timerEl = document.getElementById('weekly-timer-val');
+            if(timerEl) timerEl.innerText = `${days}d : ${hours}h : ${mins}m : ${secs}s`;
+        }
+        updateTimer();
+        weeklyTimerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function renderWeekly() {
+        const weeklyContainer = document.getElementById('weeklyContent');
+        if(!weeklyContainer || DB.levels.length === 0) return;
+        
+        const d = dict[DB.currentLang] || dict['it'];
+        const week = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
+        const lvl = DB.levels[week % DB.levels.length];
+        const myProg = DB.progress[lvl.name] || 0;
+        
+        const q1Done = myProg >= 15;
+        const q2Done = myProg >= 50;
+        const q3Done = myProg === 100;
+        
+        weeklyContainer.innerHTML = `
+            <div style="width:100%; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:var(--text-muted); font-weight:700;">
+                <span>EVENT #${week % 1000}</span>
+                <span style="color:var(--accent); font-family:'Orbitron'">${lvl.skill || 'Extreme'}</span>
+            </div>
+            <div style="position:relative; width:100%; max-width:480px;">
+                <img src="${lvl.thumb}" onerror="this.src='https://via.placeholder.com/400x225/1a1a24/9d4edd?text=GD'" style="width:100%; height:210px; object-fit:cover; border-radius:20px; border:1px solid var(--border); box-shadow:0 12px 24px rgba(0,0,0,0.6);">
+            </div>
+            <h3 style="margin:5px 0 0; font-size:2.2rem; color:#fff; font-weight:900;">${lvl.name}</h3>
+            
+            <div class="quest-box">
+                <strong style="font-size:0.8rem; font-family:'Orbitron'; color:var(--accent);">${d.qTitle}</strong>
+                <div class="quest-item ${q1Done ? 'completed' : ''}">
+                    <div class="quest-check">${q1Done ? '✓' : ''}</div>
+                    <span>${d.q1}</span>
+                </div>
+                <div class="quest-item ${q2Done ? 'completed' : ''}">
+                    <div class="quest-check">${q2Done ? '✓' : ''}</div>
+                    <span>${d.q2}</span>
+                </div>
+                <div class="quest-item ${q3Done ? 'completed' : ''}">
+                    <div class="quest-check">${q3Done ? '✓' : ''}</div>
+                    <span>${d.q3}</span>
+                </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+                <span style="font-size:0.85rem; color:var(--text-muted)">${d.wProg} <strong style="color:var(--accent); font-size:1.1rem;">${myProg}%</strong></span>
+            </div>
+            <button class="btn-custom" style="padding:14px 40px; font-size:0.95rem; width:100%; max-width:320px;" onclick="openWeeklyLevel('${lvl.name}')">${d.wEnter}</button>
+        `;
+    }
+
+    window.openWeeklyLevel = function(lvlName) {
+        playSfx('click');
+        const lvl = DB.levels.find(l => l.name === lvlName);
+        if(lvl) { showDetails(lvl); showPage('list', document.querySelectorAll('.nav-icon')[0]); }
+    }
+
+    function renderHall() {
+        const hof = document.getElementById('hofContent'); hof.innerHTML = "";
+        const d = dict[DB.currentLang] || dict['it'];
+        let scores = {};
+        Object.entries(DB.players).forEach(([lvlName, records]) => {
+            records.forEach(r => {
+                if(!scores[r.name]) scores[r.name] = { points: 0, cleared: [] };
+                scores[r.name].points += r.percent;
+                if(r.percent === 100) scores[r.name].cleared.push(lvlName);
+            });
+        });
+
+        const sorted = Object.entries(scores).sort((a,b) => b[1].points - a[1].points);
+        if(sorted.length === 0) { hof.innerHTML = `<p style="opacity:0.4;">${d.noRec}</p>`; return; }
+        sorted.forEach(([name, data], i) => {
+            const el = document.createElement("div"); el.className = "card"; el.style.background = "rgba(255,255,255,0.015)";
+            el.innerHTML = `<div style="font-size:1.1rem; font-weight:900; color:${i === 0 ? '#ffd700' : 'var(--accent)'}; margin-bottom:4px;">${i === 0 ? '🏆 ' : (i === 1 ? '🥈 ' : (i === 2 ? '🥉 ' : `#${i+1} `))}${name}</div><div style="font-size:0.85rem; color:var(--text-muted)">${d.points}: <strong style="color:#fff;">${data.points}</strong> • ${d.cleared}: <strong>${data.cleared.length}</strong></div>`;
+            hof.appendChild(el);
+        });
+    }
+
+    window.showPage = function(pageId, navEl) {
+        playSfx('click');
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-icon').forEach(n => n.classList.remove('active'));
+        document.getElementById(pageId + 'Page').classList.add('active');
+        if(navEl) navEl.classList.add('active');
+    }
+
+    window.toggleFilter = function(type) {
+        playSfx('click');
+        if(type === 'unv') { DB.hideUnv = !DB.hideUnv; document.getElementById('btnFilter').classList.toggle('active', DB.hideUnv); }
+        else if(type === 'fav') { DB.showFavsOnly = !DB.showFavsOnly; document.getElementById('btnFavFilter').classList.toggle('active', DB.showFavsOnly); }
+        renderList();
+    }
+
+    window.toggleTheme = function() { playSfx('click'); document.body.classList.toggle('light'); }
+
+    window.setThemeColor = function(color, glow, el) {
+        playSfx('click');
+        document.documentElement.style.setProperty('--accent', color);
+        document.documentElement.style.setProperty('--accent-glow', glow);
+        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    window.setLang = function(lang, el) {
+        playSfx('click');
+        DB.currentLang = lang;
+        document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        
+        const d = dict[lang] || dict['it'];
+        
+        if(document.getElementById('search')) document.getElementById('search').placeholder = d.search;
+        if(document.getElementById('searchPlayer')) document.getElementById('searchPlayer').placeholder = d.searchP;
+        if(document.getElementById('btnFilter')) document.getElementById('btnFilter').innerText = d.unv;
+        if(document.getElementById('btnFavFilter')) document.getElementById('btnFavFilter').innerText = d.fav;
+        if(document.getElementById('hSub')) document.getElementById('hSub').innerText = d.hSub;
+        if(document.getElementById('btnSubmit')) document.getElementById('btnSubmit').innerText = d.btnSub;
+        if(document.getElementById('weeklyTitle')) document.getElementById('weeklyTitle').innerText = d.weekly;
+        if(document.getElementById('weeklyBadge')) document.getElementById('weeklyBadge').innerText = d.weeklyBadge;
+        if(document.getElementById('weeklySub')) document.getElementById('weeklySub').innerText = d.weeklySub;
+        if(document.getElementById('lblTimerPrefix')) document.getElementById('lblTimerPrefix').innerText = d.timerPrefix;
+        if(document.getElementById('hallTitle')) document.getElementById('hallTitle').innerText = d.hall;
+        if(document.getElementById('hallSub')) document.getElementById('hallSub').innerText = d.hallSub;
+        if(document.getElementById('sTitle')) document.getElementById('sTitle').innerText = d.sTitle;
+        if(document.getElementById('tLang')) document.getElementById('tLang').innerText = d.tLang;
+        if(document.getElementById('tColor')) document.getElementById('tColor').innerText = d.tColor;
+        if(document.getElementById('tPref')) document.getElementById('tPref').innerText = d.tPref;
+        if(document.getElementById('lblTheme')) document.getElementById('lblTheme').innerText = d.lblTheme;
+        if(document.getElementById('lblSfx')) document.getElementById('lblSfx').innerText = d.lblSfx;
+        if(document.getElementById('lblCompact')) document.getElementById('lblCompact').innerText = d.lblCompact;
+        if(document.getElementById('lblAuto')) document.getElementById('lblAuto').innerText = d.lblAuto;
+        if(document.getElementById('lblDefVideo')) document.getElementById('lblDefVideo').innerText = d.lblDefVideo;
+        if(document.getElementById('lblPerf')) document.getElementById('lblPerf').innerText = d.lblPerf;
+        if(document.getElementById('lblReset')) document.getElementById('lblReset').innerText = d.lblReset;
+        if(document.getElementById('btnReset')) document.getElementById('btnReset').innerText = d.btnReset;
+        if(document.getElementById('lblMyProg')) document.getElementById('lblMyProg').innerText = d.lblMyProg;
+        if(document.getElementById('btnChal')) document.getElementById('btnChal').innerText = d.btnChal;
+        if(document.getElementById('rTitle')) document.getElementById('rTitle').innerText = d.rTitle;
+        if(document.getElementById('rSub')) document.getElementById('rSub').innerText = d.rSub;
+        if(document.getElementById('btnSpin')) document.getElementById('btnSpin').innerText = d.rSpin;
+        if(document.getElementById('btnCancelR')) document.getElementById('btnCancelR').innerText = d.rCancel;
+        if(document.getElementById('btnOpenLvl')) document.getElementById('btnOpenLvl').innerText = d.rOpen;
+        if(document.getElementById('stLvlLabel')) document.getElementById('stLvlLabel').innerText = d.stLvl;
+        if(document.getElementById('stVerLabel')) document.getElementById('stVerLabel').innerText = d.stVer;
+        if(document.getElementById('stFavLabel')) document.getElementById('stFavLabel').innerText = d.stFav;
+        if(document.getElementById('lblDifficulty')) document.getElementById('lblDifficulty').innerText = d.diffTier;
+        if(document.getElementById('btnShare')) document.getElementById('btnShare').innerText = d.share;
+        if(document.getElementById('lblCreat')) document.getElementById('lblCreat').innerText = d.lblCreat;
+        if(document.getElementById('lblVerif')) document.getElementById('lblVerif').innerText = d.lblVerif;
+        if(document.getElementById('lblSong')) document.getElementById('lblSong').innerText = d.lblSong;
+
+        if(DB.currentLvl) showDetails(DB.currentLvl);
+        renderWeekly(); renderHall();
+    }
+
+    window.shareLevel = function() {
+        if(!DB.currentLvl) return;
+        playSfx('click');
+        const d = dict[DB.currentLang] || dict['it'];
+        const text = `🔥 Guarda "${DB.currentLvl.name}" (#${DB.currentLvl.rank}) su Extreme Demon List OS!`;
+        if (navigator.share) {
+            navigator.share({ title: DB.currentLvl.name, text: text, url: window.location.href }).catch(()=>{});
+        } else {
+            navigator.clipboard.writeText(`${text} ${window.location.href}`);
+            const btn = document.getElementById('btnShare');
+            btn.innerText = d.copied;
+            setTimeout(() => btn.innerText = d.share, 1500);
+        }
+    }
+
+    window.resetAllData = function() {
+        playSfx('click');
+        if(confirm("Sei sicuro di voler resettare? / Are you sure?")) {
+            localStorage.clear(); DB.favs = []; DB.progress = {};
+            updateStats(); renderList(); renderWeekly(); alert("Dati resettati! / Data Reset!");
+        }
+    }
+
+    window.copyID = function() {
+        if(!DB.currentLvl || !DB.currentLvl.levelID) return;
+        navigator.clipboard.writeText(DB.currentLvl.levelID);
+        playSfx('click');
+        const d = dict[DB.currentLang] || dict['it'];
+        const btn = document.getElementById("btnCopy");
+        btn.innerText = d.copied;
+        setTimeout(() => btn.innerText = "📋 Copia ID", 1500);
+    }
+
+    window.triggerConfetti = function(e) {
+        e.preventDefault(); playSfx('win');
+        const perfMode = document.getElementById('perfCheck').checked;
+        if(!perfMode) confetti({ particleCount: 200, spread: 360, origin: { y: 0.6 } });
+        setTimeout(() => window.open('https://forms.gle/XtbhiKcnvP4yhkN36', '_blank'), 1500);
+    }
+
+    init();
 </script>
 </body>
 </html>
