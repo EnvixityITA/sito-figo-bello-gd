@@ -1,0 +1,192 @@
+[
+    {
+        "rank": 1,
+        "name": "Society",
+        "videoID": "https://youtu.be/omG1VuyA92w?si=jIpnneemU7jQckgz",
+        "verifierID": "https://youtu.be/3CoEaH1CM7o?si=Duvwpen0bpMelG6I",
+        "thumb": "https://i.ytimg.com/vi/6s-NBTRzspE/sddefault.jpg?v=68f620a4",
+        "verified": true,
+        "recent": true,
+        "verifierName": "wPopoff"
+    },
+    {
+        "rank": 2,
+        "name": "Thinking Space II",
+        "videoID": "https://youtu.be/fnz9ddZjIGc?si=kxPW9RscoGEONgl_",
+        "verifierID": "https://youtu.be/CELNmHwln_c?si=NzNFBmIZu7c1d1fx",
+        "thumb": "https://i.ytimg.com/vi/CELNmHwln_c/maxresdefault.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Zoink"
+    },
+    {
+        "rank": 3,
+        "name": "Flamewall",
+        "videoID": "https://youtu.be/gwNYGFmo_WY?si=6cJwtcKKKG4sFpvy",
+        "verifierID": "https://youtu.be/x4Io4zkWVRw?si=olFgOINGmn9LwMP5",
+        "thumb": "https://i.ytimg.com/vi/x4Io4zkWVRw/maxresdefault.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Quatrocientos"
+    },
+    {
+        "rank": 4,
+        "name": "Amethyst",
+        "videoID": "https://youtu.be/OqGuNBi3_SU?si=YAhXLqR437SH9w9D",
+        "verifierID": "https://youtu.be/4lfkzz1VCbA?si=tewONTTn6L2psGFS",
+        "thumb": "https://i.ytimg.com/vi/4lfkzz1VCbA/hq720.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Zoink"
+    },
+    {
+        "rank": 5,
+        "name": "Tidal Wave",
+        "videoID": "https://youtu.be/YbyfDYChIYU?si=BH1aqAyZghFEOfX_",
+        "verifierID": "https://youtu.be/9fsZ014qB3s?si=fLrX58BUg-vUSppi",
+        "thumb": "https://i.redd.it/fyvxniatilwb1.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Zoink"
+    },
+    {
+        "rank": 6,
+        "name": "ORBIT",
+        "videoID": "https://youtu.be/9oHv_cK84WI?si=qovGHLPp3EaNMMCI",
+        "verifierID": "https://youtu.be/QKcv8DkNPd0?si=ZETrQS7lI5xSii-K",
+        "thumb": "https://i.ytimg.com/vi/QKcv8DkNPd0/hq720.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Zoink"
+    },
+    {
+        "rank": 7,
+        "name": "Nullscapes",
+        "videoID": "https://youtu.be/C-KDhWkXlvI?si=6QpElXGGqtvatG2v",
+        "verifierID": "https://youtu.be/EztneTPp5CU?si=E4uZbmOFHGNrJ0rk",
+        "thumb": "https://i.ytimg.com/vi/EztneTPp5CU/sddefault.jpg?v=66d6cb3c",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Zoink"
+    },
+    {
+        "rank": 8,
+        "name": "Quanteuse processing",
+        "videoID": "https://youtu.be/sRUO72zI2GQ?si=iKeUMFkgb3odkwJU",
+        "verifierID": "https://youtu.be/j5NC0u1Q91Q?si=kAxCC98MXG-SXXjx",
+        "thumb": "https://i.ytimg.com/vi/j5NC0u1Q91Q/hq720.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Zoink"
+    },
+    {
+        "rank": 9,
+        "name": "BOOBAWAMBA",
+        "videoID": "https://youtu.be/TAPij318cjE?si=DtqDH0UCjpvaXdKl",
+        "verifierID": "https://youtu.be/20fYiqLAo_E?si=Zdh9jRrpyf_rZGUj",
+        "thumb": "https://i.ytimg.com/vi/20fYiqLAo_E/maxresdefault.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Brandon Larkin"
+    },
+    {
+        "rank": 10,
+        "name": "Unnerfed Sakupen Circles",
+        "videoID": "https://youtu.be/DXdbTRjRylE?si=xXBRxv4LxbhYrw2T",
+        "verifierID": "https://youtu.be/AdrmZsy52EY?si=Z04n7Pnhs2HEZDIB",
+        "thumb": "https://i.ytimg.com/vi/AdrmZsy52EY/maxresdefault.jpg",
+        "verified": false,
+        "recent": false,
+        "verifierName": "Unknown"
+    },
+    {
+        "rank": 11,
+        "name": "Lesowopal",
+        "videoID": "https://youtu.be/3CuvGIWjDX0?si=W1nrQOotf6kKsZsY",
+        "verifierID": "https://youtu.be/RTXnFHkGO_g?si=tt_NhH4UBM5H6W2m",
+        "thumb": "https://i.ytimg.com/vi/EwDAZUgVTS8/hq720.jpg",
+        "verified": false,
+        "recent": false,
+        "verifierName": "Unknown"
+    },
+    {
+        "rank": 12,
+        "name": "Every End",
+        "videoID": "https://youtu.be/f-O_TnxIZBA?si=g7Fz67F8lNWoEgkS",
+        "verifierID": "https://youtu.be/KexrBfBCZJA?si=3FxAmyoVrdm-RXt_",
+        "thumb": "https://i.ytimg.com/vi/ZyRmgwSh5tQ/hq720.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Zeronium"
+    },
+    {
+        "rank": 13,
+        "name": "Penumbral",
+        "videoID": "https://youtu.be/vxa4ZpfCD-A?si=A2foYdGuR7V4tUXs",
+        "verifierID": "https://youtu.be/nVHPFf13M-I?si=FUSFu2_Oy8iiYLCq",
+        "thumb": "https://i.ytimg.com/vi/nVHPFf13M-I/hq720.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Technical"
+    },
+    {
+        "rank": 14,
+        "name": "Subsuming Vortex",
+        "videoID": "https://youtu.be/3dKj12cQSII?si=PXzcKd4ZTuZxFEM0",
+        "verifierID": "https://youtu.be/0eYG1ogJpIQ?si=hqlj5-Z5rO9Qw1YF",
+        "thumb": "https://i.ytimg.com/vi/0eYG1ogJpIQ/maxresdefault.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Nswish"
+    },
+    {
+        "rank": 15,
+        "name": "Silent Clubstep",
+        "videoID": "https://youtu.be/4VQzSID55lY?si=XrWsAVefTWREneR4",
+        "verifierID": "https://youtu.be/GR4OMkS3SN8?si=whAqUtOn8yBoXETE",
+        "thumb": "https://i.ytimg.com/vi/uO2ISQnXm4Q/maxresdefault.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Sailent"
+    },
+    {
+        "rank": 16,
+        "name": "Ashley Wave Trials",
+        "videoID": "https://youtu.be/KrdMngKSLKc?si=Af0WLbIfMAH_7RFN",
+        "verifierID": "https://youtu.be/aTxt76U3e2Q?si=6ODIErmZl_DlyeiA",
+        "thumb": "https://i.ytimg.com/vi/aTxt76U3e2Q/sddefault.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Ashley"
+    },
+    {
+        "rank": 17,
+        "name": "Andromeda",
+        "videoID": "https://youtu.be/fFtQxxepyDo?si=sCew59OYY5_dUrAT",
+        "verifierID": "https://youtu.be/mk3TDemdkC0?si=GC89fQhsLA3oQZqz",
+        "thumb": "https://i.ytimg.com/vi/mk3TDemdkC0/hq720.jpg",
+        "verified": true,
+        "recent": false,
+        "verifierName": "Riot"
+    },
+    {
+        "rank": 18,
+        "name": "Killstealer",
+        "videoID": "https://youtu.be/R8S74KJcFuc?si=husew7Lra2wBDIp9",
+        "verifierID": "https://youtu.be/uhH4oqWrsfo?si=WMj4ccpSUdtrZ2BE",
+        "thumb": "https://i.ytimg.com/vi/uhH4oqWrsfo/maxresdefault.jpg",
+        "verified": true,
+        "recent": true,
+        "verifierName": "kloone"
+    },
+    {
+        "rank": 20,
+        "name": "Aquamarine",
+        "videoID": "https://youtu.be/80YeaP2DLvQ?si=9ptispE2-X0B4Zcg",
+        "verifierID": "https://youtu.be/Q__EnRojGt4?si=VmUqjzdIe_PYhgtf",
+        "thumb": "https://i.ytimg.com/vi/Q__EnRojGt4/maxresdefault.jpg",
+        "verified": false,
+        "recent": false,
+        "verifierName": "Unknown"
+    }
+]
