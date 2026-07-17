@@ -270,6 +270,172 @@
             <div><span style="opacity:0.5; display:block;" id="stLvlLabel">DEMONI</span><strong id="stTotal" style="font-size:1.2rem; color:var(--accent);">0</strong></div>
             <div><span style="opacity:0.5; display:block;" id="stVerLabel">VERIFICATI</span><strong id="stVer" style="font-size:1.2rem;">0</strong></div>
             <div><span style="opacity:0.5; display:block;" id="stFavLabel">PREFERITI</span><strong id="stFav" style="font-size:1.2rem; color:#ff4d6d;">0</strong></div>
+            <button id="btnAccountToggle" onclick="toggleAccountModal()" class="btn-custom" style="width: 100%; padding: 12px; margin-bottom: 15px; font-size: 0.85rem; border-radius: 14px; box-shadow: 0 4px 12px var(--accent-glow);">
+            🌐 ACCOUNT: DISCONNESSO
+        </button>
+
+        <div id="accountModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 2, 6, 0.85); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center;">
+            <div style="background: var(--panel-solid); border: 1px solid var(--border); padding: 25px; border-radius: 24px; width: 90%; max-width: 360px; box-shadow: 0 0 30px rgba(157, 78, 221, 0.2); position: relative;">
+                
+                <button onclick="toggleAccountModal()" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">✕</button>
+
+                <div style="font-family: 'Orbitron', sans-serif; font-size: 0.95rem; font-weight: 900; color: var(--accent); letter-spacing: 1px; margin-bottom: 20px; text-align: center;">🌐 AREA ACCOUNT CLOUD</div>
+                
+                <div id="auth-form" style="display: flex; flex-direction: column; gap: 10px;">
+                    <input type="email" id="auth-email" placeholder="Inserisci Email" 
+                           style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); color: var(--text); padding: 12px 14px; border-radius: 12px; font-family: 'Syne', sans-serif; font-size: 0.85rem; outline: none; transition: 0.3s;"
+                           onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 10px var(--accent-glow)'" 
+                           onblur="this.style.borderColor='var(--border)'; this.style.boxShadow='none'">
+                    <input type="password" id="auth-password" placeholder="Inserisci Password" 
+                           style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); color: var(--text); padding: 12px 14px; border-radius: 12px; font-family: 'Syne', sans-serif; font-size: 0.85rem; outline: none; transition: 0.3s;"
+                           onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 10px var(--accent-glow)'" 
+                           onblur="this.style.borderColor='var(--border)'; this.style.boxShadow='none'">
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 5px;">
+                        <button onclick="accediUtente()" class="btn-custom" style="flex: 1; padding: 12px; font-size: 0.85rem; border-radius: 12px; box-shadow: 0 4px 12px var(--accent-glow);">ACCEDI</button>
+                        <button onclick="registraUtente()" class="btn-secondary" style="flex: 1; padding: 12px; font-size: 0.85rem; border-radius: 12px;">REGISTRATI</button>
+                    </div>
+                </div>
+
+                <div id="user-logged-info" style="display: none; flex-direction: column; gap: 12px; text-align: center;">
+                    <div style="background: rgba(157, 78, 221, 0.05); padding: 15px; border-radius: 14px; border: 1px solid rgba(157, 78, 221, 0.15);">
+                        <p style="margin: 0 0 5px 0; font-size: 0.8rem; color: var(--text-muted);">Sessione attiva come:</p>
+                        <p id="user-display-email" style="margin: 0; color: var(--text); font-weight: 700; font-size: 0.9rem; word-break: break-all; font-family: 'Syne', sans-serif;"></p>
+                    </div>
+                    <button onclick="disconnettiUtente()" class="btn-custom" style="background: linear-gradient(135deg, #ff003c, #b3002a); box-shadow: 0 4px 12px rgba(255,0,60,0.3); padding: 10px; font-size: 0.85rem; border-radius: 12px; width: 100%;">EFFETTUA LOGOUT</button>
+                </div>
+
+                <p id="auth-msg" style="margin: 15px 0 0 0; font-size: 0.8rem; font-family: 'Syne', sans-serif; font-weight: 500; min-height: 16px; text-align: center;"></p>
+            </div>
+        </div>
+        ```
+
+---
+
+### ⚡ PUNTO 2: Dove inserire lo Script (JavaScript)
+
+Scorri in fondo al file, trova il tag di chiusura **`</body>`** e incolla questo script aggiornato **subito prima** di esso:
+
+```html
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+        getAuth, 
+        createUserWithEmailAndPassword, 
+        signInWithEmailAndPassword, 
+        signOut, 
+        onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBH2sXzuOfOpY2rOQNlS2zwyQnyfWy0DvA",
+        authDomain: "global-list-inv.firebaseapp.com",
+        projectId: "global-list-inv",
+        storageBucket: "global-list-inv.firebasestorage.app",
+        messagingSenderId: "517402636532",
+        appId: "1:517402636532:web:02c81482fe8b6367782ea1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Elementi UI
+    const emailInput = document.getElementById('auth-email');
+    const passwordInput = document.getElementById('auth-password');
+    const authForm = document.getElementById('auth-form');
+    const loggedInfo = document.getElementById('user-logged-info');
+    const userEmailSpan = document.getElementById('user-display-email');
+    const msgEl = document.getElementById('auth-msg');
+    const btnAccountToggle = document.getElementById('btnAccountToggle');
+    const accountModal = document.getElementById('accountModal');
+
+    // Funzione globale per aprire/chiudere la finestra popup
+    window.toggleAccountModal = function() {
+        if (accountModal.style.display === 'none' || accountModal.style.display === '') {
+            accountModal.style.display = 'flex';
+        } else {
+            accountModal.style.display = 'none';
+            msgEl.innerText = ""; // Pulisce i messaggi alla chiusura
+        }
+    }
+
+    function mostraMessaggio(testo, isSuccesso) {
+        msgEl.innerText = testo;
+        msgEl.style.color = isSuccesso ? "#39ff14" : "#ff003c";
+        setTimeout(() => { msgEl.innerText = ""; }, 5000);
+    }
+
+    // Registrazione
+    window.registraUtente = async function() {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        if(!email || !password) return mostraMessaggio("❌ Inserisci email e password!", false);
+        if(password.length < 6) return mostraMessaggio("❌ Password di almeno 6 caratteri!", false);
+
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            mostraMessaggio("✅ Registrato con successo!", true);
+            emailInput.value = ""; passwordInput.value = "";
+            setTimeout(() => toggleAccountModal(), 1500); // Chiude il popup dopo il successo
+        } catch (error) {
+            if(error.code === 'auth/email-already-in-use') mostraMessaggio("❌ Email già registrata!", false);
+            else if(error.code === 'auth/invalid-email') mostraMessaggio("❌ Formato email errato!", false);
+            else mostraMessaggio("❌ Errore di registrazione.", false);
+        }
+    }
+
+    // Login
+    window.accediUtente = async function() {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        if(!email || !password) return mostraMessaggio("❌ Inserisci dati!", false);
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            mostraMessaggio("⚡ Accesso eseguito!", true);
+            emailInput.value = ""; passwordInput.value = "";
+            setTimeout(() => toggleAccountModal(), 1500);
+        } catch (error) {
+            if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                mostraMessaggio("❌ Email o password errate!", false);
+            } else {
+                mostraMessaggio("❌ Errore di accesso.", false);
+            }
+        }
+    }
+
+    // Logout
+    window.disconnettiUtente = async function() {
+        try {
+            await signOut(auth);
+            mostraMessaggio("👋 Disconnesso/a!", true);
+            setTimeout(() => toggleAccountModal(), 1000);
+        } catch (error) {
+            mostraMessaggio("❌ Errore logout.", false);
+        }
+    }
+
+    // Cambia il testo del bottone principale in base allo stato dell'utente
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            authForm.style.display = 'none';
+            loggedInfo.style.display = 'flex';
+            userEmailSpan.innerText = user.email;
+            // Estrae l'username tagliando la parte dopo la chiocciola @ per renderlo pulito sul tasto
+            const username = user.email.split('@')[0];
+            btnAccountToggle.innerHTML = `👤 UTENTE: ${username.toUpperCase()}`;
+            btnAccountToggle.style.border = "1px solid #39ff14";
+            btnAccountToggle.style.boxShadow = "0 4px 12px rgba(57, 255, 20, 0.2)";
+        } else {
+            authForm.style.display = 'flex';
+            loggedInfo.style.display = 'none';
+            userEmailSpan.innerText = '';
+            btnAccountToggle.innerHTML = `🌐 ACCOUNT: DISCONNESSO`;
+            btnAccountToggle.style.border = "none";
+            btnAccountToggle.style.boxShadow = "0 4px 12px var(--accent-glow)";
+        }
+    });
+</script>
         </div>
 
         <div style="background: rgba(0,0,0,0.2); padding: 14px; border-radius: 18px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
