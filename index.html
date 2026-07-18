@@ -1,300 +1,799 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App con Profilo Customizzabile</title>
-  
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <title>Extreme Demon List - Ultra Premium OS v2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg: #030206;
+            --panel: rgba(14, 11, 22, 0.75);
+            --panel-solid: #0e0b16;
+            --accent: #9d4edd;
+            --accent-glow: rgba(157, 78, 221, 0.4);
+            --text: #e0d8f0;
+            --text-muted: #8a7fa4;
+            --border: rgba(157, 78, 221, 0.15);
+            --border-hover: rgba(157, 78, 221, 0.4);
+            --item-pad: 14px;
+            --track-fill: 0%;
+        }
+        
+        .light {
+            --bg: #f4f2f8;
+            --panel: rgba(240, 235, 248, 0.75);
+            --panel-solid: #f0ebf8;
+            --accent: #7b2cbf;
+            --accent-glow: rgba(123, 44, 191, 0.2);
+            --text: #1a1625;
+            --text-muted: #6e6488;
+            --border: rgba(123, 44, 191, 0.15);
+            --border-hover: rgba(123, 44, 191, 0.4);
+        }
 
-    body {
-      background-color: #f4f6f8;
-      color: #333;
-    }
+        * { box-sizing: border-box; selection-background: var(--accent); }
+        body {
+            margin: 0; background: var(--bg); color: var(--text);
+            font-family: 'Syne', sans-serif; transition: background 0.3s, color 0.3s;
+            overflow: hidden; height: 100vh;
+        }
 
-    .app-container {
-      display: flex;
-      height: 100vh;
-    }
+        .app-container { display: flex; height: 100vh; width: 100vw; }
 
-    /* Barra laterale (Sidebar) */
-    .sidebar {
-      width: 70px;
-      background-color: #1e1e24;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 0;
-      border-right: 1px solid #ddd;
-    }
+        /* SIDEBAR MODIFICATA PER EFFETTO BOTTOM FIXED DENTRO I FLEX */
+        .sidebar {
+            width: 360px; background: var(--panel);
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            backdrop-filter: blur(12px); z-index: 10;
+        }
 
-    .nav-icons {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
+        .sidebar-header { padding: 24px; border-bottom: 1px solid var(--border); }
+        .sidebar-header h1 {
+            margin: 0; font-family: 'Orbitron', sans-serif; font-size: 1.5rem;
+            letter-spacing: 2px; color: var(--accent); text-shadow: 0 0 10px var(--accent-glow);
+        }
 
-    .icon-btn, .profile-btn {
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      padding: 10px;
-      border-radius: 12px;
-      transition: background 0.2s;
-    }
+        .search-area { padding: 16px; display: flex; gap: 8px; }
+        .search-input {
+            flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+            padding: 10px 14px; border-radius: 8px; color: var(--text); font-family: inherit;
+        }
+        .search-input:focus { outline: none; border-color: var(--accent); }
 
-    .icon-btn:hover, .profile-btn:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
+        .tabs { display: flex; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.1); }
+        .tab {
+            flex: 1; padding: 12px; text-align: center; cursor: pointer; font-weight: 700;
+            font-size: 0.85rem; color: var(--text-muted); transition: 0.2s;
+        }
+        .tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); background: rgba(255,255,255,0.02); }
 
-    /* Icona profilo circolare nella sidebar */
-    #sidebar-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #4CAF50;
-    }
+        .level-list { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-    .main-content {
-      flex: 1;
-      padding: 40px;
-    }
+        .level-item {
+            padding: var(--item-pad); background: rgba(255,255,255,0.01);
+            border: 1px solid var(--border); border-radius: 10px; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; transition: 0.2s;
+        }
+        .level-item:hover, .level-item.active {
+            border-color: var(--border-hover); background: rgba(157, 78, 221, 0.05);
+            transform: translateX(4px);
+        }
+        .level-info { display: flex; flex-direction: column; gap: 4px; }
+        .level-name { font-weight: 700; font-size: 1rem; }
+        .level-author { font-size: 0.8rem; color: var(--text-muted); }
+        .level-pos {
+            font-family: 'Orbitron', sans-serif; font-weight: 900;
+            color: var(--text-muted); opacity: 0.5; font-size: 1.1rem;
+        }
+        .level-item.active .level-pos { color: var(--accent); opacity: 1; }
 
-    /* Finestra Modale */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
+        /* SEZIONE BOTTONI IN BASSO A SINISTRA (SIDEBAR FOOTER) */
+        .sidebar-footer {
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            background: rgba(5, 3, 10, 0.5);
+            align-items: center;
+            margin-top: auto;
+        }
 
-    .modal.hidden {
-      display: none;
-    }
+        .sidebar-footer-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      width: 350px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
+        .sidebar-footer-btn:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 12px var(--accent-glow);
+            transform: translateY(-2px);
+        }
 
-    .avatar-container {
-      margin: 20px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
+        .sidebar-footer-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
 
-    #modal-avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #eee;
-    }
+        /* SCHERMATA INTERA PROFILO OVERLAY */
+        .full-profile-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 2, 6, 0.96);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            overflow-y: auto;
+            font-family: 'Syne', sans-serif;
+            animation: fadeInProfile 0.3s ease-out forwards;
+        }
 
-    .upload-btn {
-      background: #e0e0e0;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
+        @keyframes fadeInProfile {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
 
-    .upload-btn:hover {
-      background: #d0d0d0;
-    }
+        .profile-page-content {
+            max-width: 500px;
+            margin: 80px auto;
+            background: var(--panel-solid);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 40px rgba(157, 78, 221, 0.15);
+            position: relative;
+        }
 
-    .input-group {
-      text-align: left;
-      margin-bottom: 20px;
-    }
+        .profile-page-content h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-top: 0;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
 
-    .input-group label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 5px;
-      color: #666;
-    }
+        .profile-avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 20px auto 30px auto;
+        }
 
-    .input-group input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
+        .profile-large-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            object-fit: cover;
+            background: #140e24;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
 
-    .modal-actions {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
+        .avatar-upload-label {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--accent);
+            color: white;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
 
-    .btn {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+        .avatar-upload-label:hover {
+            transform: scale(1.1);
+            background: #b566ff;
+        }
 
-    .btn.primary {
-      background: #4CAF50;
-      color: white;
-    }
+        .profile-form-group {
+            margin-bottom: 20px;
+        }
 
-    .btn.secondary {
-      background: #f1f1f1;
-      color: #333;
-    }
-  </style>
+        .profile-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .profile-form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            box-sizing: border-box;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .profile-form-group input:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.06);
+            outline: none;
+            box-shadow: 0 0 8px rgba(157, 78, 221, 0.2);
+        }
+
+        .profile-btn-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn-profile-save {
+            flex: 2;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+        }
+
+        .btn-profile-save:hover {
+            box-shadow: 0 0 15px var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .btn-profile-close {
+            flex: 1;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-profile-close:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+        }
+
+        /* MAIN CONTENT AREA */
+        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; position: relative; }
+        
+        .hero {
+            padding: 60px 40px; border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(157, 78, 221, 0.05) 0%, transparent 100%);
+            position: relative;
+        }
+        .hero-banner {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0.15; z-index: -1; filter: saturate(1.5);
+        }
+        .hero-tags { display: flex; gap: 8px; margin-bottom: 12px; }
+        .tag {
+            font-family: 'Orbitron', sans-serif; font-size: 0.75rem; padding: 4px 10px;
+            border-radius: 4px; background: rgba(157, 78, 221, 0.2); color: var(--accent);
+            border: 1px solid var(--border); font-weight: 700;
+        }
+        .hero h2 {
+            margin: 0; font-family: 'Orbitron', sans-serif; font-size: 2.5rem;
+            letter-spacing: -1px; text-transform: uppercase;
+        }
+        .hero .author { color: var(--text-muted); font-size: 1.1rem; margin-top: 4px; }
+
+        .details-grid { padding: 40px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        
+        .stats-panel {
+            background: var(--panel-solid); border: 1px solid var(--border);
+            border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 20px;
+        }
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .stat-card {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+            padding: 16px; border-radius: 12px; text-align: center;
+        }
+        .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
+        .stat-value { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 900; color: var(--accent); }
+
+        .progress-section { background: rgba(255,255,255,0.01); border: 1px solid var(--border); padding: 20px; border-radius: 12px; }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; }
+        .track-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+        .track-fill { width: var(--track-fill); height: 100%; background: var(--accent); box-shadow: 0 0 10px var(--accent); transition: 0.3s; }
+
+        .action-row { display: flex; gap: 12px; margin-top: 10px; }
+        .btn {
+            flex: 1; padding: 12px; border-radius: 8px; font-family: 'Orbitron', sans-serif;
+            font-weight: 700; border: 1px solid var(--border); background: rgba(255,255,255,0.02);
+            color: var(--text); cursor: pointer; transition: 0.2s; text-align: center; font-size: 0.85rem;
+        }
+        .btn:hover { border-color: var(--accent); background: rgba(157, 78, 221, 0.1); }
+        .btn-primary { background: var(--accent); color: white; border: none; }
+        .btn-primary:hover { box-shadow: 0 0 15px var(--accent-glow); background: #b566ff; }
+
+        .side-panel { display: flex; flex-direction: column; gap: 20px; }
+        .box {
+            background: var(--panel-solid); border: 1px solid var(--border);
+            border-radius: 16px; padding: 24px;
+        }
+        .box h3 { margin-top: 0; font-family: 'Orbitron', sans-serif; font-size: 1rem; letter-spacing: 1px; color: var(--accent); }
+
+        .record-list { display: flex; flex-direction: column; gap: 10px; }
+        .record-item {
+            display: flex; justify-content: space-between; padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem;
+        }
+        .record-user { font-weight: 700; }
+        .record-proof { color: var(--accent); text-decoration: none; font-size: 0.8rem; }
+
+        .config-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; font-size: 0.9rem; }
+        
+        /* TOGGLE SWITCH SYSTEM */
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255,255,255,0.1); transition: .3s; border-radius: 24px;
+            border: 1px solid var(--border);
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
+            background-color: var(--text-muted); transition: .3s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--accent-glow); border-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(20px); background-color: var(--accent); }
+    </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <!-- Barra laterale a sinistra -->
-    <nav class="sidebar">
-      <div class="nav-icons">
-        <button class="icon-btn" title="Home">🏠</button>
-        <button class="icon-btn" title="Messaggi">💬</button>
-        <button class="icon-btn" title="Impostazioni">⚙️</button>
-      </div>
-      
-      <!-- Tasto Profilo in fondo alla barra -->
-      <div class="profile-section">
-        <button id="profile-icon-btn" class="profile-btn" title="Il tuo profilo">
-          <img id="sidebar-avatar" src="https://via.placeholder.com/40" alt="Profilo">
-        </button>
-      </div>
-    </nav>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>DEMON LIST</h1>
+                <div style="font-size:0.75rem; color:var(--accent); font-family:'Orbitron',sans-serif; letter-spacing:1px;">ULTRA PREMIUM OS v2.0</div>
+            </div>
+            
+            <div class="search-area">
+                <input type="text" id="searchBar" class="search-input" placeholder="Cerca demone... / Search...">
+            </div>
 
-    <!-- Contenuto principale dell'applicazione -->
-    <main class="main-content">
-      <h1>Benvenuto, <span id="display-name">Utente</span>! 👋</h1>
-      <p>Clicca sull'icona del profilo in basso a sinistra nella barra laterale per personalizzare la tua foto e il tuo nome.</p>
-    </main>
-  </div>
+            <div class="tabs">
+                <div class="tab active" id="tabTop" onclick="changeTab('top')">TOP LIST</div>
+                <div class="tab" id="tabFavs" onclick="changeTab('favs')">PREFERITI</div>
+            </div>
 
-  <!-- Finestra Modale per modificare il Profilo -->
-  <div id="profile-modal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Modifica Profilo</h2>
-      
-      <!-- Gestione Immagine -->
-      <div class="avatar-container">
-        <img id="modal-avatar" src="https://via.placeholder.com/100" alt="Foto Profilo">
-        <label for="avatar-upload" class="upload-btn">📷 Cambia foto</label>
-        <input type="file" id="avatar-upload" accept="image/*" hidden>
-      </div>
+            <div class="level-list" id="levelList">
+                </div>
 
-      <!-- Gestione Nome -->
-      <div class="input-group">
-        <label for="username-input">Il tuo Nome:</label>
-        <input type="text" id="username-input" placeholder="Scrivi il tuo nome...">
-      </div>
+            <div class="sidebar-footer">
+                <button id="btnSettingsWheel" class="sidebar-footer-btn" title="Impostazioni di Sistema">⚙️</button>
+                <button id="btnProfileInterface" class="sidebar-footer-btn" title="Profilo Utente">
+                    <img id="sidebarMiniAvatar" src="" style="display:none;">
+                    <span id="sidebarProfileFallback">👤</span>
+                </button>
+            </div>
+        </div>
 
-      <div class="modal-actions">
-        <button id="save-btn" class="btn primary">Salva</button>
-        <button id="close-btn" class="btn secondary">Chiudi</button>
-      </div>
+        <div class="main-content" id="mainContent">
+            <img id="heroBanner" class="hero-banner" src="" alt="Level Banner">
+            <div class="hero">
+                <div class="hero-tags">
+                    <span class="tag" id="lvlPlacement">#1</span>
+                    <span class="tag" id="lvlPoints">100 PTS</span>
+                </div>
+                <h2 id="lvlName">Acheron</h2>
+                <div class="author" id="lvlAuthor">by ryamu</div>
+            </div>
+
+            <div class="details-grid">
+                <div class="stats-panel">
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-label">ID Livello</div>
+                            <div class="stat-value" id="statID">-</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Oggetti / Objects</div>
+                            <div class="stat-value" id="statObjects">-</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Difficoltà</div>
+                            <div class="stat-value" style="color:#ff0055;">Top 1</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-section">
+                        <div class="progress-header">
+                            <span>Miglior Record / Best Record</span>
+                            <span id="progressText">0%</span>
+                        </div>
+                        <div class="track-bar">
+                            <div class="track-fill" id="trackFill"></div>
+                        </div>
+                        <div class="action-row" style="margin-top: 15px;">
+                            <button class="btn" onclick="updateProgress(-5)">-5%</button>
+                            <button class="btn" onclick="updateProgress(5)">+5%</button>
+                            <button class="btn btn-primary" onclick="triggerConfetti(event)">COMPLETATO! 🎉</button>
+                        </div>
+                    </div>
+
+                    <div class="action-row">
+                        <button class="btn" id="btnFav" onclick="toggleFavorite()">❤️ Aggiungi Preferiti</button>
+                        <button class="btn" id="btnCopy" onclick="copyID()">📋 Copia ID</button>
+                        <button class="btn" id="btnShare" onclick="shareLevel()">🔗 Condividi</button>
+                    </div>
+                </div>
+
+                <div class="side-panel">
+                    <div class="box">
+                        <h3>100% Victors</h3>
+                        <div class="record-list" id="victorsList">
+                            </div>
+                    </div>
+
+                    <div class="box" id="systemConfigPanel">
+                        <h3>System Engine</h3>
+                        <div class="config-row">
+                            <span>Modalità Chiara / Light Mode</span>
+                            <label class="switch">
+                                <input type="checkbox" id="themeCheck" onchange="toggleTheme()">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="config-row">
+                            <span>Performance Boost (No Confetti)</span>
+                            <label class="switch">
+                                <input type="checkbox" id="perfCheck">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <button class="btn" style="width:100%; margin-top:14px; border-color:rgba(255,0,0,0.3); color:#ff5555;" onclick="resetAllData()">⚠️ Reset Dati Sistema</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const profileIconBtn = document.getElementById("profile-icon-btn");
-      const profileModal = document.getElementById("profile-modal");
-      const closeBtn = document.getElementById("close-btn");
-      const saveBtn = document.getElementById("save-btn");
-      
-      const sidebarAvatar = document.getElementById("sidebar-avatar");
-      const modalAvatar = document.getElementById("modal-avatar");
-      const avatarUpload = document.getElementById("avatar-upload");
-      const usernameInput = document.getElementById("username-input");
-      const displayName = document.getElementById("display-name");
+    <div id="fullProfilePage" class="full-profile-page">
+        <div class="profile-page-content">
+            <h2>Profilo Utente</h2>
+            
+            <div class="profile-avatar-container">
+                <img id="profileLargeAvatar" class="profile-large-avatar" src="">
+                <label for="avatarFileInput" class="avatar-upload-label" title="Cambia Immagine Profilo">📷</label>
+                <input type="file" id="avatarFileInput" accept="image/*" style="display: none;">
+            </div>
 
-      // 1. Carica i dati salvati al riavvio della pagina
-      loadProfileData();
+            <div class="profile-form-group">
+                <label for="profileUsernameField">Nome Utente Personalizzato</label>
+                <input type="text" id="profileUsernameField" placeholder="Modifica il tuo nickname...">
+            </div>
 
-      // 2. Apri e chiudi la modale
-      profileIconBtn.addEventListener("click", () => {
-        profileModal.classList.remove("hidden");
-      });
+            <div class="profile-form-group">
+                <label for="profilePasswordField">Nuova Password di Accesso</label>
+                <input type="password" id="profilePasswordField" placeholder="Crea o aggiorna la password di sicurezza...">
+            </div>
 
-      closeBtn.addEventListener("click", () => {
-        profileModal.classList.add("hidden");
-      });
+            <div class="profile-btn-container">
+                <button id="btnProfileClosePage" class="btn-profile-close">Chiudi Schermata</button>
+                <button id="btnProfileSaveData" class="btn-profile-save">SALVA MODIFICHE</button>
+            </div>
+        </div>
+    </div>
 
-      // 3. Gestione del caricamento di una nuova immagine
-      let tempImageBase64 = null;
+    <script>
+        const DB = {
+            levels: [
+                { id: 1, name: "Acheron", author: "ryamu", levelID: "84293849", objects: "142K", banner: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=800", victors: ["Zoink", "wPopoff", "Trick"] },
+                { id: 2, name: "Avaris", author: "Viprin", levelID: "93840293", objects: "210K", banner: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800", victors: ["Doggie", "Diamond"] },
+                { id: 3, name: "Tartarus", author: "Riot", levelID: "61902934", objects: "89K", banner: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800", victors: ["Mullo", "Dolphy", "Combined"] },
+                { id: 4, name: "Sonic Wave", author: "Cyclic", levelID: "26483920", objects: "53K", banner: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800", victors: ["Sunix", "Technical", "Bold"] }
+            ],
+            currentLvl: null,
+            currentTab: 'top',
+            favs: JSON.parse(localStorage.getItem('os_favs')) || [],
+            progress: JSON.parse(localStorage.getItem('os_progress')) || {},
+            currentLang: 'it'
+        };
 
-      avatarUpload.addEventListener("change", (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            tempImageBase64 = e.target.result;
-            modalAvatar.src = tempImageBase64; // Mostra l'anteprima nella modale
-          };
-          reader.readAsDataURL(file);
-        }
-      });
+        const dict = {
+            it: { share: "🔗 Condividi", copied: "📋 Copiato!", favAdd: "❤️ Aggiungi Preferiti", favRem: "💔 Rimuovi Preferiti" }
+        };
 
-      // 4. Salva nome e foto nel localStorage
-      saveBtn.addEventListener("click", () => {
-        const newName = usernameInput.value.trim();
-        
-        if (newName) {
-          localStorage.setItem("user_name", newName);
-          displayName.textContent = newName;
-        }
-
-        if (tempImageBase64) {
-          localStorage.setItem("user_avatar", tempImageBase64);
-          sidebarAvatar.src = tempImageBase64;
-        }
-
-        profileModal.classList.add("hidden");
-      });
-
-      // Funzione per recuperare i dati dal browser
-      function loadProfileData() {
-        const savedName = localStorage.getItem("user_name");
-        const savedAvatar = localStorage.getItem("user_avatar");
-
-        if (savedName) {
-          usernameInput.value = savedName;
-          displayName.textContent = savedName;
+        function playSfx(type) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                
+                if(type === 'click') {
+                    osc.frequency.setValueAtTime(400, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    osc.start(); osc.stop(ctx.currentTime + 0.05);
+                } else if(type === 'win') {
+                    osc.frequency.setValueAtTime(600, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.3);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    osc.start(); osc.stop(ctx.currentTime + 0.3);
+                }
+            } catch(e){}
         }
 
-        if (savedAvatar) {
-          sidebarAvatar.src = savedAvatar;
-          modalAvatar.src = savedAvatar;
+        function renderList() {
+            const list = document.getElementById('levelList');
+            list.innerHTML = '';
+            const search = document.getElementById('searchBar').value.toLowerCase();
+
+            let filtered = DB.levels;
+            if(DB.currentTab === 'favs') {
+                filtered = DB.levels.filter(l => DB.favs.includes(l.id));
+            }
+            if(search) {
+                filtered = filtered.filter(l => l.name.toLowerCase().includes(search) || l.author.toLowerCase().includes(search));
+            }
+
+            filtered.forEach((lvl, index) => {
+                const div = document.createElement('div');
+                div.className = `level-item ${DB.currentLvl && DB.currentLvl.id === lvl.id ? 'active' : ''}`;
+                div.onclick = () => { selectLevel(lvl); playSfx('click'); };
+                
+                div.innerHTML = `
+                    <div class="level-info">
+                        <span class="level-name">${lvl.name}</span>
+                        <span class="level-author">by ${lvl.author}</span>
+                    </div>
+                    <span class="level-pos">#${index + 1}</span>
+                `;
+                list.appendChild(div);
+            });
+
+            if(!DB.currentLvl && filtered.length > 0) {
+                selectLevel(filtered[0]);
+            }
         }
-      }
-    });
-  </script>
+
+        function selectLevel(lvl) {
+            DB.currentLvl = lvl;
+            document.querySelectorAll('.level-item').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('lvlName').innerText = lvl.name;
+            document.getElementById('lvlAuthor').innerText = `by ${lvl.author}`;
+            document.getElementById('statID').innerText = lvl.levelID;
+            document.getElementById('statObjects').innerText = lvl.objects;
+            document.getElementById('heroBanner').src = lvl.banner;
+
+            const p = DB.progress[lvl.id] || 0;
+            document.getElementById('progressText').innerText = p + '%';
+            document.documentElement.style.setProperty('--track-fill', p + '%');
+
+            const d = dict[DB.currentLang];
+            document.getElementById('btnFav').innerText = DB.favs.includes(lvl.id) ? d.favRem : d.favAdd;
+
+            const victorsContainer = document.getElementById('victorsList');
+            victorsContainer.innerHTML = lvl.victors.map(v => `<div class="record-item"><span class="record-user">👑 ${v}</span><a class="record-proof" href="#">Video Proof</a></div>`).join('');
+            
+            renderList();
+        }
+
+        function changeTab(tab) {
+            DB.currentTab = tab;
+            document.getElementById('tabTop').classList.toggle('active', tab === 'top');
+            document.getElementById('tabFavs').classList.toggle('active', tab === 'favs');
+            playSfx('click');
+            renderList();
+        }
+
+        function updateProgress(val) {
+            if(!DB.currentLvl) return;
+            let current = DB.progress[DB.currentLvl.id] || 0;
+            current = Math.max(0, Math.min(100, current + val));
+            DB.progress[DB.currentLvl.id] = current;
+            localStorage.setItem('os_progress', JSON.stringify(DB.progress));
+            
+            document.getElementById('progressText').innerText = current + '%';
+            document.documentElement.style.setProperty('--track-fill', current + '%');
+            playSfx('click');
+        }
+
+        function toggleFavorite() {
+            if(!DB.currentLvl) return;
+            const idx = DB.favs.indexOf(DB.currentLvl.id);
+            if(idx > -1) DB.favs.splice(idx, 1);
+            else DB.favs.push(DB.currentLvl.id);
+            localStorage.setItem('os_favs', JSON.stringify(DB.favs));
+            playSfx('click');
+            selectLevel(DB.currentLvl);
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            playSfx('click');
+        }
+
+        function shareLevel() {
+            if(!DB.currentLvl) return;
+            playSfx('click');
+            const d = dict[DB.currentLang];
+            const text = `Ho fatto record su ${DB.currentLvl.name}!`;
+            if (navigator.share) {
+                navigator.share({ title: DB.currentLvl.name, text: text, url: window.location.href }).catch(()=>{});
+            } else {
+                navigator.clipboard.writeText(`${text} ${window.location.href}`);
+                const btn = document.getElementById('btnShare');
+                btn.innerText = d.copied;
+                setTimeout(() => btn.innerText = d.share, 1500);
+            }
+        }
+
+        function resetAllData() {
+            playSfx('click');
+            if(confirm("Sei sicuro di voler resettare tutti i dati del gioco? / Are you sure?")) {
+                localStorage.removeItem('os_favs');
+                localStorage.removeItem('os_progress');
+                DB.favs = []; DB.progress = {};
+                selectLevel(DB.currentLvl);
+                alert("Dati ripristinati con successo!");
+            }
+        }
+
+        function copyID() {
+            if(!DB.currentLvl) return;
+            navigator.clipboard.writeText(DB.currentLvl.levelID);
+            playSfx('click');
+            const btn = document.getElementById("btnCopy");
+            btn.innerText = "📋 Copiato!";
+            setTimeout(() => btn.innerText = "📋 Copia ID", 1500);
+        }
+
+        function triggerConfetti(e) {
+            e.preventDefault(); playSfx('win');
+            const perfMode = document.getElementById('perfCheck').checked;
+            if(!perfMode && typeof confetti === 'function') {
+                confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 } });
+            }
+            if(DB.currentLvl) {
+                DB.progress[DB.currentLvl.id] = 100;
+                localStorage.setItem('os_progress', JSON.stringify(DB.progress));
+                document.getElementById('progressText').innerText = '100%';
+                document.documentElement.style.setProperty('--track-fill', '100%');
+            }
+        }
+
+        // --- INTEGRAZIONE GESTIONE PROFILO PERSONALIZZATO ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inizializza Liste Principali
+            renderList();
+            
+            // Filtro live barra di ricerca
+            document.getElementById('searchBar').addEventListener('input', renderList);
+
+            // Carica profilo salvato o imposta default
+            let profileData = JSON.parse(localStorage.getItem('os_user_profile')) || {
+                username: 'Demon Player',
+                password: '',
+                avatar: ''
+            };
+
+            const fullProfilePage = document.getElementById('fullProfilePage');
+            const btnProfileInterface = document.getElementById('btnProfileInterface');
+            const btnProfileClosePage = document.getElementById('btnProfileClosePage');
+            const btnProfileSaveData = document.getElementById('btnProfileSaveData');
+            
+            const profileUsernameField = document.getElementById('profileUsernameField');
+            const profilePasswordField = document.getElementById('profilePasswordField');
+            const avatarFileInput = document.getElementById('avatarFileInput');
+            
+            const sidebarMiniAvatar = document.getElementById('sidebarMiniAvatar');
+            const sidebarProfileFallback = document.getElementById('sidebarProfileFallback');
+            const profileLargeAvatar = document.getElementById('profileLargeAvatar');
+            const btnSettingsWheel = document.getElementById('btnSettingsWheel');
+
+            function syncProfileUI() {
+                profileUsernameField.value = profileData.username;
+                profilePasswordField.value = profileData.password;
+                
+                if (profileData.avatar) {
+                    sidebarMiniAvatar.src = profileData.avatar;
+                    sidebarMiniAvatar.style.display = 'block';
+                    sidebarProfileFallback.style.display = 'none';
+                    profileLargeAvatar.src = profileData.avatar;
+                } else {
+                    sidebarMiniAvatar.style.display = 'none';
+                    sidebarProfileFallback.style.display = 'inline';
+                    // Immagine astratta cyberpunk di default
+                    profileLargeAvatar.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150'; 
+                }
+            }
+
+            // Apri Pagina Intera
+            btnProfileInterface.addEventListener('click', () => {
+                syncProfileUI();
+                fullProfilePage.style.display = 'block';
+                playSfx('click');
+            });
+
+            // Chiudi Schermata
+            btnProfileClosePage.addEventListener('click', () => {
+                fullProfilePage.style.display = 'none';
+                playSfx('click');
+            });
+
+            // Conversione Real-time immagine in Stringa Base64 locale
+            avatarFileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        profileLargeAvatar.src = evt.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Click su Salva
+            btnProfileSaveData.addEventListener('click', () => {
+                profileData.username = profileUsernameField.value.trim() || 'Demon Player';
+                profileData.password = profilePasswordField.value;
+                profileData.avatar = profileLargeAvatar.src;
+
+                localStorage.setItem('os_user_profile', JSON.stringify(profileData));
+                syncProfileUI();
+                
+                playSfx('win');
+                alert("Profilo di sistema aggiornato con successo! 🚀");
+                fullProfilePage.style.display = 'none';
+            });
+
+            // Rotellina delle Impostazioni
+            btnSettingsWheel.addEventListener('click', () => {
+                playSfx('click');
+                const targetPanel = document.getElementById('systemConfigPanel');
+                if (targetPanel) {
+                    targetPanel.scrollIntoView({ behavior: 'smooth' });
+                    targetPanel.style.outline = "2px solid var(--accent)";
+                    setTimeout(() => targetPanel.style.outline = "none", 1500);
+                }
+            });
+
+            // Sincronizzazione al Boot del file
+            syncProfileUI();
+        });
+    </script>
 </body>
 </html>
