@@ -21,779 +21,287 @@
         }
         
         .light {
-            --bg: #f4f2f8;
-            --panel: rgba(240, 235, 248, 0.75);
-            --panel-solid: #f0ebf8;
-            --accent: #7b2cbf;
-            --accent-glow: rgba(123, 44, 191, 0.2);
-            --text: #1a1625;
-            --text-muted: #6e6488;
-            --border: rgba(123, 44, 191, 0.15);
-            --border-hover: rgba(123, 44, 191, 0.4);
+            --bg: #f4f5fa;
+            --panel: rgba(255, 255, 255, 0.85);
+            --panel-solid: #ffffff;
+            --text: #14141f;
+            --text-muted: #62627a;
+            --border: rgba(0, 0, 0, 0.08);
+            --border-hover: rgba(157, 78, 221, 0.3);
         }
 
-        * { box-sizing: border-box; selection-background: var(--accent); }
-        body {
-            margin: 0; background: var(--bg); color: var(--text);
-            font-family: 'Syne', sans-serif; transition: background 0.3s, color 0.3s;
-            overflow: hidden; height: 100vh;
-        }
+        .compact { --item-pad: 8px; }
 
-        .app-container { display: flex; height: 100vh; width: 100vw; }
-
-        /* SIDEBAR MODIFICATA PER EFFETTO BOTTOM FIXED DENTRO I FLEX */
-        .sidebar {
-            width: 360px; background: var(--panel);
-            border-right: 1px solid var(--border);
-            display: flex; flex-direction: column;
-            backdrop-filter: blur(12px); z-index: 10;
-        }
-
-        .sidebar-header { padding: 24px; border-bottom: 1px solid var(--border); }
-        .sidebar-header h1 {
-            margin: 0; font-family: 'Orbitron', sans-serif; font-size: 1.5rem;
-            letter-spacing: 2px; color: var(--accent); text-shadow: 0 0 10px var(--accent-glow);
-        }
-
-        .search-area { padding: 16px; display: flex; gap: 8px; }
-        .search-input {
-            flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-            padding: 10px 14px; border-radius: 8px; color: var(--text); font-family: inherit;
-        }
-        .search-input:focus { outline: none; border-color: var(--accent); }
-
-        .tabs { display: flex; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.1); }
-        .tab {
-            flex: 1; padding: 12px; text-align: center; cursor: pointer; font-weight: 700;
-            font-size: 0.85rem; color: var(--text-muted); transition: 0.2s;
-        }
-        .tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); background: rgba(255,255,255,0.02); }
-
-        .level-list { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-        
-        /* CUSTOM SCROLLBAR */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        * { box-sizing: border-box; user-select: none; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
-        .level-item {
-            padding: var(--item-pad); background: rgba(255,255,255,0.01);
-            border: 1px solid var(--border); border-radius: 10px; cursor: pointer;
-            display: flex; align-items: center; justify-content: space-between; transition: 0.2s;
-        }
-        .level-item:hover, .level-item.active {
-            border-color: var(--border-hover); background: rgba(157, 78, 221, 0.05);
-            transform: translateX(4px);
-        }
-        .level-info { display: flex; flex-direction: column; gap: 4px; }
-        .level-name { font-weight: 700; font-size: 1rem; }
-        .level-author { font-size: 0.8rem; color: var(--text-muted); }
-        .level-pos {
-            font-family: 'Orbitron', sans-serif; font-weight: 900;
-            color: var(--text-muted); opacity: 0.5; font-size: 1.1rem;
-        }
-        .level-item.active .level-pos { color: var(--accent); opacity: 1; }
-
-        /* SEZIONE BOTTONI IN BASSO A SINISTRA (SIDEBAR FOOTER) */
-        .sidebar-footer {
-            padding: 14px 20px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 12px;
-            background: rgba(5, 3, 10, 0.5);
-            align-items: center;
-            margin-top: auto;
+        body {
+            background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif;
+            margin: 0; display: flex; height: 100vh; overflow: hidden;
+            transition: background 0.3s ease, color 0.3s ease; position: relative;
         }
 
-        .sidebar-footer-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            color: var(--text);
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sidebar-footer-btn:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 12px var(--accent-glow);
-            transform: translateY(-2px);
-        }
-
-        .sidebar-footer-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        /* SCHERMATA INTERA PROFILO OVERLAY */
-        .full-profile-page {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(3, 2, 6, 0.96);
-            backdrop-filter: blur(20px);
-            z-index: 2000;
-            overflow-y: auto;
-            font-family: 'Syne', sans-serif;
-            animation: fadeInProfile 0.3s ease-out forwards;
-        }
-
-        @keyframes fadeInProfile {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .profile-page-content {
-            max-width: 500px;
-            margin: 80px auto;
-            background: var(--panel-solid);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 0 40px rgba(157, 78, 221, 0.15);
-            position: relative;
-        }
-
-        .profile-page-content h2 {
+        h2, h3, .top1-text, #weeklyTitle, #hallTitle, #sTitle, #rTitle {
             font-family: 'Orbitron', sans-serif;
-            color: var(--accent);
-            font-size: 1.8rem;
-            margin-top: 0;
-            text-align: center;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--accent-glow);
         }
+
+        body::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(circle at 50% 50%, var(--accent-glow) 0%, transparent 60%),
+                linear-gradient(rgba(157, 78, 221, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(157, 78, 221, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px; pointer-events: none; z-index: 0;
+        }
+
+        /* Neon Sidebar */
+        .sidebar {
+            width: 85px; background: rgba(8, 6, 12, 0.98); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; align-items: center; padding: 25px 0; gap: 25px; z-index: 10;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.6);
+        }
+        
+        .brand-logo {
+            width: 55px; height: 55px; border-radius: 16px; overflow: hidden;
+            border: 2px solid var(--border); cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.02);
+        }
+        .brand-logo:hover { transform: scale(1.1) rotate(8deg); border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
+        .brand-logo img { width: 85%; height: 85%; object-fit: contain; }
+
+        .nav-icon {
+            cursor: pointer; font-size: 1.4rem; opacity: 0.5; position: relative;
+            transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; align-items: center; justify-content: center;
+            width: 50px; height: 50px; border-radius: 14px; border: 1px solid transparent;
+        }
+        .nav-icon:hover, .nav-icon.active {
+            opacity: 1; transform: scale(1.1); background: rgba(157, 78, 221, 0.1);
+            border-color: rgba(157, 78, 221, 0.3); filter: drop-shadow(0 0 8px var(--accent-glow));
+        }
+        .nav-icon.active { border-color: var(--accent); color: #fff; }
+        
+        .live-dot {
+            position: absolute; top: 8px; right: 8px; width: 8px; height: 8px;
+            background: #ff0055; border-radius: 50%; box-shadow: 0 0 10px #ff0055;
+            animation: pulse 1.8s infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.7; } }
+
+        /* Modernized Layout */
+        .page {
+            display: none; width: 100%; height: 100vh; padding: 25px;
+            grid-template-columns: 430px 1fr 360px; gap: 20px; z-index: 2;
+        }
+        .page.active { display: grid; animation: fadeIn 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Cyber Glassmorphism Card */
+        .card {
+            background: var(--panel); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border); padding: 24px; border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4); overflow-y: auto;
+            display: flex; flex-direction: column; gap: 16px; position: relative;
+            transition: border-color 0.3s ease;
+        }
+        .card:hover { border-color: var(--border-hover); }
+
+        /* Modern UI Controls */
+        input[type="text"], input[type="password"] {
+            background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); color: var(--text);
+            padding: 14px 18px; border-radius: 16px; font-family: 'Syne', sans-serif; font-size: 0.9rem; outline: none; transition: 0.3s;
+        }
+        input[type="text"]:focus, input[type="password"]:focus { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); background: rgba(0,0,0,0.6); }
+        
+        .btn-custom {
+            background: linear-gradient(135deg, var(--accent), #7b2cbf); color: white; border: none; padding: 14px 20px; border-radius: 16px;
+            font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 6px 20px var(--accent-glow); text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-custom:hover { transform: translateY(-3px); filter: brightness(1.2); box-shadow: 0 10px 25px var(--accent-glow); }
+        .btn-custom:active { transform: translateY(-1px); }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); color: var(--text);
+            padding: 12px 14px; border-radius: 14px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .btn-secondary:hover { background: rgba(157, 78, 221, 0.1); border-color: var(--accent); }
+        .btn-secondary.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
 
         .profile-avatar-container {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 20px auto 30px auto;
+            width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--accent);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+            background: rgba(0,0,0,0.4); box-shadow: 0 0 15px var(--accent-glow);
         }
-
-        .profile-large-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 2px solid var(--accent);
-            object-fit: cover;
-            background: #140e24;
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        .avatar-upload-label {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: var(--accent);
-            color: white;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-        }
-
-        .avatar-upload-label:hover {
-            transform: scale(1.1);
-            background: #b566ff;
-        }
-
-        .profile-form-group {
-            margin-bottom: 20px;
-        }
-
-        .profile-form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .profile-form-group input {
-            width: 100%;
-            padding: 12px 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text);
-            box-sizing: border-box;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            font-family: 'Syne', sans-serif;
-        }
-
-        .profile-form-group input:focus {
-            border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.06);
-            outline: none;
-            box-shadow: 0 0 8px rgba(157, 78, 221, 0.2);
-        }
-
-        .profile-btn-container {
-            display: flex;
-            gap: 12px;
-            margin-top: 30px;
-        }
-
-        .btn-profile-save {
-            flex: 2;
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s;
-            letter-spacing: 1px;
-        }
-
-        .btn-profile-save:hover {
-            box-shadow: 0 0 15px var(--accent);
-            transform: translateY(-1px);
-        }
-
-        .btn-profile-close {
-            flex: 1;
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-profile-close:hover {
-            background: rgba(255,255,255,0.05);
-            color: var(--text);
-        }
-
-        /* MAIN CONTENT AREA */
-        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; position: relative; }
-        
-        .hero {
-            padding: 60px 40px; border-bottom: 1px solid var(--border);
-            background: linear-gradient(180deg, rgba(157, 78, 221, 0.05) 0%, transparent 100%);
-            position: relative;
-        }
-        .hero-banner {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; opacity: 0.15; z-index: -1; filter: saturate(1.5);
-        }
-        .hero-tags { display: flex; gap: 8px; margin-bottom: 12px; }
-        .tag {
-            font-family: 'Orbitron', sans-serif; font-size: 0.75rem; padding: 4px 10px;
-            border-radius: 4px; background: rgba(157, 78, 221, 0.2); color: var(--accent);
-            border: 1px solid var(--border); font-weight: 700;
-        }
-        .hero h2 {
-            margin: 0; font-family: 'Orbitron', sans-serif; font-size: 2.5rem;
-            letter-spacing: -1px; text-transform: uppercase;
-        }
-        .hero .author { color: var(--text-muted); font-size: 1.1rem; margin-top: 4px; }
-
-        .details-grid { padding: 40px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
-        
-        .stats-panel {
-            background: var(--panel-solid); border: 1px solid var(--border);
-            border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 20px;
-        }
-        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        .stat-card {
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
-            padding: 16px; border-radius: 12px; text-align: center;
-        }
-        .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
-        .stat-value { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 900; color: var(--accent); }
-
-        .progress-section { background: rgba(255,255,255,0.01); border: 1px solid var(--border); padding: 20px; border-radius: 12px; }
-        .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; }
-        .track-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
-        .track-fill { width: var(--track-fill); height: 100%; background: var(--accent); box-shadow: 0 0 10px var(--accent); transition: 0.3s; }
-
-        .action-row { display: flex; gap: 12px; margin-top: 10px; }
-        .btn {
-            flex: 1; padding: 12px; border-radius: 8px; font-family: 'Orbitron', sans-serif;
-            font-weight: 700; border: 1px solid var(--border); background: rgba(255,255,255,0.02);
-            color: var(--text); cursor: pointer; transition: 0.2s; text-align: center; font-size: 0.85rem;
-        }
-        .btn:hover { border-color: var(--accent); background: rgba(157, 78, 221, 0.1); }
-        .btn-primary { background: var(--accent); color: white; border: none; }
-        .btn-primary:hover { box-shadow: 0 0 15px var(--accent-glow); background: #b566ff; }
-
-        .side-panel { display: flex; flex-direction: column; gap: 20px; }
-        .box {
-            background: var(--panel-solid); border: 1px solid var(--border);
-            border-radius: 16px; padding: 24px;
-        }
-        .box h3 { margin-top: 0; font-family: 'Orbitron', sans-serif; font-size: 1rem; letter-spacing: 1px; color: var(--accent); }
-
-        .record-list { display: flex; flex-direction: column; gap: 10px; }
-        .record-item {
-            display: flex; justify-content: space-between; padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem;
-        }
-        .record-user { font-weight: 700; }
-        .record-proof { color: var(--accent); text-decoration: none; font-size: 0.8rem; }
-
-        .config-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; font-size: 0.9rem; }
-        
-        /* TOGGLE SWITCH SYSTEM */
-        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(255,255,255,0.1); transition: .3s; border-radius: 24px;
-            border: 1px solid var(--border);
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
-            background-color: var(--text-muted); transition: .3s; border-radius: 50%;
-        }
-        input:checked + .slider { background-color: var(--accent-glow); border-color: var(--accent); }
-        input:checked + .slider:before { transform: translateX(20px); background-color: var(--accent); }
+        .profile-avatar-container img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h1>DEMON LIST</h1>
-                <div style="font-size:0.75rem; color:var(--accent); font-family:'Orbitron',sans-serif; letter-spacing:1px;">ULTRA PREMIUM OS v2.0</div>
-            </div>
-            
-            <div class="search-area">
-                <input type="text" id="searchBar" class="search-input" placeholder="Cerca demone... / Search...">
-            </div>
+<nav class="sidebar">
+    <div class="brand-logo" onclick="showPage('list', document.querySelectorAll('.nav-icon')[0])" title="Home OS">
+        <img src="logo.png" alt="Logo" onerror="this.src='https://via.placeholder.com/48/9d4edd/ffffff?text=OS'">
+    </div>
+    <div class="nav-icon active" onclick="showPage('list', this)" title="Lista">📊</div>
+    <div class="nav-icon" onclick="showPage('weekly', this)" title="Weekly Demon">🗓️<div class="live-dot"></div></div>
+    <div class="nav-icon" onclick="showPage('hall', this)" title="Hall of Fame">🏆</div>
+    <div class="nav-icon" onclick="showPage('profile', this)" title="Profilo Utente">👤</div>
+    <div class="nav-icon" onclick="showPage('settings', this)" title="Impostazioni">⚙️</div>
+</nav>
 
-            <div class="tabs">
-                <div class="tab active" id="tabTop" onclick="changeTab('top')">TOP LIST</div>
-                <div class="tab" id="tabFavs" onclick="changeTab('favs')">PREFERITI</div>
+<div id="listPage" class="page active">
+    <div class="card">
+        <div class="stats-bar">
+            <div><span style="opacity:0.5; display:block;">DEMONI</span><strong id="stTotal" style="font-size:1.2rem; color:var(--accent);">0</strong></div>
+            <div><span style="opacity:0.5; display:block;">VERIFICATI</span><strong id="stVer" style="font-size:1.2rem;">0</strong></div>
+            <div><span style="opacity:0.5; display:block;">PREFERITI</span><strong id="stFav" style="font-size:1.2rem; color:#ff4d6d;">0</strong></div>
+        </div>
+        <input type="text" id="search" placeholder="Cerca demone per nome...">
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-secondary" style="flex:1;">✔ Verificati</button>
+            <button class="btn-secondary" style="flex:1;">♥ Preferiti</button>
+        </div>
+        <div id="listBody"></div>
+    </div>
+    
+    <div class="card">
+        <h2 id="lvlName">Seleziona un Livello</h2>
+        <div id="videoContainer">Seleziona un livello dalla lista per visualizzare i dettagli</div>
+    </div>
+    
+    <div class="card">
+        <h3>Classifica Record</h3>
+        <div id="leaderboard"></div>
+    </div>
+</div>
+
+<div id="profilePage" class="page">
+    <div class="card" style="grid-column: span 3; max-width: 600px; margin: 0 auto; width: 100%;">
+        <h2>👤 Personalizzazione Profilo</h2>
+        <p style="color: var(--text-muted); margin: 0;">Gestisci la tua identità all'interno dell'interfaccia Premium OS.</p>
+        
+        <div style="display: flex; align-items: center; gap: 20px; background: rgba(255,255,255,0.02); padding: 20px; border-radius: 20px; border: 1px solid var(--border); margin-top: 10px;">
+            <div class="profile-avatar-container" id="currentAvatarBox">
+                <span style="font-size: 2.5rem;" id="avatarPlaceholder">👤</span>
             </div>
-
-            <div class="level-list" id="levelList">
-                </div>
-
-            <div class="sidebar-footer">
-                <button id="btnSettingsWheel" class="sidebar-footer-btn" title="Impostazioni di Sistema">⚙️</button>
-                <button id="btnProfileInterface" class="sidebar-footer-btn" title="Profilo Utente">
-                    <img id="sidebarMiniAvatar" src="" style="display:none;">
-                    <span id="sidebarProfileFallback">👤</span>
-                </button>
+            <div>
+                <h3 id="displayUsername" style="margin: 0; font-size: 1.5rem; color: #fff;">Player</h3>
+                <span style="font-size: 0.8rem; background: var(--accent); color: #fff; padding: 3px 8px; border-radius: 8px; font-weight: bold; text-transform: uppercase;">Utente Locale</span>
             </div>
         </div>
 
-        <div class="main-content" id="mainContent">
-            <img id="heroBanner" class="hero-banner" src="" alt="Level Banner">
-            <div class="hero">
-                <div class="hero-tags">
-                    <span class="tag" id="lvlPlacement">#1</span>
-                    <span class="tag" id="lvlPoints">100 PTS</span>
-                </div>
-                <h2 id="lvlName">Acheron</h2>
-                <div class="author" id="lvlAuthor">by ryamu</div>
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label style="font-weight: 700; font-size: 0.9rem;">Nuovo Nome Utente:</label>
+                <input type="text" id="profileNameInput" placeholder="Inserisci il tuo nome...">
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label style="font-weight: 700; font-size: 0.9rem;">Modifica Password:</label>
+                <input type="password" id="profilePasswordInput" placeholder="Inserisci una nuova password temporanea...">
             </div>
 
-            <div class="details-grid">
-                <div class="stats-panel">
-                    <div class="stats-row">
-                        <div class="stat-card">
-                            <div class="stat-label">ID Livello</div>
-                            <div class="stat-value" id="statID">-</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Oggetti / Objects</div>
-                            <div class="stat-value" id="statObjects">-</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Difficoltà</div>
-                            <div class="stat-value" style="color:#ff0055;">Top 1</div>
-                        </div>
-                    </div>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label style="font-weight: 700; font-size: 0.9rem;">URL Immagine di Profilo (Avatar):</label>
+                <input type="text" id="profileImgInput" placeholder="https://esempio.com/tuo-avatar.png">
+            </div>
+        </div>
 
-                    <div class="progress-section">
-                        <div class="progress-header">
-                            <span>Miglior Record / Best Record</span>
-                            <span id="progressText">0%</span>
-                        </div>
-                        <div class="track-bar">
-                            <div class="track-fill" id="trackFill"></div>
-                        </div>
-                        <div class="action-row" style="margin-top: 15px;">
-                            <button class="btn" onclick="updateProgress(-5)">-5%</button>
-                            <button class="btn" onclick="updateProgress(5)">+5%</button>
-                            <button class="btn btn-primary" onclick="triggerConfetti(event)">COMPLETATO! 🎉</button>
-                        </div>
-                    </div>
+        <button class="btn-custom" style="margin-top: 10px;" onclick="saveUserProfile()">💾 Salva Modifiche Profilo</button>
+    </div>
+</div>
 
-                    <div class="action-row">
-                        <button class="btn" id="btnFav" onclick="toggleFavorite()">❤️ Aggiungi Preferiti</button>
-                        <button class="btn" id="btnCopy" onclick="copyID()">📋 Copia ID</button>
-                        <button class="btn" id="btnShare" onclick="shareLevel()">🔗 Condividi</button>
-                    </div>
-                </div>
-
-                <div class="side-panel">
-                    <div class="box">
-                        <h3>100% Victors</h3>
-                        <div class="record-list" id="victorsList">
-                            </div>
-                    </div>
-
-                    <div class="box" id="systemConfigPanel">
-                        <h3>System Engine</h3>
-                        <div class="config-row">
-                            <span>Modalità Chiara / Light Mode</span>
-                            <label class="switch">
-                                <input type="checkbox" id="themeCheck" onchange="toggleTheme()">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="config-row">
-                            <span>Performance Boost (No Confetti)</span>
-                            <label class="switch">
-                                <input type="checkbox" id="perfCheck">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <button class="btn" style="width:100%; margin-top:14px; border-color:rgba(255,0,0,0.3); color:#ff5555;" onclick="resetAllData()">⚠️ Reset Dati Sistema</button>
-                    </div>
-                </div>
+<div id="settingsPage" class="page">
+    <div class="card" style="grid-column: span 3; max-width:650px; margin: 0 auto; width:100%;">
+        <h2 id="sTitle">⚙️ Impostazioni OS</h2>
+        <p style="color:var(--text-muted); margin:0;">Configura le preferenze grafiche del tuo sistema.</p>
+        
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
+            <div class="setting-row" style="display: flex; justify-content: space-between; align-items: center; padding: 14px; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px solid var(--border);">
+                <span>Tema Chiaro / Scuro</span>
+                <input type="checkbox" id="themeCheck" style="width:20px; height:20px; cursor:pointer;">
+            </div>
+            <div class="setting-row" style="display: flex; justify-content: space-between; align-items: center; padding: 14px; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px solid var(--border);">
+                <span>Effetti Sonori Interfaccia (SFX)</span>
+                <input type="checkbox" id="sfxCheck" checked style="width:20px; height:20px; cursor:pointer;">
             </div>
         </div>
     </div>
+</div>
 
-    <div id="fullProfilePage" class="full-profile-page">
-        <div class="profile-page-content">
-            <h2>Profilo Utente</h2>
-            
-            <div class="profile-avatar-container">
-                <img id="profileLargeAvatar" class="profile-large-avatar" src="">
-                <label for="avatarFileInput" class="avatar-upload-label" title="Cambia Immagine Profilo">📷</label>
-                <input type="file" id="avatarFileInput" accept="image/*" style="display: none;">
-            </div>
+<script>
+    // Database locale iniziale dello script
+    const DB = {
+        currentLvl: null,
+        favs: JSON.parse(localStorage.getItem('gd_favs')) || [],
+        progress: {},
+        userProfile: JSON.parse(localStorage.getItem('user_profile')) || {
+            name: 'Player',
+            password: '',
+            imgUrl: ''
+        }
+    };
 
-            <div class="profile-form-group">
-                <label for="profileUsernameField">Nome Utente Personalizzato</label>
-                <input type="text" id="profileUsernameField" placeholder="Modifica il tuo nickname...">
-            </div>
+    // Inizializzazione applicazione
+    window.onload = function() {
+        loadUserProfileUI();
+    };
 
-            <div class="profile-form-group">
-                <label for="profilePasswordField">Nuova Password di Accesso</label>
-                <input type="password" id="profilePasswordField" placeholder="Crea o aggiorna la password di sicurezza...">
-            </div>
+    // Funzione Gestione Pagine Sidebar
+    function showPage(pageId, navEl) {
+        // Disattiva tutte le pagine e icone
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-icon').forEach(n => n.classList.remove('active'));
+        
+        // Attiva la pagina richiesta
+        const targetPage = document.getElementById(pageId + 'Page');
+        if(targetPage) targetPage.classList.add('active');
+        if(navEl) navEl.classList.add('active');
+    }
 
-            <div class="profile-btn-container">
-                <button id="btnProfileClosePage" class="btn-profile-close">Chiudi Schermata</button>
-                <button id="btnProfileSaveData" class="btn-profile-save">SALVA MODIFICHE</button>
-            </div>
-        </div>
-    </div>
+    // Carica i dati del profilo nella UI
+    function loadUserProfileUI() {
+        const profile = DB.userProfile;
+        document.getElementById('displayUsername').innerText = profile.name;
+        document.getElementById('profileNameInput').value = profile.name;
+        document.getElementById('profilePasswordInput').value = profile.password;
+        document.getElementById('profileImgInput').value = profile.imgUrl;
 
-    <script>
-        const DB = {
-            levels: [
-                { id: 1, name: "Acheron", author: "ryamu", levelID: "84293849", objects: "142K", banner: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=800", victors: ["Zoink", "wPopoff", "Trick"] },
-                { id: 2, name: "Avaris", author: "Viprin", levelID: "93840293", objects: "210K", banner: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800", victors: ["Doggie", "Diamond"] },
-                { id: 3, name: "Tartarus", author: "Riot", levelID: "61902934", objects: "89K", banner: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800", victors: ["Mullo", "Dolphy", "Combined"] },
-                { id: 4, name: "Sonic Wave", author: "Cyclic", levelID: "26483920", objects: "53K", banner: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800", victors: ["Sunix", "Technical", "Bold"] }
-            ],
-            currentLvl: null,
-            currentTab: 'top',
-            favs: JSON.parse(localStorage.getItem('os_favs')) || [],
-            progress: JSON.parse(localStorage.getItem('os_progress')) || {},
-            currentLang: 'it'
+        const avatarBox = document.getElementById('currentAvatarBox');
+        if(profile.imgUrl.trim() !== "") {
+            avatarBox.innerHTML = `<img src="${profile.imgUrl}" alt="Avatar" onerror="resetAvatarFallback()">`;
+        } else {
+            avatarBox.innerHTML = `<span style="font-size: 2.5rem;">👤</span>`;
+        }
+    }
+
+    // Gestione fallback immagine errata
+    function resetAvatarFallback() {
+        document.getElementById('currentAvatarBox').innerHTML = `<span style="font-size: 2.5rem;">👤</span>`;
+    }
+
+    // Salva i dati del profilo nel LocalStorage
+    function saveUserProfile() {
+        const newName = document.getElementById('profileNameInput').value.trim() || 'Player';
+        const newPassword = document.getElementById('profilePasswordInput').value;
+        const newImgUrl = document.getElementById('profileImgInput').value.trim();
+
+        DB.userProfile = {
+            name: newName,
+            password: newPassword,
+            imgUrl: newImgUrl
         };
 
-        const dict = {
-            it: { share: "🔗 Condividi", copied: "📋 Copiato!", favAdd: "❤️ Aggiungi Preferiti", favRem: "💔 Rimuovi Preferiti" }
-        };
-
-        function playSfx(type) {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
-                
-                if(type === 'click') {
-                    osc.frequency.setValueAtTime(400, ctx.currentTime);
-                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-                    osc.start(); osc.stop(ctx.currentTime + 0.05);
-                } else if(type === 'win') {
-                    osc.frequency.setValueAtTime(600, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.3);
-                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-                    osc.start(); osc.stop(ctx.currentTime + 0.3);
-                }
-            } catch(e){}
-        }
-
-        function renderList() {
-            const list = document.getElementById('levelList');
-            list.innerHTML = '';
-            const search = document.getElementById('searchBar').value.toLowerCase();
-
-            let filtered = DB.levels;
-            if(DB.currentTab === 'favs') {
-                filtered = DB.levels.filter(l => DB.favs.includes(l.id));
-            }
-            if(search) {
-                filtered = filtered.filter(l => l.name.toLowerCase().includes(search) || l.author.toLowerCase().includes(search));
-            }
-
-            filtered.forEach((lvl, index) => {
-                const div = document.createElement('div');
-                div.className = `level-item ${DB.currentLvl && DB.currentLvl.id === lvl.id ? 'active' : ''}`;
-                div.onclick = () => { selectLevel(lvl); playSfx('click'); };
-                
-                div.innerHTML = `
-                    <div class="level-info">
-                        <span class="level-name">${lvl.name}</span>
-                        <span class="level-author">by ${lvl.author}</span>
-                    </div>
-                    <span class="level-pos">#${index + 1}</span>
-                `;
-                list.appendChild(div);
-            });
-
-            if(!DB.currentLvl && filtered.length > 0) {
-                selectLevel(filtered[0]);
-            }
-        }
-
-        function selectLevel(lvl) {
-            DB.currentLvl = lvl;
-            document.querySelectorAll('.level-item').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById('lvlName').innerText = lvl.name;
-            document.getElementById('lvlAuthor').innerText = `by ${lvl.author}`;
-            document.getElementById('statID').innerText = lvl.levelID;
-            document.getElementById('statObjects').innerText = lvl.objects;
-            document.getElementById('heroBanner').src = lvl.banner;
-
-            const p = DB.progress[lvl.id] || 0;
-            document.getElementById('progressText').innerText = p + '%';
-            document.documentElement.style.setProperty('--track-fill', p + '%');
-
-            const d = dict[DB.currentLang];
-            document.getElementById('btnFav').innerText = DB.favs.includes(lvl.id) ? d.favRem : d.favAdd;
-
-            const victorsContainer = document.getElementById('victorsList');
-            victorsContainer.innerHTML = lvl.victors.map(v => `<div class="record-item"><span class="record-user">👑 ${v}</span><a class="record-proof" href="#">Video Proof</a></div>`).join('');
-            
-            renderList();
-        }
-
-        function changeTab(tab) {
-            DB.currentTab = tab;
-            document.getElementById('tabTop').classList.toggle('active', tab === 'top');
-            document.getElementById('tabFavs').classList.toggle('active', tab === 'favs');
-            playSfx('click');
-            renderList();
-        }
-
-        function updateProgress(val) {
-            if(!DB.currentLvl) return;
-            let current = DB.progress[DB.currentLvl.id] || 0;
-            current = Math.max(0, Math.min(100, current + val));
-            DB.progress[DB.currentLvl.id] = current;
-            localStorage.setItem('os_progress', JSON.stringify(DB.progress));
-            
-            document.getElementById('progressText').innerText = current + '%';
-            document.documentElement.style.setProperty('--track-fill', current + '%');
-            playSfx('click');
-        }
-
-        function toggleFavorite() {
-            if(!DB.currentLvl) return;
-            const idx = DB.favs.indexOf(DB.currentLvl.id);
-            if(idx > -1) DB.favs.splice(idx, 1);
-            else DB.favs.push(DB.currentLvl.id);
-            localStorage.setItem('os_favs', JSON.stringify(DB.favs));
-            playSfx('click');
-            selectLevel(DB.currentLvl);
-        }
-
-        function toggleTheme() {
-            document.body.classList.toggle('light');
-            playSfx('click');
-        }
-
-        function shareLevel() {
-            if(!DB.currentLvl) return;
-            playSfx('click');
-            const d = dict[DB.currentLang];
-            const text = `Ho fatto record su ${DB.currentLvl.name}!`;
-            if (navigator.share) {
-                navigator.share({ title: DB.currentLvl.name, text: text, url: window.location.href }).catch(()=>{});
-            } else {
-                navigator.clipboard.writeText(`${text} ${window.location.href}`);
-                const btn = document.getElementById('btnShare');
-                btn.innerText = d.copied;
-                setTimeout(() => btn.innerText = d.share, 1500);
-            }
-        }
-
-        function resetAllData() {
-            playSfx('click');
-            if(confirm("Sei sicuro di voler resettare tutti i dati del gioco? / Are you sure?")) {
-                localStorage.removeItem('os_favs');
-                localStorage.removeItem('os_progress');
-                DB.favs = []; DB.progress = {};
-                selectLevel(DB.currentLvl);
-                alert("Dati ripristinati con successo!");
-            }
-        }
-
-        function copyID() {
-            if(!DB.currentLvl) return;
-            navigator.clipboard.writeText(DB.currentLvl.levelID);
-            playSfx('click');
-            const btn = document.getElementById("btnCopy");
-            btn.innerText = "📋 Copiato!";
-            setTimeout(() => btn.innerText = "📋 Copia ID", 1500);
-        }
-
-        function triggerConfetti(e) {
-            e.preventDefault(); playSfx('win');
-            const perfMode = document.getElementById('perfCheck').checked;
-            if(!perfMode && typeof confetti === 'function') {
-                confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 } });
-            }
-            if(DB.currentLvl) {
-                DB.progress[DB.currentLvl.id] = 100;
-                localStorage.setItem('os_progress', JSON.stringify(DB.progress));
-                document.getElementById('progressText').innerText = '100%';
-                document.documentElement.style.setProperty('--track-fill', '100%');
-            }
-        }
-
-        // --- INTEGRAZIONE GESTIONE PROFILO PERSONALIZZATO ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Inizializza Liste Principali
-            renderList();
-            
-            // Filtro live barra di ricerca
-            document.getElementById('searchBar').addEventListener('input', renderList);
-
-            // Carica profilo salvato o imposta default
-            let profileData = JSON.parse(localStorage.getItem('os_user_profile')) || {
-                username: 'Demon Player',
-                password: '',
-                avatar: ''
-            };
-
-            const fullProfilePage = document.getElementById('fullProfilePage');
-            const btnProfileInterface = document.getElementById('btnProfileInterface');
-            const btnProfileClosePage = document.getElementById('btnProfileClosePage');
-            const btnProfileSaveData = document.getElementById('btnProfileSaveData');
-            
-            const profileUsernameField = document.getElementById('profileUsernameField');
-            const profilePasswordField = document.getElementById('profilePasswordField');
-            const avatarFileInput = document.getElementById('avatarFileInput');
-            
-            const sidebarMiniAvatar = document.getElementById('sidebarMiniAvatar');
-            const sidebarProfileFallback = document.getElementById('sidebarProfileFallback');
-            const profileLargeAvatar = document.getElementById('profileLargeAvatar');
-            const btnSettingsWheel = document.getElementById('btnSettingsWheel');
-
-            function syncProfileUI() {
-                profileUsernameField.value = profileData.username;
-                profilePasswordField.value = profileData.password;
-                
-                if (profileData.avatar) {
-                    sidebarMiniAvatar.src = profileData.avatar;
-                    sidebarMiniAvatar.style.display = 'block';
-                    sidebarProfileFallback.style.display = 'none';
-                    profileLargeAvatar.src = profileData.avatar;
-                } else {
-                    sidebarMiniAvatar.style.display = 'none';
-                    sidebarProfileFallback.style.display = 'inline';
-                    // Immagine astratta cyberpunk di default
-                    profileLargeAvatar.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150'; 
-                }
-            }
-
-            // Apri Pagina Intera
-            btnProfileInterface.addEventListener('click', () => {
-                syncProfileUI();
-                fullProfilePage.style.display = 'block';
-                playSfx('click');
-            });
-
-            // Chiudi Schermata
-            btnProfileClosePage.addEventListener('click', () => {
-                fullProfilePage.style.display = 'none';
-                playSfx('click');
-            });
-
-            // Conversione Real-time immagine in Stringa Base64 locale
-            avatarFileInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(evt) {
-                        profileLargeAvatar.src = evt.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // Click su Salva
-            btnProfileSaveData.addEventListener('click', () => {
-                profileData.username = profileUsernameField.value.trim() || 'Demon Player';
-                profileData.password = profilePasswordField.value;
-                profileData.avatar = profileLargeAvatar.src;
-
-                localStorage.setItem('os_user_profile', JSON.stringify(profileData));
-                syncProfileUI();
-                
-                playSfx('win');
-                alert("Profilo di sistema aggiornato con successo! 🚀");
-                fullProfilePage.style.display = 'none';
-            });
-
-            // Rotellina delle Impostazioni
-            btnSettingsWheel.addEventListener('click', () => {
-                playSfx('click');
-                const targetPanel = document.getElementById('systemConfigPanel');
-                if (targetPanel) {
-                    targetPanel.scrollIntoView({ behavior: 'smooth' });
-                    targetPanel.style.outline = "2px solid var(--accent)";
-                    setTimeout(() => targetPanel.style.outline = "none", 1500);
-                }
-            });
-
-            // Sincronizzazione al Boot del file
-            syncProfileUI();
-        });
-    </script>
+        localStorage.setItem('user_profile', JSON.stringify(DB.userProfile));
+        loadUserProfileUI();
+        alert("Profilo aggiornato con successo localmente! 🚀");
+    }
+</script>
 </body>
 </html>
