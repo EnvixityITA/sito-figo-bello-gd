@@ -59,7 +59,6 @@
             background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px; pointer-events: none; z-index: 0;
         }
 
-        /* Neon Glass Sidebar */
         .sidebar {
             width: 85px; background: rgba(8, 6, 12, 0.7); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; 
@@ -94,7 +93,6 @@
         }
         @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.7; } }
 
-        /* Profilo Utente in Sidebar */
         .sidebar-profile-container {
             margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%;
         }
@@ -107,7 +105,6 @@
         .profile-btn-sidebar img { width: 100%; height: 100%; object-fit: cover; }
         .profile-name-mini { font-size: 0.65rem; font-weight: 800; color: var(--text); max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
 
-        /* Modernized Layout */
         .page {
             display: none; width: 100%; height: 100vh; padding: 25px;
             grid-template-columns: 430px 1fr 360px; gap: 20px; z-index: 2;
@@ -115,7 +112,6 @@
         .page.active { display: grid; animation: fadeIn 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Ultra Glassmorphism Card */
         .card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%), var(--panel);
             backdrop-filter: blur(35px) saturate(160%); -webkit-backdrop-filter: blur(35px) saturate(160%);
@@ -126,7 +122,6 @@
         }
         .card:hover { border-color: var(--border-hover); box-shadow: 0 30px 65px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25); }
 
-        /* Modern UI Controls */
         input[type="text"], input[type="email"], input[type="password"] {
             background: rgba(0, 0, 0, 0.35); border: 1px solid var(--border); color: var(--text);
             padding: 14px 18px; border-radius: 16px; font-family: 'Syne', sans-serif; font-size: 0.9rem; outline: none; transition: 0.3s;
@@ -151,7 +146,6 @@
         .btn-secondary:hover { background: rgba(157, 78, 221, 0.15); border-color: var(--accent); }
         .btn-secondary.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 18px var(--accent-glow); }
 
-        /* ... Altri stili (Slider, Lists, Leaderboard, Modal ecc. rimangono invariati) ... */
         .custom-slider-container { width: 100%; padding: 4px 0; }
         .custom-slider { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 10px; background: linear-gradient(to right, var(--accent) var(--track-fill), rgba(255, 255, 255, 0.06) var(--track-fill)); outline: none; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
         .custom-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #ffffff; border: 4px solid var(--accent); cursor: pointer; box-shadow: 0 0 12px var(--accent); transition: transform 0.1s; }
@@ -205,7 +199,6 @@
         .analyzer-box { display: flex; justify-content: space-between; align-items: center; background: rgba(157, 78, 221, 0.1); border: 1px dashed var(--accent); padding: 10px 16px; border-radius: 14px; font-size: 0.8rem; }
         #pageRankTitle { font-size: 0.9rem; font-weight: 800; padding: 8px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.15); display: inline-block; transition: all 0.3s ease; }
 
-        /* Social Tab Styling */
         .user-card {
             display: flex; justify-content: space-between; align-items: center; padding: 15px; 
             background: rgba(255, 255, 255, 0.02); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
@@ -347,14 +340,15 @@
 <div id="socialPage" class="page">
     <div class="card" style="grid-column: span 3; max-width:900px; margin: 0 auto; width:100%;">
         <h2 style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem; display:flex; justify-content:space-between; align-items:center;">
-            <span>👥 Social Network</span>
+            <span>👥 Social Network & Cloud</span>
         </h2>
-        <p style="color:var(--text-muted); font-size:0.9rem;">Cerca altri giocatori, visualizza il loro stato e aggiungili agli amici.</p>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Cerca i giocatori nel network Firebase, visualizza il loro stato e interagirci.</p>
         
-        <input type="text" id="socialSearchInput" placeholder="Cerca utente per nome o ID..." oninput="renderSocialList()">
+        <input type="text" id="socialSearchInput" placeholder="Cerca utente per nome o stato..." oninput="if(window.renderSocialList) window.renderSocialList()">
         
         <div id="socialList" style="display:flex; flex-direction:column; gap:12px; margin-top: 15px; overflow-y:auto; max-height: 60vh; padding-right:10px;">
-            </div>
+            <p style="opacity:0.4; text-align:center;">Caricamento giocatori dal Cloud...</p>
+        </div>
     </div>
 </div>
 
@@ -420,7 +414,7 @@
         <h2 id="profileMainTitle" style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem;">Autenticazione Sistema</h2>
         
         <div id="authSection" style="display:flex; flex-direction:column; gap:15px; max-width:400px; margin: 20px auto;">
-            <p style="color:var(--text-muted); font-size:0.9rem;">Accedi per salvare i tuoi progressi nel cloud.</p>
+            <p style="color:var(--text-muted); font-size:0.9rem;">Accedi per salvare i tuoi progressi nel cloud e interagire sui social.</p>
             <input type="email" id="emailInput" placeholder="Inserisci Email..." required>
             <input type="password" id="passwordInput" placeholder="Inserisci Password..." required>
             
@@ -454,7 +448,7 @@
 
             <div style="display:flex; gap:12px; justify-content:center; margin-top:10px;">
                 <button id="btnLogout" class="btn-secondary" style="padding:12px 20px;">🔴 Disconnetti</button>
-                <button id="btnSaveProfile" class="btn-custom" style="padding:12px 20px;">💾 Salva Modifiche</button>
+                <button id="btnSaveProfile" class="btn-custom" style="padding:12px 20px;">💾 Salva in Cloud</button>
             </div>
         </div>
     </div>
@@ -492,15 +486,6 @@
         "Avernus": [{ name: "Diamond", percent: 100 }, { name: "SpaceUK", percent: 92 }],
         "Acheron": [{ name: "Zoink", percent: 100 }]
     };
-
-    // MOCK USERS FOR SOCIAL TAB
-    const mockSocialUsers = [
-        { name: "Zoink", status: "Chilling in Acheron", avatar: "Default_Profile.jpg" },
-        { name: "Trick", status: "Grindando il Top 1 🌊", avatar: "Default_Profile.jpg" },
-        { name: "SpaceUK", status: "Ritorno in scena...", avatar: "Default_Profile.jpg" },
-        { name: "Doggie", status: "Editing il prossimo video", avatar: "Default_Profile.jpg" },
-        { name: "Nexus", status: "Showcasing livelli", avatar: "Default_Profile.jpg" }
-    ];
 
     let DB = {
         levels: [], players: {},
@@ -578,6 +563,7 @@
             rankEl.style.borderColor = rankColor;
             rankEl.style.background = rankColor + "1a";
         }
+        return rankStr;
     };
 
     const dict = {
@@ -623,20 +609,17 @@
             DB.players = mockPlayers;
         }
         loadSettings();
-        updateStats(); renderList(); renderWeekly(); renderHall(); startWeeklyTimer(); renderSocialList();
+        updateStats(); renderList(); renderWeekly(); renderHall(); startWeeklyTimer();
         window.updateUserRankUI();
+        if(window.renderSocialList) window.renderSocialList();
     }
 
     function loadSettings() {
-        // Load Language
         setLang(DB.currentLang);
-        
-        // Load Color
         const savedColor = localStorage.getItem('gd_color') || '#9d4edd';
         const savedGlow = localStorage.getItem('gd_glow') || 'rgba(157, 78, 221, 0.45)';
         setThemeColor(savedColor, savedGlow, null, true);
 
-        // Load Toggles
         const isLight = localStorage.getItem('gd_light') === 'true';
         document.getElementById('themeCheck').checked = isLight;
         if(isLight) document.body.classList.add('light');
@@ -654,7 +637,6 @@
         
         document.getElementById('perfCheck').checked = localStorage.getItem('gd_perf') === 'true';
 
-        // Load User Status
         const savedStatus = localStorage.getItem('gd_status') || 'Nessuno stato';
         document.getElementById('sidebarStatusText').innerText = savedStatus;
         document.getElementById('profileStatusInput').value = savedStatus === 'Nessuno stato' ? '' : savedStatus;
@@ -672,36 +654,6 @@
         else DB.favs.push(name);
         localStorage.setItem('gd_favs', JSON.stringify(DB.favs));
         updateStats(); renderList(); if(DB.currentLvl && DB.currentLvl.name === name) renderWeekly();
-    }
-
-    // SOCIAL TAB RENDER
-    function renderSocialList() {
-        const query = document.getElementById('socialSearchInput').value.toLowerCase();
-        const container = document.getElementById('socialList');
-        container.innerHTML = "";
-        
-        const filtered = mockSocialUsers.filter(u => u.name.toLowerCase().includes(query) || u.status.toLowerCase().includes(query));
-        
-        if (filtered.length === 0) {
-            container.innerHTML = `<p style="opacity:0.4; text-align:center;">Nessun giocatore trovato.</p>`;
-            return;
-        }
-
-        filtered.forEach(u => {
-            const el = document.createElement("div");
-            el.className = "user-card";
-            el.innerHTML = `
-                <div class="user-info">
-                    <img src="${u.avatar}" class="user-avatar" onerror="this.src='Default_Profile.jpg'">
-                    <div>
-                        <strong style="color:var(--text); font-size:1.1rem; display:block;">${u.name}</strong>
-                        <span class="user-status">💭 "${u.status}"</span>
-                    </div>
-                </div>
-                <button class="btn-secondary" onclick="playSfx('click'); alert('Richiesta inviata a ${u.name}!');">➕ Aggiungi</button>
-            `;
-            container.appendChild(el);
-        });
     }
 
     function renderList() {
@@ -1069,6 +1021,7 @@
         document.querySelectorAll('.nav-icon').forEach(n => n.classList.remove('active'));
         document.getElementById(pageId + 'Page').classList.add('active');
         if(navEl) navEl.classList.add('active');
+        if(pageId === 'social' && window.renderSocialList) window.renderSocialList();
     }
 
     function toggleFilter(type) {
@@ -1078,7 +1031,6 @@
         renderList();
     }
 
-    // UPDATED FOR LOCALSTORAGE
     function toggleTheme() { 
         playSfx('click'); 
         const isLight = document.body.classList.toggle('light');
@@ -1113,7 +1065,6 @@
         if(el) {
             el.classList.add('active');
         } else {
-            // Find by color if 'el' is not passed on load
             document.querySelectorAll('.color-swatch').forEach(s => {
                 if(s.style.color === color) s.classList.add('active');
             });
@@ -1206,7 +1157,7 @@
             localStorage.clear(); DB.favs = []; DB.progress = {};
             updateStats(); renderList(); renderWeekly(); alert(d.alertReset);
             window.updateUserRankUI();
-            location.reload(); // Reload to reset theme and toggles properly
+            location.reload();
         }
     }
 
@@ -1234,6 +1185,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBH2sXzuOfOpY2rOQNlS2zwyQnyfWy0DvA",
@@ -1247,6 +1199,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const storage = getStorage(app);
+    const db = getFirestore(app);
 
     const authSection = document.getElementById('authSection');
     const userProfileSection = document.getElementById('userProfileSection');
@@ -1258,19 +1211,95 @@
         authError.innerHTML = msg;
     }
 
-    onAuthStateChanged(auth, (user) => {
+    // Integriamo la lettura live degli utenti per il tab SOCIAL
+    window.renderSocialList = async function() {
+        const query = (document.getElementById('socialSearchInput')?.value || "").toLowerCase();
+        const container = document.getElementById('socialList');
+        if(!container) return;
+
+        let usersList = [];
+        try {
+            const querySnapshot = await getDocs(collection(db, "users"));
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                if(data && (data.name || data.status)) {
+                    usersList.push({
+                        id: docSnap.id,
+                        name: data.name || "Player Anonimo",
+                        status: data.status || "Nessuno stato in cloud",
+                        avatar: data.avatar || "Default_Profile.jpg",
+                        rank: data.rank || "🟢 Novice Demon Slayer"
+                    });
+                }
+            });
+        } catch (e) {
+            console.warn("Mancato recupero da Firestore (regole di sicurezza o offline), uso utenti di riserva.");
+            usersList = [
+                { name: "Zoink", status: "Chilling in Acheron", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
+                { name: "Trick", status: "Grindando il Top 1 🌊", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
+                { name: "SpaceUK", status: "Ritorno in scena...", avatar: "Default_Profile.jpg", rank: "🟣 Extreme Conqueror" },
+                { name: "Doggie", status: "Editing il prossimo video", avatar: "Default_Profile.jpg", rank: "🔵 Advanced Slayer" }
+            ];
+        }
+
+        const filtered = usersList.filter(u => u.name.toLowerCase().includes(query) || u.status.toLowerCase().includes(query));
+        container.innerHTML = "";
+        
+        if (filtered.length === 0) {
+            container.innerHTML = `<p style="opacity:0.4; text-align:center;">Nessun giocatore trovato nel network.</p>`;
+            return;
+        }
+
+        filtered.forEach(u => {
+            const isMe = auth.currentUser && auth.currentUser.uid === u.id;
+            const el = document.createElement("div");
+            el.className = "user-card";
+            el.innerHTML = `
+                <div class="user-info">
+                    <img src="${u.avatar}" class="user-avatar" onerror="this.src='Default_Profile.jpg'">
+                    <div>
+                        <strong style="color:var(--text); font-size:1.05rem; display:block;">${u.name} ${isMe ? '<span style="color:var(--accent); font-size:0.75rem;">(Tu)</span>' : ''}</strong>
+                        <span style="font-size:0.68rem; color:var(--accent); font-weight:700;">${u.rank || ''}</span>
+                        <div class="user-status">💭 "${u.status}"</div>
+                    </div>
+                </div>
+                <button class="btn-secondary" onclick="if(window.playSfx) window.playSfx('click'); alert('Richiesta di amicizia inviata a ${u.name}!');">➕ Aggiungi</button>
+            `;
+            container.appendChild(el);
+        });
+    };
+
+    onAuthStateChanged(auth, async (user) => {
         if (user) {
             authSection.style.display = 'none';
             userProfileSection.style.display = 'flex';
-            profileMainTitle.innerText = "👤 Profilo Giocatore";
+            profileMainTitle.innerText = "👤 Profilo Cloud";
             
-            const currentName = user.displayName || localStorage.getItem('gd_username') || 'Player 1';
-            document.getElementById('profileNameInput').value = currentName;
-            document.getElementById('sidebarNameText').innerText = currentName;
-            
-            const avatarUrl = user.photoURL || localStorage.getItem('gd_custom_avatar') || 'Default_Profile.jpg';
-            document.getElementById('pageAvatarPreview').src = avatarUrl;
-            document.getElementById('sidebarAvatarImg').src = avatarUrl;
+            // All'avvio recupera dal documento del DB o dal LocalStorage se assente
+            let cloudName = user.displayName;
+            let cloudStatus = "Nessuno stato";
+            let cloudAvatar = user.photoURL;
+
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if(userDoc.exists()){
+                    const d = userDoc.data();
+                    if(d.name) cloudName = d.name;
+                    if(d.status) cloudStatus = d.status;
+                    if(d.avatar) cloudAvatar = d.avatar;
+                }
+            } catch(e){}
+
+            const finalName = cloudName || localStorage.getItem('gd_username') || 'Player 1';
+            const finalStatus = cloudStatus !== "Nessuno stato" ? cloudStatus : (localStorage.getItem('gd_status') || 'Nessuno stato');
+            const finalAvatar = cloudAvatar || localStorage.getItem('gd_custom_avatar') || 'Default_Profile.jpg';
+
+            document.getElementById('profileNameInput').value = finalName;
+            document.getElementById('sidebarNameText').innerText = finalName;
+            document.getElementById('profileStatusInput').value = finalStatus === 'Nessuno stato' ? '' : finalStatus;
+            document.getElementById('sidebarStatusText').innerText = finalStatus;
+            document.getElementById('pageAvatarPreview').src = finalAvatar;
+            document.getElementById('sidebarAvatarImg').src = finalAvatar;
             
         } else {
             authSection.style.display = 'flex';
@@ -1286,6 +1315,7 @@
             document.getElementById('pageAvatarPreview').src = guestAvatar;
         }
         if (window.updateUserRankUI) window.updateUserRankUI();
+        if (window.renderSocialList) window.renderSocialList();
     });
 
     const firebaseAuthActions = {
@@ -1303,9 +1333,19 @@
             }
 
             try {
-                await createUserWithEmailAndPassword(auth, email, password);
+                const cred = await createUserWithEmailAndPassword(auth, email, password);
                 authError.style.display = 'none';
-                alert("🎉 Account creato con successo!");
+                
+                // Creazione automatica del doc utente in Firestore
+                const initialRank = window.updateUserRankUI ? window.updateUserRankUI() : "🟢 Novice Demon Slayer";
+                await setDoc(doc(db, "users", cred.user.uid), {
+                    name: email.split('@')[0],
+                    status: "Appena unito al Cloud OS!",
+                    avatar: "Default_Profile.jpg",
+                    rank: initialRank
+                });
+
+                alert("🎉 Account cloud creato con successo!");
                 if (window.playSfx) window.playSfx('win');
             } catch (error) {
                 switch (error.code) {
@@ -1341,38 +1381,53 @@
         saveProfile: async () => {
             if (window.playSfx) window.playSfx('win');
             
-            // Salvataggio Nome
             const newName = document.getElementById('profileNameInput').value.trim() || 'Player 1';
-            localStorage.setItem('gd_username', newName);
-            document.getElementById('sidebarNameText').innerText = newName;
-            
-            // Salvataggio Stato Custom
             const newStatus = document.getElementById('profileStatusInput').value.trim() || 'Nessuno stato';
+            const currentAvatar = document.getElementById('pageAvatarPreview').src;
+            const currentRank = window.updateUserRankUI ? window.updateUserRankUI() : "🟢 Novice Demon Slayer";
+
+            localStorage.setItem('gd_username', newName);
             localStorage.setItem('gd_status', newStatus);
+            document.getElementById('sidebarNameText').innerText = newName;
             document.getElementById('sidebarStatusText').innerText = newStatus;
 
             if (auth.currentUser) {
                 await updateProfile(auth.currentUser, { displayName: newName });
+                try {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), {
+                        name: newName,
+                        status: newStatus,
+                        avatar: currentAvatar,
+                        rank: currentRank
+                    }, { merge: true });
+                } catch(e) {
+                    console.warn("Impossibile salvare sul cloud DB, modifiche mantenute localmente.");
+                }
             }
-            alert("Profilo aggiornato con successo!");
+            alert("Profilo e stato cloud aggiornati!");
             if (window.updateUserRankUI) window.updateUserRankUI();
+            if (window.renderSocialList) window.renderSocialList();
         },
 
         uploadAvatar: async (event) => {
             const file = event.target.files[0];
             if (!file) return;
             
-            // Instant Local Preview Fallback via FileReader
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 const base64Url = e.target.result;
                 document.getElementById('pageAvatarPreview').src = base64Url;
                 document.getElementById('sidebarAvatarImg').src = base64Url;
                 localStorage.setItem('gd_custom_avatar', base64Url);
+
+                if (auth.currentUser) {
+                    try {
+                        await setDoc(doc(db, "users", auth.currentUser.uid), { avatar: base64Url }, { merge: true });
+                    } catch(err){}
+                }
             };
             reader.readAsDataURL(file);
 
-            // Cloud Storage Upload Flow
             if (auth.currentUser) {
                 document.getElementById('pageAvatarPreview').style.opacity = '0.5';
                 try {
@@ -1380,16 +1435,17 @@
                     await uploadBytes(storageRef, file);
                     const downloadURL = await getDownloadURL(storageRef);
                     await updateProfile(auth.currentUser, { photoURL: downloadURL });
+                    await setDoc(doc(db, "users", auth.currentUser.uid), { avatar: downloadURL }, { merge: true });
                 } catch (error) {
-                    console.warn("Storage cloud fallback applicato: per usare il cloud Storage, attiva le regole pubbliche sulla console Firebase.", error.message);
+                    console.warn("Utilizzo del fallback locale per l'immagine.");
                 } finally {
                     document.getElementById('pageAvatarPreview').style.opacity = '1';
+                    if(window.renderSocialList) window.renderSocialList();
                 }
             }
         }
     };
 
-    // Binding Programmatico degli eventi nativi dell'interfaccia
     document.getElementById('btnRegister').addEventListener('click', firebaseAuthActions.register);
     document.getElementById('btnLogin').addEventListener('click', firebaseAuthActions.login);
     document.getElementById('btnLogout').addEventListener('click', firebaseAuthActions.logout);
