@@ -1248,6 +1248,52 @@
             }
         }
     };
+    async function registraNuovoUtente() {
+    const email = document.getElementById('emailInput').value.trim();
+    const password = document.getElementById('passwordInput').value;
+    const errorDisplay = document.getElementById('errorDisplay'); // Il punto in cui mostri l'errore a schermo
+
+    // 1. CONTROLLO PREVENTIVO (Evita di inviare dati palesemente errati a Firebase)
+    if (!email || !email.includes('@') || !email.includes('.')) {
+        if (errorDisplay) errorDisplay.innerText = "⚠️ Inserisci un indirizzo email valido!";
+        return;
+    }
+    if (password.length < 6) {
+        if (errorDisplay) errorDisplay.innerText = "⚠️ La password deve contenere almeno 6 caratteri!";
+        return;
+    }
+
+    try {
+        // Tenta la creazione dell'account su Firebase
+        await createUserWithEmailAndPassword(auth, email, password);
+        
+        // Se va a buon fine:
+        if (errorDisplay) errorDisplay.innerText = ""; // Cancella eventuali errori precedenti
+        alert("🎉 Account creato con successo!");
+        if (window.playSfx) window.playSfx('win');
+        
+    } catch (error) {
+        // 2. GESTIONE PULITA DEGLI ERRORI DI FIREBASE
+        console.error("Firebase Auth Error:", error.code);
+        
+        switch (error.code) {
+            case 'auth/operation-not-allowed':
+                if (errorDisplay) errorDisplay.innerHTML = "❌ <strong>Errore:</strong> Devi abilitare il metodo 'Email/Password' nella console di Firebase (Authentication -> Sign-in method)!";
+                break;
+            case 'auth/email-already-in-use':
+                if (errorDisplay) errorDisplay.innerText = "✉️ Questa email è già registrata. Prova a fare l'Accesso (Login)!";
+                break;
+            case 'auth/invalid-email':
+                if (errorDisplay) errorDisplay.innerText = "📧 Il formato dell'email non è valido.";
+                break;
+            case 'auth/weak-password':
+                if (errorDisplay) errorDisplay.innerText = "🔒 La password è troppo debole (minimo 6 caratteri).";
+                break;
+            default:
+                if (errorDisplay) errorDisplay.innerText = "⚠️ Errore durante la registrazione: " + error.message;
+        }
+    }
+}
 </script>
 </body>
 </html>
