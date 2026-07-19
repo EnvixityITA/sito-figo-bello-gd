@@ -151,126 +151,69 @@
         .btn-secondary:hover { background: rgba(157, 78, 221, 0.15); border-color: var(--accent); }
         .btn-secondary.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 18px var(--accent-glow); }
 
-        /* Slider UI */
+        /* ... Altri stili (Slider, Lists, Leaderboard, Modal ecc. rimangono invariati) ... */
         .custom-slider-container { width: 100%; padding: 4px 0; }
-        .custom-slider {
-            -webkit-appearance: none; width: 100%; height: 8px; border-radius: 10px;
-            background: linear-gradient(to right, var(--accent) var(--track-fill), rgba(255, 255, 255, 0.06) var(--track-fill));
-            outline: none; cursor: pointer; border: 1px solid rgba(255,255,255,0.05);
-        }
-        .custom-slider::-webkit-slider-thumb {
-            -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
-            background: #ffffff; border: 4px solid var(--accent); cursor: pointer;
-            box-shadow: 0 0 12px var(--accent); transition: transform 0.1s;
-        }
+        .custom-slider { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 10px; background: linear-gradient(to right, var(--accent) var(--track-fill), rgba(255, 255, 255, 0.06) var(--track-fill)); outline: none; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
+        .custom-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #ffffff; border: 4px solid var(--accent); cursor: pointer; box-shadow: 0 0 12px var(--accent); transition: transform 0.1s; }
         .custom-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
-
-        /* Lists and Elements */
-        .lvl-item {
-            display: flex; align-items: center; gap: 14px; padding: var(--item-pad) 14px; border-radius: 18px;
-            border: 1px solid transparent; background: rgba(255, 255, 255, 0.015); cursor: pointer;
-            transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
+        .lvl-item { display: flex; align-items: center; gap: 14px; padding: var(--item-pad) 14px; border-radius: 18px; border: 1px solid transparent; background: rgba(255, 255, 255, 0.015); cursor: pointer; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .lvl-item:hover { background: rgba(157, 78, 221, 0.08); border-color: rgba(157, 78, 221, 0.25); transform: translateX(5px); }
         .lvl-item.selected { background: rgba(157, 78, 221, 0.2); border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); }
-
         .thumb { width: 64px; height: 36px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
         .fav-btn { font-size: 1.2rem; color: rgba(255, 255, 255, 0.15); transition: 0.2s; cursor: pointer; }
         .fav-btn:hover { transform: scale(1.25); color: #ff4d6d; }
         .fav-active { color: #ff4d6d; filter: drop-shadow(0 0 8px #ff4d6d); }
-
         .status-badge { font-size: 0.75rem; padding: 5px 10px; border-radius: 10px; font-weight: 700; text-transform: uppercase; backdrop-filter: blur(5px); }
         .st-unplayed { background: rgba(255,255,255,0.05); color: var(--text-muted); }
         .st-practice { background: rgba(255, 193, 7, 0.15); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.3); }
         .st-beaten { background: rgba(57, 255, 20, 0.15); color: #39ff14; border: 1px solid rgba(57, 255, 20, 0.3); filter: drop-shadow(0 0 6px rgba(57,255,20,0.2)); }
-
         .top1-text { color: #ffd700; font-weight: 900; text-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
-
-        /* Premium Leaderboard */
         .leaderboard-title-box { border-bottom: 1px solid var(--border); padding-bottom: 12px; display:flex; flex-direction:column; gap:10px; }
-        .lb-row {
-            display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; 
-            background: rgba(255, 255, 255, 0.02); border-radius: 14px; border: 1px solid rgba(255,255,255,0.04);
-            font-size: 0.9rem; transition: 0.2s ease;
-        }
+        .lb-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255, 255, 255, 0.02); border-radius: 14px; border: 1px solid rgba(255,255,255,0.04); font-size: 0.9rem; transition: 0.2s ease; }
         .lb-row:hover { background: rgba(157, 78, 221, 0.08); border-color: rgba(157, 78, 221, 0.35); transform: scale(1.02); }
         .lb-rank { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; margin-right: 10px; }
         .lb-rank-1 { background: linear-gradient(135deg, #ffe47e, #ffd700); color: #000; box-shadow: 0 0 15px rgba(255,215,0,0.5); }
         .lb-rank-2 { background: linear-gradient(135deg, #ffffff, #b0bec5); color: #000; box-shadow: 0 0 10px rgba(255,255,255,0.3); }
         .lb-rank-3 { background: linear-gradient(135deg, #ffb38a, #ff7043); color: #000; box-shadow: 0 0 10px rgba(255,112,67,0.3); }
         .lb-rank-other { background: rgba(255,255,255,0.06); color: var(--text-muted); }
-        
-        /* Stats Dashboard Bar */
         .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.35); padding: 12px; border-radius: 18px; font-size: 0.75rem; border: 1px solid var(--border); text-align: center; }
         .meta-tag { background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        
-        /* Interactive Weekly Board */
-        .quest-box {
-            background: rgba(157, 78, 221, 0.05); border: 1px solid var(--border);
-            border-radius: 16px; padding: 15px; width: 100%; max-width: 500px; text-align: left;
-            display: flex; flex-direction: column; gap: 10px;
-        }
+        .quest-box { background: rgba(157, 78, 221, 0.05); border: 1px solid var(--border); border-radius: 16px; padding: 15px; width: 100%; max-width: 500px; text-align: left; display: flex; flex-direction: column; gap: 10px; }
         .quest-item { display: flex; align-items: center; gap: 12px; font-size: 0.88rem; opacity: 0.7; transition: 0.3s; }
         .quest-item.completed { opacity: 1; color: #39ff14; text-decoration: line-through rgba(57, 255, 20, 0.4); }
         .quest-check { width: 18px; height: 18px; border-radius: 6px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; }
         .quest-item.completed .quest-check { background: #39ff14; border-color: #39ff14; color: #000; }
-
-        /* Grids & Framework settings */
         .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .lang-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; }
         .lang-card:hover { border-color: var(--accent); background: rgba(157, 78, 221, 0.08); }
         .lang-card.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-        
         .color-grid { display: flex; gap: 12px; }
         .color-swatch { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.15); transition: 0.2s; }
         .color-swatch:hover, .color-swatch.active { transform: scale(1.15); border-color: white; box-shadow: 0 0 15px currentColor; }
-
         .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: rgba(0,0,0,0.25); border-radius: 16px; border: 1px solid var(--border); }
-
-        .timer-badge {
-            background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border); border-radius: 16px;
-            padding: 12px 24px; font-family: monospace; font-size: 1.2rem; font-weight: 700;
-            color: #fff; display: inline-flex; align-items: center; gap: 10px; margin: 10px 0;
-        }
-
-        /* Modals */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 2, 6, 0.85);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1000;
-            display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
-        }
+        .timer-badge { background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border); border-radius: 16px; padding: 12px 24px; font-family: monospace; font-size: 1.2rem; font-weight: 700; color: #fff; display: inline-flex; align-items: center; gap: 10px; margin: 10px 0; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 2, 6, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
         .modal-overlay.active { display: flex; opacity: 1; }
-        
-        .modal-box {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%), var(--panel-solid);
-            border: 2px solid var(--accent); border-radius: 28px; padding: 35px; width: 480px; text-align: center; 
-            box-shadow: 0 0 60px rgba(157, 78, 221, 0.45); display: flex; flex-direction: column; gap: 20px;
-        }
-
-        /* Slot Machine */
-        .slot-window {
-            height: 140px; background: rgba(0, 0, 0, 0.85); border: 2px solid var(--accent); border-radius: 20px;
-            display: flex; align-items: flex-start; justify-content: center; overflow: hidden; position: relative;
-            box-shadow: inset 0 0 35px rgba(0,0,0,0.9);
-        }
-        .slot-window::before, .slot-window::after {
-            content: ""; position: absolute; left:0; width:100%; height:30px; z-index: 2; pointer-events:none;
-        }
+        .modal-box { background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%), var(--panel-solid); border: 2px solid var(--accent); border-radius: 28px; padding: 35px; width: 480px; text-align: center; box-shadow: 0 0 60px rgba(157, 78, 221, 0.45); display: flex; flex-direction: column; gap: 20px; }
+        .slot-window { height: 140px; background: rgba(0, 0, 0, 0.85); border: 2px solid var(--accent); border-radius: 20px; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; position: relative; box-shadow: inset 0 0 35px rgba(0,0,0,0.9); }
+        .slot-window::before, .slot-window::after { content: ""; position: absolute; left:0; width:100%; height:30px; z-index: 2; pointer-events:none; }
         .slot-window::before { top:0; background: linear-gradient(to bottom, rgba(0,0,0,1), transparent); }
         .slot-window::after { bottom:0; background: linear-gradient(to top, rgba(0,0,0,1), transparent); }
-
         .slot-track { display: flex; flex-direction: column; align-items: center; transition: transform 0.1s linear; width: 100%; will-change: transform; }
         .slot-card { height: 140px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 15px; font-size: 1.5rem; font-weight: 900; color: #fff; font-family: 'Orbitron', sans-serif; flex-shrink: 0; }
         .slot-card img { width: 100px; height: 56px; border-radius: 10px; border: 2px solid var(--accent); object-fit: cover; box-shadow: 0 0 10px var(--accent-glow); }
+        .analyzer-box { display: flex; justify-content: space-between; align-items: center; background: rgba(157, 78, 221, 0.1); border: 1px dashed var(--accent); padding: 10px 16px; border-radius: 14px; font-size: 0.8rem; }
+        #pageRankTitle { font-size: 0.9rem; font-weight: 800; padding: 8px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.15); display: inline-block; transition: all 0.3s ease; }
 
-        /* Analyzer Badge */
-        .analyzer-box {
-            display: flex; justify-content: space-between; align-items: center; background: rgba(157, 78, 221, 0.1); border: 1px dashed var(--accent); padding: 10px 16px; border-radius: 14px; font-size: 0.8rem;
+        /* Social Tab Styling */
+        .user-card {
+            display: flex; justify-content: space-between; align-items: center; padding: 15px; 
+            background: rgba(255, 255, 255, 0.02); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
         }
-
-        #pageRankTitle {
-            font-size: 0.9rem; font-weight: 800; padding: 8px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.15); display: inline-block; transition: all 0.3s ease;
-        }
+        .user-card:hover { border-color: var(--accent); background: rgba(157, 78, 221, 0.1); }
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .user-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
+        .user-status { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; font-style: italic; }
     </style>
 </head>
 <body>
@@ -283,13 +226,15 @@
     <div class="nav-icon active" onclick="showPage('list', this)" id="nav-list" title="Lista">📊</div>
     <div class="nav-icon" onclick="showPage('weekly', this)" id="nav-weekly" title="Weekly Demon">🗓️<div class="live-dot"></div></div>
     <div class="nav-icon" onclick="showPage('hall', this)" id="nav-hall" title="Hall of Fame">🏆</div>
+    <div class="nav-icon" onclick="showPage('social', this)" id="nav-social" title="Social">👥</div>
     <div class="nav-icon" onclick="showPage('settings', this)" id="nav-settings" title="Impostazioni">⚙️</div>
 
     <div class="sidebar-profile-container">
-        <div class="profile-btn-sidebar nav-icon" onclick="showPage('profile', this)" id="nav-profile" title="Profilo Utente">
-            <img id="sidebarAvatarImg" src="https://api.dicebear.com/7.x/bottts/svg?seed=GD" alt="User">
+        <div class="profile-btn-sidebar nav-icon" onclick="showPage('profile', document.getElementById('nav-profile'))" id="nav-profile" title="Profilo Utente">
+            <img id="sidebarAvatarImg" src="Default_Profile.jpg" alt="User">
         </div>
         <span class="profile-name-mini" id="sidebarNameText">Ospite</span>
+        <span id="sidebarStatusText" style="font-size: 0.55rem; color: var(--accent); text-align: center; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Nessuno stato</span>
     </div>
 </nav>
 
@@ -399,26 +344,40 @@
     </div>
 </div>
 
+<div id="socialPage" class="page">
+    <div class="card" style="grid-column: span 3; max-width:900px; margin: 0 auto; width:100%;">
+        <h2 style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem; display:flex; justify-content:space-between; align-items:center;">
+            <span>👥 Social Network</span>
+        </h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Cerca altri giocatori, visualizza il loro stato e aggiungili agli amici.</p>
+        
+        <input type="text" id="socialSearchInput" placeholder="Cerca utente per nome o ID..." oninput="renderSocialList()">
+        
+        <div id="socialList" style="display:flex; flex-direction:column; gap:12px; margin-top: 15px; overflow-y:auto; max-height: 60vh; padding-right:10px;">
+            </div>
+    </div>
+</div>
+
 <div id="settingsPage" class="page">
     <div class="card" style="grid-column: span 3; max-width:850px; margin: 0 auto; width:100%;">
         <h2 id="sTitle" style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem;">Impostazioni & OS</h2>
         
         <label id="tLang" style="font-weight:700; margin-top:10px;">Lingua di Sistema:</label>
         <div class="lang-grid">
-            <div class="lang-card active" onclick="setLang('it', this)">🇮🇹<br><strong>Italiano</strong></div>
-            <div class="lang-card" onclick="setLang('en', this)">🇬🇧<br><strong>English</strong></div>
-            <div class="lang-card" onclick="setLang('es', this)">🇪🇸<br><strong>Español</strong></div>
-            <div class="lang-card" onclick="setLang('pt', this)">🇧🇷 / 🇵🇹<br><strong>Português</strong></div>
-            <div class="lang-card" onclick="setLang('fr', this)">🇫🇷<br><strong>Français</strong></div>
+            <div class="lang-card active" id="lang-it" onclick="setLang('it')">🇮🇹<br><strong>Italiano</strong></div>
+            <div class="lang-card" id="lang-en" onclick="setLang('en')">🇬🇧<br><strong>English</strong></div>
+            <div class="lang-card" id="lang-es" onclick="setLang('es')">🇪🇸<br><strong>Español</strong></div>
+            <div class="lang-card" id="lang-pt" onclick="setLang('pt')">🇧🇷 / 🇵🇹<br><strong>Português</strong></div>
+            <div class="lang-card" id="lang-fr" onclick="setLang('fr')">🇫🇷<br><strong>Français</strong></div>
         </div>
 
         <label id="tColor" style="font-weight:700; margin-top:15px;">Colore Neon Principale:</label>
         <div class="color-grid">
-            <div class="color-swatch active" style="background:#9d4edd; color:#9d4edd;" onclick="setThemeColor('#9d4edd', 'rgba(157, 78, 221, 0.45)', this)" title="Void Purple"></div>
-            <div class="color-swatch" style="background:#39ff14; color:#39ff14;" onclick="setThemeColor('#39ff14', 'rgba(57, 255, 20, 0.45)', this)" title="Cyber Green"></div>
-            <div class="color-swatch" style="background:#00f0ff; color:#00f0ff;" onclick="setThemeColor('#00f0ff', 'rgba(0, 240, 255, 0.45)', this)" title="Neon Cyan"></div>
-            <div class="color-swatch" style="background:#ff003c; color:#ff003c;" onclick="setThemeColor('#ff003c', 'rgba(255, 0, 60, 0.45)', this)" title="Blood Red"></div>
-            <div class="color-swatch" style="background:#ffd700; color:#ffd700;" onclick="setThemeColor('#ffd700', 'rgba(255, 215, 0, 0.45)', this)" title="Luxury Gold"></div>
+            <div class="color-swatch active" id="color-purple" style="background:#9d4edd; color:#9d4edd;" onclick="setThemeColor('#9d4edd', 'rgba(157, 78, 221, 0.45)', this)" title="Void Purple"></div>
+            <div class="color-swatch" id="color-green" style="background:#39ff14; color:#39ff14;" onclick="setThemeColor('#39ff14', 'rgba(57, 255, 20, 0.45)', this)" title="Cyber Green"></div>
+            <div class="color-swatch" id="color-cyan" style="background:#00f0ff; color:#00f0ff;" onclick="setThemeColor('#00f0ff', 'rgba(0, 240, 255, 0.45)', this)" title="Neon Cyan"></div>
+            <div class="color-swatch" id="color-red" style="background:#ff003c; color:#ff003c;" onclick="setThemeColor('#ff003c', 'rgba(255, 0, 60, 0.45)', this)" title="Blood Red"></div>
+            <div class="color-swatch" id="color-gold" style="background:#ffd700; color:#ffd700;" onclick="setThemeColor('#ffd700', 'rgba(255, 215, 0, 0.45)', this)" title="Luxury Gold"></div>
         </div>
 
         <label style="font-weight:700; margin-top:15px;" id="tPref">Preferenze Interfaccia:</label>
@@ -429,15 +388,15 @@
             </div>
             <div class="setting-row">
                 <span id="lblSfx">Effetti Sonori UI (SFX)</span>
-                <input type="checkbox" id="sfxCheck" checked style="width:20px; height:20px; cursor:pointer;">
+                <input type="checkbox" id="sfxCheck" onchange="toggleSetting('sfx', this.checked)" checked style="width:20px; height:20px; cursor:pointer;">
             </div>
             <div class="setting-row">
                 <span id="lblCompact">Modalità Compatta (Lista Densa)</span>
-                <input type="checkbox" id="compactCheck" onchange="document.body.classList.toggle('compact')" style="width:20px; height:20px; cursor:pointer;">
+                <input type="checkbox" id="compactCheck" onchange="toggleCompact()" style="width:20px; height:20px; cursor:pointer;">
             </div>
             <div class="setting-row">
                 <span id="lblAuto">Autoplay Video YouTube</span>
-                <input type="checkbox" id="autoCheck" checked style="width:20px; height:20px; cursor:pointer;">
+                <input type="checkbox" id="autoCheck" onchange="toggleSetting('auto', this.checked)" checked style="width:20px; height:20px; cursor:pointer;">
             </div>
             <div class="setting-row">
                 <span id="lblDefVideo">Avvia Video di default in modalità Showcase</span>
@@ -445,7 +404,7 @@
             </div>
             <div class="setting-row">
                 <span id="lblPerf">Modalità Prestazioni (Disabilita animazioni pesanti)</span>
-                <input type="checkbox" id="perfCheck" style="width:20px; height:20px; cursor:pointer;">
+                <input type="checkbox" id="perfCheck" onchange="toggleSetting('perf', this.checked)" style="width:20px; height:20px; cursor:pointer;">
             </div>
         </div>
 
@@ -474,7 +433,7 @@
 
         <div id="userProfileSection" style="display:none; flex-direction:column; align-items:center; gap:20px; margin-top:20px;">
             <div style="position: relative;">
-                <img id="pageAvatarPreview" src="https://api.dicebear.com/7.x/bottts/svg?seed=GD" style="width:120px; height:120px; border-radius:50%; border:4px solid var(--accent); box-shadow:0 0 25px var(--accent-glow); object-fit:cover;">
+                <img id="pageAvatarPreview" src="Default_Profile.jpg" style="width:120px; height:120px; border-radius:50%; border:4px solid var(--accent); box-shadow:0 0 25px var(--accent-glow); object-fit:cover;">
                 
                 <label for="avatarUpload" class="btn-custom" style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); padding: 5px 10px; font-size: 0.7rem; cursor: pointer; border-radius: 10px;">📷 Cambia</label>
                 <input type="file" id="avatarUpload" accept="image/png, image/jpeg" style="display:none;">
@@ -482,9 +441,15 @@
             
             <span id="pageRankTitle">🟢 Novice Demon Slayer</span>
 
-            <div style="text-align:left; display:flex; flex-direction:column; gap:6px; width:100%; max-width:300px;">
-                <label style="font-size:0.85rem; font-weight:700;">Nome Utente:</label>
-                <input type="text" id="profileNameInput" placeholder="Il tuo nick..." maxlength="16">
+            <div style="text-align:left; display:flex; flex-direction:column; gap:10px; width:100%; max-width:320px;">
+                <div>
+                    <label style="font-size:0.85rem; font-weight:700;">Nome Utente:</label>
+                    <input type="text" id="profileNameInput" placeholder="Il tuo nick..." maxlength="16">
+                </div>
+                <div>
+                    <label style="font-size:0.85rem; font-weight:700;">Il tuo Stato (visibile agli altri):</label>
+                    <input type="text" id="profileStatusInput" placeholder="Es. Sto grindando Tidal Wave..." maxlength="40">
+                </div>
             </div>
 
             <div style="display:flex; gap:12px; justify-content:center; margin-top:10px;">
@@ -523,17 +488,26 @@
     ];
 
     const mockPlayers = {
-        "Tidal Wave": [{ name: "Zoink", percent: 100 }, { name: "Trick", percent: 98 }, { name: "Riot", percent: 85 }, { name: "Nexus", percent: 72 }, { name: "Doggie", percent: 65 }],
-        "Avernus": [{ name: "Diamond", percent: 100 }, { name: "SpaceUK", percent: 92 }, { name: "Viper", percent: 80 }],
-        "Acheron": [{ name: "Zoink", percent: 100 }, { name: "Viper", percent: 100 }, { name: "Doggie", percent: 96 }]
+        "Tidal Wave": [{ name: "Zoink", percent: 100 }, { name: "Trick", percent: 98 }, { name: "Riot", percent: 85 }],
+        "Avernus": [{ name: "Diamond", percent: 100 }, { name: "SpaceUK", percent: 92 }],
+        "Acheron": [{ name: "Zoink", percent: 100 }]
     };
+
+    // MOCK USERS FOR SOCIAL TAB
+    const mockSocialUsers = [
+        { name: "Zoink", status: "Chilling in Acheron", avatar: "Default_Profile.jpg" },
+        { name: "Trick", status: "Grindando il Top 1 🌊", avatar: "Default_Profile.jpg" },
+        { name: "SpaceUK", status: "Ritorno in scena...", avatar: "Default_Profile.jpg" },
+        { name: "Doggie", status: "Editing il prossimo video", avatar: "Default_Profile.jpg" },
+        { name: "Nexus", status: "Showcasing livelli", avatar: "Default_Profile.jpg" }
+    ];
 
     let DB = {
         levels: [], players: {},
         favs: JSON.parse(localStorage.getItem('gd_favs') || '[]'),
         progress: JSON.parse(localStorage.getItem('gd_prog') || '{}'),
-        hideUnv: false, showFavsOnly: false, currentLvl: null, currentLang: 'it',
-        currentVideoMode: 'verifier', defaultVideoMode: 'verifier'
+        hideUnv: false, showFavsOnly: false, currentLvl: null, currentLang: localStorage.getItem('gd_lang') || 'it',
+        currentVideoMode: 'verifier', defaultVideoMode: localStorage.getItem('gd_defVid') || 'verifier'
     };
 
     window.DB = DB;
@@ -648,8 +622,42 @@
             DB.levels = mockLevels;
             DB.players = mockPlayers;
         }
-        updateStats(); renderList(); renderWeekly(); renderHall(); startWeeklyTimer();
+        loadSettings();
+        updateStats(); renderList(); renderWeekly(); renderHall(); startWeeklyTimer(); renderSocialList();
         window.updateUserRankUI();
+    }
+
+    function loadSettings() {
+        // Load Language
+        setLang(DB.currentLang);
+        
+        // Load Color
+        const savedColor = localStorage.getItem('gd_color') || '#9d4edd';
+        const savedGlow = localStorage.getItem('gd_glow') || 'rgba(157, 78, 221, 0.45)';
+        setThemeColor(savedColor, savedGlow, null, true);
+
+        // Load Toggles
+        const isLight = localStorage.getItem('gd_light') === 'true';
+        document.getElementById('themeCheck').checked = isLight;
+        if(isLight) document.body.classList.add('light');
+
+        document.getElementById('sfxCheck').checked = localStorage.getItem('gd_sfx') !== 'false';
+        
+        const isCompact = localStorage.getItem('gd_compact') === 'true';
+        document.getElementById('compactCheck').checked = isCompact;
+        if(isCompact) document.body.classList.add('compact');
+
+        document.getElementById('autoCheck').checked = localStorage.getItem('gd_auto') !== 'false';
+        
+        const isDefShowcase = localStorage.getItem('gd_defVid') === 'showcase';
+        document.getElementById('defVideoCheck').checked = isDefShowcase;
+        
+        document.getElementById('perfCheck').checked = localStorage.getItem('gd_perf') === 'true';
+
+        // Load User Status
+        const savedStatus = localStorage.getItem('gd_status') || 'Nessuno stato';
+        document.getElementById('sidebarStatusText').innerText = savedStatus;
+        document.getElementById('profileStatusInput').value = savedStatus === 'Nessuno stato' ? '' : savedStatus;
     }
 
     function updateStats() {
@@ -664,6 +672,36 @@
         else DB.favs.push(name);
         localStorage.setItem('gd_favs', JSON.stringify(DB.favs));
         updateStats(); renderList(); if(DB.currentLvl && DB.currentLvl.name === name) renderWeekly();
+    }
+
+    // SOCIAL TAB RENDER
+    function renderSocialList() {
+        const query = document.getElementById('socialSearchInput').value.toLowerCase();
+        const container = document.getElementById('socialList');
+        container.innerHTML = "";
+        
+        const filtered = mockSocialUsers.filter(u => u.name.toLowerCase().includes(query) || u.status.toLowerCase().includes(query));
+        
+        if (filtered.length === 0) {
+            container.innerHTML = `<p style="opacity:0.4; text-align:center;">Nessun giocatore trovato.</p>`;
+            return;
+        }
+
+        filtered.forEach(u => {
+            const el = document.createElement("div");
+            el.className = "user-card";
+            el.innerHTML = `
+                <div class="user-info">
+                    <img src="${u.avatar}" class="user-avatar" onerror="this.src='Default_Profile.jpg'">
+                    <div>
+                        <strong style="color:var(--text); font-size:1.1rem; display:block;">${u.name}</strong>
+                        <span class="user-status">💭 "${u.status}"</span>
+                    </div>
+                </div>
+                <button class="btn-secondary" onclick="playSfx('click'); alert('Richiesta inviata a ${u.name}!');">➕ Aggiungi</button>
+            `;
+            container.appendChild(el);
+        });
     }
 
     function renderList() {
@@ -802,11 +840,6 @@
         
         const auto = document.getElementById('autoCheck').checked ? "?autoplay=1&mute=0" : "?autoplay=0";
         document.getElementById("videoContainer").innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}${auto}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="border-radius:18px;"></iframe>`;
-    }
-
-    function updateDefaultVideo() {
-        const isShowcase = document.getElementById('defVideoCheck').checked;
-        DB.defaultVideoMode = isShowcase ? 'showcase' : 'verifier';
     }
 
     function updateProgressUI(val) {
@@ -1045,21 +1078,56 @@
         renderList();
     }
 
-    function toggleTheme() { playSfx('click'); document.body.classList.toggle('light'); }
+    // UPDATED FOR LOCALSTORAGE
+    function toggleTheme() { 
+        playSfx('click'); 
+        const isLight = document.body.classList.toggle('light');
+        localStorage.setItem('gd_light', isLight);
+    }
 
-    function setThemeColor(color, glow, el) {
+    function toggleCompact() {
         playSfx('click');
+        const isCompact = document.body.classList.toggle('compact');
+        localStorage.setItem('gd_compact', isCompact);
+    }
+    
+    function toggleSetting(key, val) {
+        localStorage.setItem(`gd_${key}`, val);
+    }
+
+    function updateDefaultVideo() {
+        const isShowcase = document.getElementById('defVideoCheck').checked;
+        DB.defaultVideoMode = isShowcase ? 'showcase' : 'verifier';
+        localStorage.setItem('gd_defVid', DB.defaultVideoMode);
+    }
+
+    function setThemeColor(color, glow, el, noSfx) {
+        if(!noSfx) playSfx('click');
         document.documentElement.style.setProperty('--accent', color);
         document.documentElement.style.setProperty('--accent-glow', glow);
+        
+        localStorage.setItem('gd_color', color);
+        localStorage.setItem('gd_glow', glow);
+        
         document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-        el.classList.add('active');
+        if(el) {
+            el.classList.add('active');
+        } else {
+            // Find by color if 'el' is not passed on load
+            document.querySelectorAll('.color-swatch').forEach(s => {
+                if(s.style.color === color) s.classList.add('active');
+            });
+        }
     }
 
     function setLang(lang, el) {
-        playSfx('click');
+        if(el) playSfx('click');
         DB.currentLang = lang;
+        localStorage.setItem('gd_lang', lang);
+
         document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
-        el.classList.add('active');
+        if(el) el.classList.add('active');
+        else document.getElementById('lang-' + lang)?.classList.add('active');
         
         const d = dict[lang] || dict['it'];
         
@@ -1138,6 +1206,7 @@
             localStorage.clear(); DB.favs = []; DB.progress = {};
             updateStats(); renderList(); renderWeekly(); alert(d.alertReset);
             window.updateUserRankUI();
+            location.reload(); // Reload to reset theme and toggles properly
         }
     }
 
@@ -1165,10 +1234,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
-    // IMPORTIAMO FIRESTORE
-    import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-    // INSERISCI QUI LA TUA CONFIGURAZIONE FIREBASE
     const firebaseConfig = {
         apiKey: "AIzaSyBH2sXzuOfOpY2rOQNlS2zwyQnyfWy0DvA",
         authDomain: "global-list-inv.firebaseapp.com",
@@ -1181,179 +1247,154 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const storage = getStorage(app);
-    const db = getFirestore(app);
 
     const authSection = document.getElementById('authSection');
     const userProfileSection = document.getElementById('userProfileSection');
+    const profileMainTitle = document.getElementById('profileMainTitle');
     const authError = document.getElementById('authError');
-    const DEFAULT_PFP = "Default_Profile.jpg"; // Immagine di default
     
-    function showError(msg) { authError.style.display = 'block'; authError.innerHTML = msg; }
-
-    // --- FUNZIONE PER APPLICARE LE IMPOSTAZIONI DAL CLOUD ---
-    function applyCloudSettings(settings) {
-        if(!settings) return;
-        if(settings.color && settings.glow) {
-            document.documentElement.style.setProperty('--accent', settings.color);
-            document.documentElement.style.setProperty('--accent-glow', settings.glow);
-            localStorage.setItem('gd_color', settings.color);
-            localStorage.setItem('gd_glow', settings.glow);
-        }
-        if(settings.lightMode !== undefined) {
-            document.body.classList.toggle('light', settings.lightMode);
-            document.getElementById('themeCheck').checked = settings.lightMode;
-            localStorage.setItem('gd_light', settings.lightMode);
-        }
-        if(settings.lang) {
-            // Usa la funzione globale che hai già nel tuo script normale
-            window.DB.currentLang = settings.lang;
-            localStorage.setItem('gd_lang', settings.lang);
-        }
+    function showError(msg) {
+        authError.style.display = 'block';
+        authError.innerHTML = msg;
     }
 
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
         if (user) {
             authSection.style.display = 'none';
             userProfileSection.style.display = 'flex';
+            profileMainTitle.innerText = "👤 Profilo Giocatore";
             
-            // 1. Recupera i dati da Firestore
-            const userDocRef = doc(db, "users", user.uid);
-            const userSnap = await getDoc(userDocRef);
-            
-            let currentStatus = "";
-            let avatarUrl = user.photoURL || DEFAULT_PFP;
-            let currentName = user.displayName || "Player 1";
-
-            if (userSnap.exists()) {
-                const data = userSnap.data();
-                currentStatus = data.status || "";
-                if(data.photoURL) avatarUrl = data.photoURL;
-                if(data.displayName) currentName = data.displayName;
-                if(data.settings) applyCloudSettings(data.settings);
-            } else {
-                // Se è un utente nuovo, creiamo il documento di base
-                await setDoc(userDocRef, {
-                    displayName: currentName,
-                    photoURL: avatarUrl,
-                    status: "Nuovo utente",
-                    uid: user.uid,
-                    friends: []
-                });
-            }
-
-            // 2. Aggiorna l'interfaccia
+            const currentName = user.displayName || localStorage.getItem('gd_username') || 'Player 1';
             document.getElementById('profileNameInput').value = currentName;
-            document.getElementById('profileStatusInput').value = currentStatus;
             document.getElementById('sidebarNameText').innerText = currentName;
             
+            const avatarUrl = user.photoURL || localStorage.getItem('gd_custom_avatar') || 'Default_Profile.jpg';
             document.getElementById('pageAvatarPreview').src = avatarUrl;
             document.getElementById('sidebarAvatarImg').src = avatarUrl;
-
+            
         } else {
             authSection.style.display = 'flex';
             userProfileSection.style.display = 'none';
+            profileMainTitle.innerText = "Autenticazione Sistema";
             
-            document.getElementById('sidebarNameText').innerText = 'Ospite';
-            document.getElementById('sidebarAvatarImg').src = DEFAULT_PFP;
-            document.getElementById('pageAvatarPreview').src = DEFAULT_PFP;
+            const guestName = localStorage.getItem('gd_username') || 'Ospite';
+            document.getElementById('sidebarNameText').innerText = guestName;
+            document.getElementById('profileNameInput').value = guestName === 'Ospite' ? '' : guestName;
+            
+            const guestAvatar = localStorage.getItem('gd_custom_avatar') || 'Default_Profile.jpg';
+            document.getElementById('sidebarAvatarImg').src = guestAvatar;
+            document.getElementById('pageAvatarPreview').src = guestAvatar;
         }
+        if (window.updateUserRankUI) window.updateUserRankUI();
     });
 
     const firebaseAuthActions = {
-        register: async () => { /* Logica di registrazione invariata... */ },
-        login: async () => { /* Logica di login invariata... */ },
-        logout: async () => { await signOut(auth); location.reload(); }, // Ricarica per pulire l'UI
-        
-        saveProfile: async () => {
-            if (!auth.currentUser) return;
-            
-            const newName = document.getElementById('profileNameInput').value.trim() || 'Player 1';
-            const newStatus = document.getElementById('profileStatusInput').value.trim();
-            const avatarUrl = document.getElementById('pageAvatarPreview').src;
+        register: async () => {
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value;
 
-            // Raccogliamo le impostazioni attuali
-            const currentSettings = {
-                lang: localStorage.getItem('gd_lang') || 'it',
-                color: localStorage.getItem('gd_color') || '#9d4edd',
-                glow: localStorage.getItem('gd_glow') || 'rgba(157, 78, 221, 0.45)',
-                lightMode: document.body.classList.contains('light')
-            };
-            
-            // Salviamo su Firestore (Cloud)
-            await setDoc(doc(db, "users", auth.currentUser.uid), {
-                displayName: newName,
-                status: newStatus,
-                photoURL: avatarUrl,
-                settings: currentSettings,
-                uid: auth.currentUser.uid
-            }, { merge: true }); // Merge unisce i dati senza cancellare quelli vecchi come gli amici
-
-            document.getElementById('sidebarNameText').innerText = newName;
-            alert("Profilo, Stato e Impostazioni salvati nel Cloud!");
-        },
-
-        // --- SISTEMA SOCIAL: RECUPERA UTENTI E RICHIESTE AMICIZIA ---
-        loadSocialUsers: async () => {
-            const body = document.getElementById('usersList');
-            const queryText = (document.getElementById('userSearch').value || '').toLowerCase();
-            body.innerHTML = "<p style='text-align:center; opacity:0.5;'>Caricamento utenti...</p>";
+            if (!email || !email.includes('@') || !email.includes('.')) {
+                showError("⚠️ Inserisci un indirizzo email valido!");
+                return;
+            }
+            if (password.length < 6) {
+                showError("⚠️ La password deve contenere almeno 6 caratteri!");
+                return;
+            }
 
             try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                body.innerHTML = "";
-                
-                querySnapshot.forEach((docSnap) => {
-                    const user = docSnap.data();
-                    // Evitiamo di mostrare noi stessi
-                    if(auth.currentUser && user.uid === auth.currentUser.uid) return;
-                    
-                    if(user.displayName && user.displayName.toLowerCase().includes(queryText)) {
-                        const el = document.createElement("div");
-                        el.className = "user-item";
-                        el.innerHTML = `
-                            <img src="${user.photoURL || DEFAULT_PFP}" class="user-avatar" onerror="this.src='${DEFAULT_PFP}'">
-                            <div style="flex:1;">
-                                <span style="font-weight:700; display:block; color:#fff;">${user.displayName}</span>
-                                <span style="font-size:0.75rem; color:var(--text-muted);">🎮 ${user.status || "Nessuno stato"}</span>
-                            </div>
-                            <button class="btn-secondary" style="padding: 6px 12px; font-size:0.75rem;" onclick="window.sendFriendReq('${user.uid}', this)">➕ Aggiungi</button>
-                        `;
-                        body.appendChild(el);
-                    }
-                });
-            } catch(e) {
-                console.error("Errore nel caricamento utenti:", e);
-                body.innerHTML = "<p style='color:#ff003c;'>Errore di connessione al database.</p>";
+                await createUserWithEmailAndPassword(auth, email, password);
+                authError.style.display = 'none';
+                alert("🎉 Account creato con successo!");
+                if (window.playSfx) window.playSfx('win');
+            } catch (error) {
+                switch (error.code) {
+                    case 'auth/operation-not-allowed':
+                        showError("❌ Abilita il metodo 'Email/Password' su Firebase console!");
+                        break;
+                    case 'auth/email-already-in-use':
+                        showError("✉️ Questa email è già registrata.");
+                        break;
+                    default:
+                        showError("⚠️ Errore: " + error.message);
+                }
+            }
+        },
+        
+        login: async () => {
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                authError.style.display = 'none';
+                if (window.playSfx) window.playSfx('win');
+            } catch (error) { 
+                showError("❌ Email o password errati."); 
+            }
+        },
+        
+        logout: async () => {
+            if (window.playSfx) window.playSfx('click');
+            await signOut(auth);
+        },
+        
+        saveProfile: async () => {
+            if (window.playSfx) window.playSfx('win');
+            
+            // Salvataggio Nome
+            const newName = document.getElementById('profileNameInput').value.trim() || 'Player 1';
+            localStorage.setItem('gd_username', newName);
+            document.getElementById('sidebarNameText').innerText = newName;
+            
+            // Salvataggio Stato Custom
+            const newStatus = document.getElementById('profileStatusInput').value.trim() || 'Nessuno stato';
+            localStorage.setItem('gd_status', newStatus);
+            document.getElementById('sidebarStatusText').innerText = newStatus;
+
+            if (auth.currentUser) {
+                await updateProfile(auth.currentUser, { displayName: newName });
+            }
+            alert("Profilo aggiornato con successo!");
+            if (window.updateUserRankUI) window.updateUserRankUI();
+        },
+
+        uploadAvatar: async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Instant Local Preview Fallback via FileReader
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Url = e.target.result;
+                document.getElementById('pageAvatarPreview').src = base64Url;
+                document.getElementById('sidebarAvatarImg').src = base64Url;
+                localStorage.setItem('gd_custom_avatar', base64Url);
+            };
+            reader.readAsDataURL(file);
+
+            // Cloud Storage Upload Flow
+            if (auth.currentUser) {
+                document.getElementById('pageAvatarPreview').style.opacity = '0.5';
+                try {
+                    const storageRef = ref(storage, `avatars/${auth.currentUser.uid}`);
+                    await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(storageRef);
+                    await updateProfile(auth.currentUser, { photoURL: downloadURL });
+                } catch (error) {
+                    console.warn("Storage cloud fallback applicato: per usare il cloud Storage, attiva le regole pubbliche sulla console Firebase.", error.message);
+                } finally {
+                    document.getElementById('pageAvatarPreview').style.opacity = '1';
+                }
             }
         }
     };
 
-    // Rendiamo la funzione di amicizia globale per l'HTML
-    window.sendFriendReq = async (targetUid, btn) => {
-        if(!auth.currentUser) {
-            alert("Devi accedere per mandare richieste di amicizia!");
-            return;
-        }
-        btn.innerText = "⏳ Inviata";
-        btn.classList.add('active');
-        btn.style.pointerEvents = 'none';
-
-        // Salviamo la richiesta nel documento del destinatario
-        const targetRef = doc(db, "users", targetUid);
-        await updateDoc(targetRef, {
-            friendRequests: arrayUnion(auth.currentUser.uid)
-        });
-    };
-
-    // Colleghiamo la ricerca all'input (sostituiamo la funzione locale)
-    document.getElementById('userSearch').addEventListener('input', firebaseAuthActions.loadSocialUsers);
-    
-    // Aggiorniamo la tab social quando viene cliccata
-    document.getElementById('nav-social').addEventListener('click', firebaseAuthActions.loadSocialUsers);
-
+    // Binding Programmatico degli eventi nativi dell'interfaccia
     document.getElementById('btnRegister').addEventListener('click', firebaseAuthActions.register);
     document.getElementById('btnLogin').addEventListener('click', firebaseAuthActions.login);
     document.getElementById('btnLogout').addEventListener('click', firebaseAuthActions.logout);
     document.getElementById('btnSaveProfile').addEventListener('click', firebaseAuthActions.saveProfile);
-    
+    document.getElementById('avatarUpload').addEventListener('change', firebaseAuthActions.uploadAvatar);
 </script>
+</body>
+</html>
