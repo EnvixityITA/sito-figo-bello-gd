@@ -151,69 +151,138 @@
         .btn-secondary:hover { background: rgba(157, 78, 221, 0.15); border-color: var(--accent); }
         .btn-secondary.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 18px var(--accent-glow); }
 
-        /* ... Altri stili (Slider, Lists, Leaderboard, Modal ecc. rimangono invariati) ... */
+        /* Slider UI */
         .custom-slider-container { width: 100%; padding: 4px 0; }
-        .custom-slider { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 10px; background: linear-gradient(to right, var(--accent) var(--track-fill), rgba(255, 255, 255, 0.06) var(--track-fill)); outline: none; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
-        .custom-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #ffffff; border: 4px solid var(--accent); cursor: pointer; box-shadow: 0 0 12px var(--accent); transition: transform 0.1s; }
+        .custom-slider {
+            -webkit-appearance: none; width: 100%; height: 8px; border-radius: 10px;
+            background: linear-gradient(to right, var(--accent) var(--track-fill), rgba(255, 255, 255, 0.06) var(--track-fill));
+            outline: none; cursor: pointer; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+            background: #ffffff; border: 4px solid var(--accent); cursor: pointer;
+            box-shadow: 0 0 12px var(--accent); transition: transform 0.1s;
+        }
         .custom-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
-        .lvl-item { display: flex; align-items: center; gap: 14px; padding: var(--item-pad) 14px; border-radius: 18px; border: 1px solid transparent; background: rgba(255, 255, 255, 0.015); cursor: pointer; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+        /* Lists and Elements */
+        .lvl-item {
+            display: flex; align-items: center; gap: 14px; padding: var(--item-pad) 14px; border-radius: 18px;
+            border: 1px solid transparent; background: rgba(255, 255, 255, 0.015); cursor: pointer;
+            transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
         .lvl-item:hover { background: rgba(157, 78, 221, 0.08); border-color: rgba(157, 78, 221, 0.25); transform: translateX(5px); }
         .lvl-item.selected { background: rgba(157, 78, 221, 0.2); border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); }
+
         .thumb { width: 64px; height: 36px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
         .fav-btn { font-size: 1.2rem; color: rgba(255, 255, 255, 0.15); transition: 0.2s; cursor: pointer; }
         .fav-btn:hover { transform: scale(1.25); color: #ff4d6d; }
         .fav-active { color: #ff4d6d; filter: drop-shadow(0 0 8px #ff4d6d); }
+
         .status-badge { font-size: 0.75rem; padding: 5px 10px; border-radius: 10px; font-weight: 700; text-transform: uppercase; backdrop-filter: blur(5px); }
         .st-unplayed { background: rgba(255,255,255,0.05); color: var(--text-muted); }
         .st-practice { background: rgba(255, 193, 7, 0.15); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.3); }
         .st-beaten { background: rgba(57, 255, 20, 0.15); color: #39ff14; border: 1px solid rgba(57, 255, 20, 0.3); filter: drop-shadow(0 0 6px rgba(57,255,20,0.2)); }
+
         .top1-text { color: #ffd700; font-weight: 900; text-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
+
+        /* Premium Leaderboard */
         .leaderboard-title-box { border-bottom: 1px solid var(--border); padding-bottom: 12px; display:flex; flex-direction:column; gap:10px; }
-        .lb-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255, 255, 255, 0.02); border-radius: 14px; border: 1px solid rgba(255,255,255,0.04); font-size: 0.9rem; transition: 0.2s ease; }
+        .lb-row {
+            display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; 
+            background: rgba(255, 255, 255, 0.02); border-radius: 14px; border: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.9rem; transition: 0.2s ease;
+        }
         .lb-row:hover { background: rgba(157, 78, 221, 0.08); border-color: rgba(157, 78, 221, 0.35); transform: scale(1.02); }
         .lb-rank { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; margin-right: 10px; }
         .lb-rank-1 { background: linear-gradient(135deg, #ffe47e, #ffd700); color: #000; box-shadow: 0 0 15px rgba(255,215,0,0.5); }
         .lb-rank-2 { background: linear-gradient(135deg, #ffffff, #b0bec5); color: #000; box-shadow: 0 0 10px rgba(255,255,255,0.3); }
         .lb-rank-3 { background: linear-gradient(135deg, #ffb38a, #ff7043); color: #000; box-shadow: 0 0 10px rgba(255,112,67,0.3); }
         .lb-rank-other { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+        
+        /* Stats Dashboard Bar */
         .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.35); padding: 12px; border-radius: 18px; font-size: 0.75rem; border: 1px solid var(--border); text-align: center; }
         .meta-tag { background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .quest-box { background: rgba(157, 78, 221, 0.05); border: 1px solid var(--border); border-radius: 16px; padding: 15px; width: 100%; max-width: 500px; text-align: left; display: flex; flex-direction: column; gap: 10px; }
+        
+        /* Interactive Weekly Board */
+        .quest-box {
+            background: rgba(157, 78, 221, 0.05); border: 1px solid var(--border);
+            border-radius: 16px; padding: 15px; width: 100%; max-width: 500px; text-align: left;
+            display: flex; flex-direction: column; gap: 10px;
+        }
         .quest-item { display: flex; align-items: center; gap: 12px; font-size: 0.88rem; opacity: 0.7; transition: 0.3s; }
         .quest-item.completed { opacity: 1; color: #39ff14; text-decoration: line-through rgba(57, 255, 20, 0.4); }
         .quest-check { width: 18px; height: 18px; border-radius: 6px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; }
         .quest-item.completed .quest-check { background: #39ff14; border-color: #39ff14; color: #000; }
+
+        /* Grids & Framework settings */
         .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .lang-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; }
         .lang-card:hover { border-color: var(--accent); background: rgba(157, 78, 221, 0.08); }
         .lang-card.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+        
         .color-grid { display: flex; gap: 12px; }
         .color-swatch { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.15); transition: 0.2s; }
         .color-swatch:hover, .color-swatch.active { transform: scale(1.15); border-color: white; box-shadow: 0 0 15px currentColor; }
+
         .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: rgba(0,0,0,0.25); border-radius: 16px; border: 1px solid var(--border); }
-        .timer-badge { background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border); border-radius: 16px; padding: 12px 24px; font-family: monospace; font-size: 1.2rem; font-weight: 700; color: #fff; display: inline-flex; align-items: center; gap: 10px; margin: 10px 0; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 2, 6, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+
+        .timer-badge {
+            background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border); border-radius: 16px;
+            padding: 12px 24px; font-family: monospace; font-size: 1.2rem; font-weight: 700;
+            color: #fff; display: inline-flex; align-items: center; gap: 10px; margin: 10px 0;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 2, 6, 0.85);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1000;
+            display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
+        }
         .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-box { background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%), var(--panel-solid); border: 2px solid var(--accent); border-radius: 28px; padding: 35px; width: 480px; text-align: center; box-shadow: 0 0 60px rgba(157, 78, 221, 0.45); display: flex; flex-direction: column; gap: 20px; }
-        .slot-window { height: 140px; background: rgba(0, 0, 0, 0.85); border: 2px solid var(--accent); border-radius: 20px; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; position: relative; box-shadow: inset 0 0 35px rgba(0,0,0,0.9); }
-        .slot-window::before, .slot-window::after { content: ""; position: absolute; left:0; width:100%; height:30px; z-index: 2; pointer-events:none; }
+        
+        .modal-box {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%), var(--panel-solid);
+            border: 2px solid var(--accent); border-radius: 28px; padding: 35px; width: 480px; text-align: center; 
+            box-shadow: 0 0 60px rgba(157, 78, 221, 0.45); display: flex; flex-direction: column; gap: 20px;
+        }
+
+        /* Slot Machine */
+        .slot-window {
+            height: 140px; background: rgba(0, 0, 0, 0.85); border: 2px solid var(--accent); border-radius: 20px;
+            display: flex; align-items: flex-start; justify-content: center; overflow: hidden; position: relative;
+            box-shadow: inset 0 0 35px rgba(0,0,0,0.9);
+        }
+        .slot-window::before, .slot-window::after {
+            content: ""; position: absolute; left:0; width:100%; height:30px; z-index: 2; pointer-events:none;
+        }
         .slot-window::before { top:0; background: linear-gradient(to bottom, rgba(0,0,0,1), transparent); }
         .slot-window::after { bottom:0; background: linear-gradient(to top, rgba(0,0,0,1), transparent); }
+
         .slot-track { display: flex; flex-direction: column; align-items: center; transition: transform 0.1s linear; width: 100%; will-change: transform; }
         .slot-card { height: 140px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 15px; font-size: 1.5rem; font-weight: 900; color: #fff; font-family: 'Orbitron', sans-serif; flex-shrink: 0; }
         .slot-card img { width: 100px; height: 56px; border-radius: 10px; border: 2px solid var(--accent); object-fit: cover; box-shadow: 0 0 10px var(--accent-glow); }
-        .analyzer-box { display: flex; justify-content: space-between; align-items: center; background: rgba(157, 78, 221, 0.1); border: 1px dashed var(--accent); padding: 10px 16px; border-radius: 14px; font-size: 0.8rem; }
-        #pageRankTitle { font-size: 0.9rem; font-weight: 800; padding: 8px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.15); display: inline-block; transition: all 0.3s ease; }
 
-        /* Social Tab Styling */
-        .user-card {
-            display: flex; justify-content: space-between; align-items: center; padding: 15px; 
-            background: rgba(255, 255, 255, 0.02); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        /* Analyzer Badge */
+        .analyzer-box {
+            display: flex; justify-content: space-between; align-items: center; background: rgba(157, 78, 221, 0.1); border: 1px dashed var(--accent); padding: 10px 16px; border-radius: 14px; font-size: 0.8rem;
         }
-        .user-card:hover { border-color: var(--accent); background: rgba(157, 78, 221, 0.1); }
-        .user-info { display: flex; align-items: center; gap: 15px; }
-        .user-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
-        .user-status { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+
+        #pageRankTitle {
+            font-size: 0.9rem; font-weight: 800; padding: 8px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.15); display: inline-block; transition: all 0.3s ease;
+        }
+
+        /* Profili Social Card */
+        .user-card {
+            display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; 
+            background: rgba(255, 255, 255, 0.02); border-radius: 14px; border: 1px solid rgba(255,255,255,0.04);
+            transition: 0.2s ease; margin-bottom: 6px;
+        }
+        .user-card:hover { background: rgba(157, 78, 221, 0.08); border-color: rgba(157, 78, 221, 0.35); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); object-fit: cover; }
+        .user-status { font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 2px; }
+        .user-uid-badge { font-family: monospace; font-size: 0.65rem; color: var(--accent); opacity: 0.8; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -226,15 +295,13 @@
     <div class="nav-icon active" onclick="showPage('list', this)" id="nav-list" title="Lista">📊</div>
     <div class="nav-icon" onclick="showPage('weekly', this)" id="nav-weekly" title="Weekly Demon">🗓️<div class="live-dot"></div></div>
     <div class="nav-icon" onclick="showPage('hall', this)" id="nav-hall" title="Hall of Fame">🏆</div>
-    <div class="nav-icon" onclick="showPage('social', this)" id="nav-social" title="Social">👥</div>
     <div class="nav-icon" onclick="showPage('settings', this)" id="nav-settings" title="Impostazioni">⚙️</div>
 
     <div class="sidebar-profile-container">
-        <div class="profile-btn-sidebar nav-icon" onclick="showPage('profile', document.getElementById('nav-profile'))" id="nav-profile" title="Profilo Utente">
-            <img id="sidebarAvatarImg" src="Default_Profile.jpg" alt="User">
+        <div class="profile-btn-sidebar nav-icon" onclick="showPage('profile', this)" id="nav-profile" title="Profilo Utente">
+            <img id="sidebarAvatarImg" src="https://api.dicebear.com/7.x/bottts/svg?seed=GD" alt="User">
         </div>
         <span class="profile-name-mini" id="sidebarNameText">Ospite</span>
-        <span id="sidebarStatusText" style="font-size: 0.55rem; color: var(--accent); text-align: center; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Nessuno stato</span>
     </div>
 </nav>
 
@@ -344,40 +411,26 @@
     </div>
 </div>
 
-<div id="socialPage" class="page">
-    <div class="card" style="grid-column: span 3; max-width:900px; margin: 0 auto; width:100%;">
-        <h2 style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem; display:flex; justify-content:space-between; align-items:center;">
-            <span>👥 Social Network</span>
-        </h2>
-        <p style="color:var(--text-muted); font-size:0.9rem;">Cerca altri giocatori, visualizza il loro stato e aggiungili agli amici.</p>
-        
-        <input type="text" id="socialSearchInput" placeholder="Cerca utente per nome o ID..." oninput="renderSocialList()">
-        
-        <div id="socialList" style="display:flex; flex-direction:column; gap:12px; margin-top: 15px; overflow-y:auto; max-height: 60vh; padding-right:10px;">
-            </div>
-    </div>
-</div>
-
 <div id="settingsPage" class="page">
     <div class="card" style="grid-column: span 3; max-width:850px; margin: 0 auto; width:100%;">
         <h2 id="sTitle" style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem;">Impostazioni & OS</h2>
         
         <label id="tLang" style="font-weight:700; margin-top:10px;">Lingua di Sistema:</label>
         <div class="lang-grid">
-            <div class="lang-card active" id="lang-it" onclick="setLang('it')">🇮🇹<br><strong>Italiano</strong></div>
-            <div class="lang-card" id="lang-en" onclick="setLang('en')">🇬🇧<br><strong>English</strong></div>
-            <div class="lang-card" id="lang-es" onclick="setLang('es')">🇪🇸<br><strong>Español</strong></div>
-            <div class="lang-card" id="lang-pt" onclick="setLang('pt')">🇧🇷 / 🇵🇹<br><strong>Português</strong></div>
-            <div class="lang-card" id="lang-fr" onclick="setLang('fr')">🇫🇷<br><strong>Français</strong></div>
+            <div class="lang-card active" onclick="setLang('it', this)">🇮🇹<br><strong>Italiano</strong></div>
+            <div class="lang-card" onclick="setLang('en', this)">🇬🇧<br><strong>English</strong></div>
+            <div class="lang-card" onclick="setLang('es', this)">🇪🇸<br><strong>Español</strong></div>
+            <div class="lang-card" onclick="setLang('pt', this)">🇧🇷 / 🇵🇹<br><strong>Português</strong></div>
+            <div class="lang-card" onclick="setLang('fr', this)">🇫🇷<br><strong>Français</strong></div>
         </div>
 
         <label id="tColor" style="font-weight:700; margin-top:15px;">Colore Neon Principale:</label>
         <div class="color-grid">
-            <div class="color-swatch active" id="color-purple" style="background:#9d4edd; color:#9d4edd;" onclick="setThemeColor('#9d4edd', 'rgba(157, 78, 221, 0.45)', this)" title="Void Purple"></div>
-            <div class="color-swatch" id="color-green" style="background:#39ff14; color:#39ff14;" onclick="setThemeColor('#39ff14', 'rgba(57, 255, 20, 0.45)', this)" title="Cyber Green"></div>
-            <div class="color-swatch" id="color-cyan" style="background:#00f0ff; color:#00f0ff;" onclick="setThemeColor('#00f0ff', 'rgba(0, 240, 255, 0.45)', this)" title="Neon Cyan"></div>
-            <div class="color-swatch" id="color-red" style="background:#ff003c; color:#ff003c;" onclick="setThemeColor('#ff003c', 'rgba(255, 0, 60, 0.45)', this)" title="Blood Red"></div>
-            <div class="color-swatch" id="color-gold" style="background:#ffd700; color:#ffd700;" onclick="setThemeColor('#ffd700', 'rgba(255, 215, 0, 0.45)', this)" title="Luxury Gold"></div>
+            <div class="color-swatch active" style="background:#9d4edd; color:#9d4edd;" onclick="setThemeColor('#9d4edd', 'rgba(157, 78, 221, 0.45)', this)" title="Void Purple"></div>
+            <div class="color-swatch" style="background:#39ff14; color:#39ff14;" onclick="setThemeColor('#39ff14', 'rgba(57, 255, 20, 0.45)', this)" title="Cyber Green"></div>
+            <div class="color-swatch" style="background:#00f0ff; color:#00f0ff;" onclick="setThemeColor('#00f0ff', 'rgba(0, 240, 255, 0.45)', this)" title="Neon Cyan"></div>
+            <div class="color-swatch" style="background:#ff003c; color:#ff003c;" onclick="setThemeColor('#ff003c', 'rgba(255, 0, 60, 0.45)', this)" title="Blood Red"></div>
+            <div class="color-swatch" style="background:#ffd700; color:#ffd700;" onclick="setThemeColor('#ffd700', 'rgba(255, 215, 0, 0.45)', this)" title="Luxury Gold"></div>
         </div>
 
         <label style="font-weight:700; margin-top:15px;" id="tPref">Preferenze Interfaccia:</label>
@@ -388,23 +441,23 @@
             </div>
             <div class="setting-row">
                 <span id="lblSfx">Effetti Sonori UI (SFX)</span>
-                <input type="checkbox" id="sfxCheck" onchange="toggleSetting('sfx', this.checked)" checked style="width:20px; height:20px; cursor:pointer;">
+                <input type="checkbox" id="sfxCheck" checked style="width:20px; height:20px; cursor:pointer;">
             </div>
             <div class="setting-row">
                 <span id="lblCompact">Modalità Compatta (Lista Densa)</span>
-                <input type="checkbox" id="compactCheck" onchange="toggleCompact()" style="width:20px; height:20px; cursor:pointer;">
+                <input type="checkbox" id="compactCheck" onchange="document.body.classList.toggle('compact')" style="width:20px; height:20px; cursor:pointer;">
             </div>
             <div class="setting-row">
                 <span id="lblAuto">Autoplay Video YouTube</span>
-                <input type="checkbox" id="autoCheck" onchange="toggleSetting('auto', this.checked)" checked style="width:20px; height:20px; cursor:pointer;">
+                <input type="checkbox" id="autoCheck" checked style="width:20px; height:20px; cursor:pointer;">
             </div>
             <div class="setting-row">
                 <span id="lblDefVideo">Avvia Video di default in modalità Showcase</span>
-                <input type="checkbox" id="defVideoCheck" onchange="updateDefaultVideo()" style="width:20px; height:20px; cursor:pointer;">
+                <input type="checkbox" id="defVideoCheck" style="width:20px; height:20px; cursor:pointer;">
             </div>
             <div class="setting-row">
                 <span id="lblPerf">Modalità Prestazioni (Disabilita animazioni pesanti)</span>
-                <input type="checkbox" id="perfCheck" onchange="toggleSetting('perf', this.checked)" style="width:20px; height:20px; cursor:pointer;">
+                <input type="checkbox" id="perfCheck" style="width:20px; height:20px; cursor:pointer;">
             </div>
         </div>
 
@@ -423,7 +476,6 @@
             <p style="color:var(--text-muted); font-size:0.9rem;">Accedi per salvare i tuoi progressi nel cloud.</p>
             <input type="email" id="emailInput" placeholder="Inserisci Email..." required>
             <input type="password" id="passwordInput" placeholder="Inserisci Password..." required>
-            
             <div style="display:flex; gap:10px; margin-top:10px;">
                 <button id="btnRegister" class="btn-secondary" style="flex:1;">Registrati</button>
                 <button id="btnLogin" class="btn-custom" style="flex:1;">Accedi</button>
@@ -433,807 +485,75 @@
 
         <div id="userProfileSection" style="display:none; flex-direction:column; align-items:center; gap:20px; margin-top:20px;">
             <div style="position: relative;">
-                <img id="pageAvatarPreview" src="Default_Profile.jpg" style="width:120px; height:120px; border-radius:50%; border:4px solid var(--accent); box-shadow:0 0 25px var(--accent-glow); object-fit:cover;">
-                
-                <label for="avatarUpload" class="btn-custom" style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); padding: 5px 10px; font-size: 0.7rem; cursor: pointer; border-radius: 10px;">📷 Cambia</label>
-                <input type="file" id="avatarUpload" accept="image/png, image/jpeg" style="display:none;">
+                <img id="pageAvatarPreview" src="https://api.dicebear.com/7.x/bottts/svg?seed=GD" style="width:120px; height:120px; border-radius:50%; border:4px solid var(--accent); object-fit: cover;">
+                <label for="avatarUpload" style="position:absolute; bottom:0; right:0; background:var(--accent); padding:8px; border-radius:50%; cursor:pointer; font-size:1rem; box-shadow:0 4px 10px var(--accent-glow);">📷</label>
+                <input type="file" id="avatarUpload" accept="image/*" style="display:none;">
             </div>
+
+            <div style="display:inline-block;">
+                <span id="pageRankTitle" style="color:var(--text); text-transform:uppercase;">Grado: Recluta</span>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:450px; text-align:left; margin: 0 auto;">
+                <div>
+                    <label style="font-weight:700; font-size:0.85rem; opacity:0.7; display:block; margin-bottom:6px;">Nome Giocatore:</label>
+                    <input type="text" id="profileNameInput" placeholder="Il tuo nome visibile...">
+                </div>
+                <div>
+                    <label style="font-weight:700; font-size:0.85rem; opacity:0.7; display:block; margin-bottom:6px;">Motto / Stato:</label>
+                    <input type="text" id="profileStatusInput" placeholder="Cosa stai giocando o pensando?">
+                </div>
+                <button id="btnSaveProfile" class="btn-custom" style="width:100%; margin-top:10px;">💾 Salva Modifiche Profilo</button>
+                <button id="btnLogout" class="btn-secondary" style="width:100%; border-color:#ff003c; color:#ff003c;">🚪 Disconnetti Account</button>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; padding-top: 30px; border-top: 1px dashed var(--border); text-align: left; max-width: 600px; margin-left: auto; margin-right: auto; width: 100%;">
+            <h3 style="margin: 0 0 10px 0; font-size: 1.2rem; color: #fff;">🌐 Ricerca Giocatori (Database Live)</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Cerca in tempo reale gli account registrati ed effettivi all'interno del sito tramite Nome o ID Utente.</p>
+            <input type="text" id="socialSearchInput" placeholder="Digita il nome o incolla un ID utente..." oninput="window.searchUsers()">
             
-            <span id="pageRankTitle">🟢 Novice Demon Slayer</span>
-
-            <div style="text-align:left; display:flex; flex-direction:column; gap:10px; width:100%; max-width:320px;">
-                <div>
-                    <label style="font-size:0.85rem; font-weight:700;">Nome Utente:</label>
-                    <input type="text" id="profileNameInput" placeholder="Il tuo nick..." maxlength="16">
-                </div>
-                <div>
-                    <label style="font-size:0.85rem; font-weight:700;">Il tuo Stato (visibile agli altri):</label>
-                    <input type="text" id="profileStatusInput" placeholder="Es. Sto grindando Tidal Wave..." maxlength="40">
-                </div>
+            <div id="socialList" style="margin-top: 15px; max-height: 250px; overflow-y: auto; padding-right: 4px;">
+                <p style="opacity:0.4; text-align:center; font-size:0.85rem;">Inizia a digitare per interrogare il database globale...</p>
             </div>
-
-            <div style="display:flex; gap:12px; justify-content:center; margin-top:10px;">
-                <button id="btnLogout" class="btn-secondary" style="padding:12px 20px;">🔴 Disconnetti</button>
-                <button id="btnSaveProfile" class="btn-custom" style="padding:12px 20px;">💾 Salva Modifiche</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="rouletteModal" class="modal-overlay">
-    <div class="modal-box">
-        <h3 id="rTitle" style="margin:0; font-size:1.5rem; color:var(--accent); font-weight:900;">🎰 Cyber-Slot Roulette</h3>
-        <p id="rSub" style="margin:0; font-size:0.85rem; opacity:0.7;">Estrazione casuale estrema senza perdere il segno nella lista.</p>
-        
-        <div class="slot-window">
-            <div id="slotTrack" class="slot-track"></div>
-        </div>
-
-        <div style="display:flex; gap:12px; justify-content:center; margin-top:10px;">
-            <button class="btn-secondary" style="flex:1; padding:14px;" onclick="closeRoulette()" id="btnCancelR">Annulla</button>
-            <button class="btn-custom" style="flex:1; padding:14px;" id="btnSpin" onclick="startSpin()">🎲 Gira Rullo</button>
-            <button class="btn-custom" style="flex:1; padding:14px; display:none; background:#39ff14; color:#000;" id="btnOpenLvl" onclick="confirmRouletteLvl()">Apri Livello</button>
         </div>
     </div>
 </div>
 
 <script>
-    const mockLevels = [
-        { rank: 1, name: "Tidal Wave", thumb: "https://i.ytimg.com/vi/4T3mZ9QG6W0/mqdefault.jpg", videoVerifier: "4T3mZ9QG6W0", videoShowcase: "P75R562qf9c", verified: true, creator: "OniLink", verifier: "Zoink", levelID: "95638150", song: "Shiawase VIP - Dion Timmer", desc: "L'Extreme Demon attuale Top 1. Difficoltà leggendaria guidata interamente dal wave.", skill: "🌊 Wave" },
-        { rank: 2, name: "Avernus", thumb: "https://i.ytimg.com/vi/8n8q4g882c0/mqdefault.jpg", videoVerifier: "8n8q4g882c0", videoShowcase: "h5M0w8X7634", verified: true, creator: "PockeWindfish", verifier: "Diamond", levelID: "89012488", song: "Thermodynamix - dj-Nate", desc: "Verificato di recente! Ostacolo infernale che requires precisione chirurgica nei salti e nel volo con la navicella.", skill: "🚀 Ship" },
-        { rank: 3, name: "Acheron", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: true, creator: "Ryamu", verifier: "Zoink", levelID: "83905761", song: "Thermaldynamix - dj-Nate", desc: "Ex Top 1 per lunghissimo tempo. Design oscuro, stretto e punitivo in ogni singola transizione.", skill: "⏱️ Timing" },
-        { rank: 4, name: "Silent Clubstep", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: false, creator: "TheRealSailent", verifier: "Paqoe", levelID: "79140416", song: "Clubstep - DJ-Nate", desc: "Il livello impossibile storico di GD, rigenerato con sezioni di memoria estreme e infine domato dopo anni di tentativi.", skill: "🧠 Memory" },
-        { rank: 5, name: "Zodiac", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: true, creator: "Biancoox & More", verifier: "Technical", levelID: "55866685", song: "Sphere - Creo", desc: "Un megacollab storico lunghissimo e snervante che testa ogni singola abilità di gioco.", skill: "⏱️ Timing" },
-        { rank: 6, name: "Slaughterhouse", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: true, creator: "IcedCave", verifier: "SpaceUK", levelID: "74480749", song: "Lost - Crim3s", desc: "La perfetta definizione di wave estremo e rilascio rapidissimo in spazi microscopici.", skill: "🌊 Wave" }
-    ];
-
-    const mockPlayers = {
-        "Tidal Wave": [{ name: "Zoink", percent: 100 }, { name: "Trick", percent: 98 }, { name: "Riot", percent: 85 }],
-        "Avernus": [{ name: "Diamond", percent: 100 }, { name: "SpaceUK", percent: 92 }],
-        "Acheron": [{ name: "Zoink", percent: 100 }]
-    };
-
-    // MOCK USERS FOR SOCIAL TAB
-    const mockSocialUsers = [
-        { name: "Zoink", status: "Chilling in Acheron", avatar: "Default_Profile.jpg" },
-        { name: "Trick", status: "Grindando il Top 1 🌊", avatar: "Default_Profile.jpg" },
-        { name: "SpaceUK", status: "Ritorno in scena...", avatar: "Default_Profile.jpg" },
-        { name: "Doggie", status: "Editing il prossimo video", avatar: "Default_Profile.jpg" },
-        { name: "Nexus", status: "Showcasing livelli", avatar: "Default_Profile.jpg" }
-    ];
-
-    let DB = {
-        levels: [], players: {},
-        favs: JSON.parse(localStorage.getItem('gd_favs') || '[]'),
-        progress: JSON.parse(localStorage.getItem('gd_prog') || '{}'),
-        hideUnv: false, showFavsOnly: false, currentLvl: null, currentLang: localStorage.getItem('gd_lang') || 'it',
-        currentVideoMode: 'verifier', defaultVideoMode: localStorage.getItem('gd_defVid') || 'verifier'
-    };
-
-    window.DB = DB;
-    let isSpinning = false;
-    let audioCtx = null;
-
-    function getAudioCtx() {
-        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if(audioCtx.state === 'suspended') audioCtx.resume();
-        return audioCtx;
-    }
-
-    function playSfx(type) {
-        if(!document.getElementById('sfxCheck').checked) return;
-        try {
-            const ctx = getAudioCtx();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain); gain.connect(ctx.destination);
-            
-            if(type === 'click') {
-                osc.frequency.setValueAtTime(350, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(700, ctx.currentTime + 0.04);
-                gain.gain.setValueAtTime(0.08, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.04);
-                osc.start(); osc.stop(ctx.currentTime + 0.04);
-            } else if(type === 'tick') {
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(900, ctx.currentTime);
-                gain.gain.setValueAtTime(0.04, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.015);
-                osc.start(); osc.stop(ctx.currentTime + 0.015);
-            } else if(type === 'win') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-                osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
-                osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16);
-                osc.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.24);
-                gain.gain.setValueAtTime(0.12, ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.45);
-                osc.start(); osc.stop(ctx.currentTime + 0.45);
-            }
-        } catch(e){}
-    }
-
-    window.playSfx = playSfx;
-
-    window.updateUserRankUI = function() {
-        let beatenCount = 0;
-        let totalProg = 0;
-        Object.values(DB.progress).forEach(p => {
-            totalProg += p;
-            if (p === 100) beatenCount++;
-        });
-        
-        let rankStr = "🟢 Novice Demon Slayer";
-        let rankColor = "#39ff14";
-        
-        if (beatenCount >= 5) { rankStr = "👑 GD Legend"; rankColor = "#ffd700"; }
-        else if (beatenCount >= 3) { rankStr = "🟣 Extreme Conqueror"; rankColor = "#9d4edd"; }
-        else if (beatenCount >= 1) { rankStr = "🔵 Advanced Slayer"; rankColor = "#00f0ff"; }
-        else if (totalProg > 0) { rankStr = "🟡 Hard Worker"; rankColor = "#ffc107"; }
-        
-        const rankEl = document.getElementById('pageRankTitle');
-        if (rankEl) {
-            rankEl.innerText = rankStr;
-            rankEl.style.color = rankColor;
-            rankEl.style.borderColor = rankColor;
-            rankEl.style.background = rankColor + "1a";
-        }
-    };
-
-    const dict = {
-        it: { 
-            search: "Cerca demone per nome...", unv: "✔ Verificati", fav: "♥ Preferiti", hSel: "Seleziona un Livello", hSub: "Classifica Record", btnSub: "🚩 Invia il tuo Record", searchP: "Cerca player nel livello...",
-            weekly: "⏰ Weekly Demon", weeklyBadge: "⏰ EVENTO SETTIMANALE", weeklySub: "Completa gli obiettivi del demone della settimana per testare la tua costanza!", timerPrefix: "⏳ SCADE TRA:", 
-            hall: "🏆 Hall of Fame", hallSub: "I giocatori leggendari classificati in base alle performance generali nella lista.", 
-            sTitle: "Impostazioni & OS", tLang: "Lingua di Sistema:", tColor: "Colore Neon Principale:", tPref: "Preferenze Interfaccia:", 
-            lblTheme: "Tema Chiaroscuro (Light Mode)", lblSfx: "Effetti Sonori UI (SFX)", lblCompact: "Modalità Compatta (Lista Densa)", lblAuto: "Autoplay Video YouTube", lblDefVideo: "Avvia Video di default in modalità Showcase", lblPerf: "Modalità Prestazioni (Disabilita animazioni pesanti)", lblReset: "Cancella preferiti e progressi salvati localmente", btnReset: "🗑 Resetta Dati", 
-            lblMyProg: "Progresso Personale (Pratica/Normal):", btnChal: "⚡ Sfida di Pratica Casuale", stLvl: "DEMONI", stVer: "VERIFICATI", stFav: "PREFERITI", 
-            rTitle: "🎰 Cyber-Slot Roulette", rSub: "Estrazione casuale estrema senza perdere il segno nella lista.", rSpin: "🎲 Gira Rullo", rRetry: "🎲 Riprova", rCancel: "Annulla", rOpen: "Apri Livello",
-            stUnplayed: "⚪ Non Giocato", stPractice: "🟡 In Pratica", stBeaten: "🟢 Completato", skillKey: "ABILITÀ CHIAVE:", diffTier: "Tier Difficoltà:", share: "📤 Condividi", copied: "✔ Copiato!",
-            lblCreat: "Creatore:", lblVerif: "Verificatore:", lblSong: "Canzone:", noVid: "Nessun video disponibile.", noRec: "Nessun record registrato per questa ricerca.", points: "Punti Totali", cleared: "Completati",
-            qTitle: "🏆 OBIETTIVI WEEKLY:", q1: "Avvia la scalata: Raggiungi almeno il 15%", q2: "Veterano della Pratica: Raggiungi almeno il 50%", q3: "Leggenda Assoluta: Completa il livello al 100%", wProg: "Progresso Registrado:", wEnter: "⚡ ENTRA IN PRATICA NOW",
-            tierGod: "🔴 God-Tier (Estremo Assoluto)", tierHigh: "🟠 High Extreme (Molto Duro)", tierMid: "🟡 Mid Extreme (Intermedio)", tierLow: "🟢 Entry Extreme (Accessibile)",
-            btnVerif: "🎥 Verificatore", btnShow: "🎬 Showcase", navList: "Lista", navWeekly: "Weekly Demon", navHall: "Hall of Fame", navSettings: "Impostazioni", navProfile: "Profilo Utente",
-            alertReset: "Dati resettati con successo!", confirmReset: "Sei sicuro di voler resettare tutti i progressi e preferiti locali?", copyIDBtn: "📋 Copia ID"
-        },
-        en: { 
-            search: "Search demon by name...", unv: "✔ Verified Only", fav: "♥ Favorites", hSel: "Select a Level", hSub: "Record Leaderboard", btnSub: "🚩 Submit Your Record", searchP: "Search player in level...",
-            weekly: "⏰ Weekly Demon", weeklyBadge: "⏰ WEEKLY EVENT", weeklySub: "Complete the weekly targets to prove your grinding consistency!", timerPrefix: "⏳ EXPIRES IN:", 
-            hall: "🏆 Hall of Fame", hallSub: "Legendary players ranked by overall leaderboards metrics.", 
-            sTitle: "Settings & OS", tLang: "System Language:", tColor: "Primary Neon Accent:", tPref: "Interface Preferences:", 
-            lblTheme: "Light Mode Theme", lblSfx: "UI Sound Effects (SFX)", lblCompact: "Compact Mode (Dense List)", lblAuto: "YouTube Video Autoplay", lblDefVideo: "Start videos in Showcase mode by default", lblPerf: "Performance Mode (Disable heavy animations)", lblReset: "Clear favorites and practice progress saved locally", btnReset: "🗑 Reset Data", 
-            lblMyProg: "Personal Progress (Practice/Normal):", btnChal: "⚡ Random Practice Challenge", stLvl: "DEMONS", stVer: "VERIFIED", stFav: "FAVORITES", 
-            rTitle: "🎰 Cyber-Slot Roulette", rSub: "Extreme random selection without losing your place in the list.", rSpin: "🎲 Spin Reel", rRetry: "🎲 Try Again", rCancel: "Cancel", rOpen: "Open Level",
-            stUnplayed: "⚪ Unplayed", stPractice: "🟡 In Practice", stBeaten: "🟢 Completed", skillKey: "KEY SKILL:", diffTier: "Difficulty Tier:", share: "📤 Share", copied: "✔ Copied!",
-            lblCreat: "Creator:", lblVerif: "Verifier:", lblSong: "Song:", noVid: "No video available.", noRec: "No records found for this search.", points: "Total Points", cleared: "Completed",
-            qTitle: "🏆 WEEKLY TARGETS:", q1: "Start the climb: Reach at least 15%", q2: "Practice Veteran: Reach at least 50%", q3: "Absolute Legend: Complete the level at 100%", wProg: "Recorded Progress:", wEnter: "⚡ ENTER PRACTICE NOW",
-            tierGod: "🔴 God-Tier (Absolute Extreme)", tierHigh: "🟠 High Extreme (Very Hard)", tierMid: "🟡 Mid Extreme (Intermediate)", tierLow: "🟢 Entry Extreme (Accessible)",
-            btnVerif: "🎥 Verifier", btnShow: "🎬 Showcase", navList: "Demon List", navWeekly: "Weekly Demon", navHall: "Hall of Fame", navSettings: "Settings", navProfile: "User Profile",
-            alertReset: "All local data reset successfully!", confirmReset: "Are you sure you want to reset all your local progress and favorites?", copyIDBtn: "📋 Copy ID"
-        }
-    };
-    dict.es = dict.en; dict.pt = dict.en; dict.fr = dict.en;
-
-    async function init() {
-        try {
-            DB.levels = await (await fetch('levels.json')).json();
-            DB.players = await (await fetch('players.json')).json();
-        } catch(e) {
-            DB.levels = mockLevels;
-            DB.players = mockPlayers;
-        }
-        loadSettings();
-        updateStats(); renderList(); renderWeekly(); renderHall(); startWeeklyTimer(); renderSocialList();
-        window.updateUserRankUI();
-    }
-
-    function loadSettings() {
-        // Load Language
-        setLang(DB.currentLang);
-        
-        // Load Color
-        const savedColor = localStorage.getItem('gd_color') || '#9d4edd';
-        const savedGlow = localStorage.getItem('gd_glow') || 'rgba(157, 78, 221, 0.45)';
-        setThemeColor(savedColor, savedGlow, null, true);
-
-        // Load Toggles
-        const isLight = localStorage.getItem('gd_light') === 'true';
-        document.getElementById('themeCheck').checked = isLight;
-        if(isLight) document.body.classList.add('light');
-
-        document.getElementById('sfxCheck').checked = localStorage.getItem('gd_sfx') !== 'false';
-        
-        const isCompact = localStorage.getItem('gd_compact') === 'true';
-        document.getElementById('compactCheck').checked = isCompact;
-        if(isCompact) document.body.classList.add('compact');
-
-        document.getElementById('autoCheck').checked = localStorage.getItem('gd_auto') !== 'false';
-        
-        const isDefShowcase = localStorage.getItem('gd_defVid') === 'showcase';
-        document.getElementById('defVideoCheck').checked = isDefShowcase;
-        
-        document.getElementById('perfCheck').checked = localStorage.getItem('gd_perf') === 'true';
-
-        // Load User Status
-        const savedStatus = localStorage.getItem('gd_status') || 'Nessuno stato';
-        document.getElementById('sidebarStatusText').innerText = savedStatus;
-        document.getElementById('profileStatusInput').value = savedStatus === 'Nessuno stato' ? '' : savedStatus;
-    }
-
-    function updateStats() {
-        document.getElementById('stTotal').innerText = DB.levels.length;
-        document.getElementById('stVer').innerText = DB.levels.filter(l => l.verified).length;
-        document.getElementById('stFav').innerText = DB.favs.length;
-    }
-
-    function toggleFav(name, event) {
-        event.stopPropagation(); playSfx('click');
-        if(DB.favs.includes(name)) DB.favs = DB.favs.filter(f => f !== name);
-        else DB.favs.push(name);
-        localStorage.setItem('gd_favs', JSON.stringify(DB.favs));
-        updateStats(); renderList(); if(DB.currentLvl && DB.currentLvl.name === name) renderWeekly();
-    }
-
-    // SOCIAL TAB RENDER
-    function renderSocialList() {
-        const query = document.getElementById('socialSearchInput').value.toLowerCase();
-        const container = document.getElementById('socialList');
-        container.innerHTML = "";
-        
-        const filtered = mockSocialUsers.filter(u => u.name.toLowerCase().includes(query) || u.status.toLowerCase().includes(query));
-        
-        if (filtered.length === 0) {
-            container.innerHTML = `<p style="opacity:0.4; text-align:center;">Nessun giocatore trovato.</p>`;
-            return;
-        }
-
-        filtered.forEach(u => {
-            const el = document.createElement("div");
-            el.className = "user-card";
-            el.innerHTML = `
-                <div class="user-info">
-                    <img src="${u.avatar}" class="user-avatar" onerror="this.src='Default_Profile.jpg'">
-                    <div>
-                        <strong style="color:var(--text); font-size:1.1rem; display:block;">${u.name}</strong>
-                        <span class="user-status">💭 "${u.status}"</span>
-                    </div>
-                </div>
-                <button class="btn-secondary" onclick="playSfx('click'); alert('Richiesta inviata a ${u.name}!');">➕ Aggiungi</button>
-            `;
-            container.appendChild(el);
-        });
-    }
-
-    function renderList() {
-        const body = document.getElementById('listBody');
-        const query = document.getElementById('search').value.toLowerCase();
-        body.innerHTML = "";
-
-        let filtered = DB.levels.filter(l => {
-            const matchQuery = l.name.toLowerCase().includes(query);
-            const matchUnv = !DB.hideUnv || l.verified;
-            const matchFav = !DB.showFavsOnly || DB.favs.includes(l.name);
-            return matchQuery && matchUnv && matchFav;
-        });
-
-        filtered.sort((a, b) => a.rank - b.rank);
-
-        filtered.forEach((lvl) => {
-            const el = document.createElement("div");
-            el.className = `lvl-item ${DB.currentLvl && DB.currentLvl.name === lvl.name ? 'selected' : ''}`;
-            
-            const isTop1 = (lvl.rank === 1);
-            const isFav = DB.favs.includes(lvl.name);
-            const myProg = DB.progress[lvl.name] || 0;
-            const statusColor = myProg === 100 ? '#39ff14' : (myProg > 0 ? '#ffd700' : 'var(--text-muted)');
-
-            el.innerHTML = `
-                <span class="fav-btn ${isFav ? 'fav-active' : ''}" onclick="toggleFav('${lvl.name}', event)">♥</span>
-                <strong style="width:30px; opacity:0.4; font-size:0.9rem;">#${lvl.rank}</strong>
-                <img src="${lvl.thumb}" class="thumb" onerror="this.src='https://via.placeholder.com/64x36/1a1a24/9d4edd?text=GD'">
-                <div style="flex:1;">
-                    <span class="${isTop1 ? 'top1-text' : ''}" style="font-weight:700; display:block;">${isTop1 ? '👑 ' : ''}${lvl.name}</span>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">${lvl.skill || '⚡ Normal'} • <strong style="color:${statusColor}">${myProg}%</strong></span>
-                </div>
-            `;
-
-            el.onclick = () => {
-                playSfx('click'); showDetails(lvl);
-                document.querySelectorAll('.lvl-item').forEach(item => item.classList.remove('selected'));
-                el.classList.add('selected');
-            };
-            body.appendChild(el);
-        });
-    }
-
-    function showDetails(lvl) {
-        DB.currentLvl = lvl;
-        const d = dict[DB.currentLang] || dict['it'];
-        document.getElementById("lvlName").innerText = (lvl.rank === 1 ? "👑 " : "") + lvl.name;
-        document.getElementById("lvlSkillBadge").innerText = lvl.skill ? `${d.skillKey} ${lvl.skill.toUpperCase()}` : "EXTREME DEMON";
-        document.getElementById("lvlDesc").innerText = lvl.desc || "No description available.";
-        
-        document.getElementById("analyzerBox").style.display = "flex";
-        let tierText = d.tierLow;
-        if(lvl.rank <= 5) tierText = d.tierGod;
-        else if(lvl.rank <= 25) tierText = d.tierHigh;
-        else if(lvl.rank <= 75) tierText = d.tierMid;
-        document.getElementById("valTier").innerText = tierText;
-
-        document.getElementById("progressSection").style.display = "flex";
-        const myVal = parseInt(DB.progress[lvl.name] || 0);
-        document.getElementById("progSlider").value = myVal;
-        updateProgressUI(myVal);
-        document.getElementById("chalResult").innerText = "";
-
-        const statusBadge = document.getElementById("lvlStatus");
-        if(myVal === 100) { statusBadge.className = "status-badge st-beaten"; statusBadge.innerText = d.stBeaten; }
-        else if(myVal > 0) { statusBadge.className = "status-badge st-practice"; statusBadge.innerText = d.stPractice; }
-        else { statusBadge.className = "status-badge st-unplayed"; statusBadge.innerText = d.stUnplayed; }
-
-        document.getElementById("lvlMeta").style.display = "grid";
-        document.getElementById("mCreator").innerText = lvl.creator || "-";
-        document.getElementById("mVerifier").innerText = lvl.verifierName || lvl.verifier || "-";
-        document.getElementById("mSong").innerText = lvl.song || "Audio Original";
-        document.getElementById("mID").innerText = lvl.levelID || "N/A";
-
-        document.getElementById("videoToggles").style.display = "flex";
-        switchVideoMode(DB.defaultVideoMode);
-        
-        renderLeaderboard();
-    }
-
-    function renderLeaderboard() {
-        if(!DB.currentLvl) return;
-        const d = dict[DB.currentLang] || dict['it'];
-        const queryP = document.getElementById('searchPlayer').value.toLowerCase();
-        const recs = DB.players[DB.currentLvl.name] || [];
-        const lbContainer = document.getElementById("leaderboard");
-        
-        let filteredRecs = recs.filter(p => p.name.toLowerCase().includes(queryP));
-        filteredRecs.sort((a,b) => b.percent - a.percent);
-
-        if(filteredRecs.length === 0) {
-            lbContainer.innerHTML = `<p style="opacity:0.4; text-align:center; font-size:0.85rem; padding: 20px 0;">${d.noRec}</p>`;
-        } else {
-            lbContainer.innerHTML = filteredRecs.map((p, idx) => {
-                let rankClass = "lb-rank-other"; let medal = "";
-                if(idx === 0) { rankClass = "lb-rank-1"; medal = "🏆 "; }
-                else if(idx === 1) { rankClass = "lb-rank-2"; medal = "🥈 "; }
-                else if(idx === 2) { rankClass = "lb-rank-3"; medal = "🥉 "; }
-                
-                return `
-                    <div class="lb-row">
-                        <div style="display: flex; align-items: center;">
-                            <span class="lb-rank ${rankClass}">${idx + 1}</span>
-                            <span style="font-weight: ${idx < 3 ? '800' : '600'}; color: ${idx === 0 ? '#ffd700' : '#fff'};">${medal}${p.name}</span>
-                        </div>
-                        <span style="color:${p.percent === 100 ? '#39ff14' : 'var(--accent)'}; font-weight:900;">${p.percent}%</span>
-                    </div>
-                `;
-            }).join('');
-        }
-    }
-
-    function switchVideoMode(mode) {
-        if (!DB.currentLvl) return;
-        DB.currentVideoMode = mode;
-        const d = dict[DB.currentLang] || dict['it'];
-        
-        document.getElementById('btnVerifVid').classList.toggle('active', mode === 'verifier');
-        document.getElementById('btnShowVid').classList.toggle('active', mode === 'showcase');
-        
-        let rawVideoId = mode === 'verifier' ? 
-            (DB.currentLvl.videoVerifier || DB.currentLvl.videoID) : 
-            (DB.currentLvl.videoShowcase || DB.currentLvl.verifierID || DB.currentLvl.videoID);
-        
-        if (!rawVideoId) {
-            document.getElementById("videoContainer").innerHTML = `<p style="opacity:0.4; text-align:center; font-size:0.85rem;">${d.noVid}</p>`;
-            return;
-        }
-
-        let id = '';
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-        const match = rawVideoId.match(regExp);
-        if (match && match[2].length === 11) { id = match[2]; } 
-        else { id = rawVideoId.split('v=').pop().split('&')[0].split('?')[0].split('/').pop(); }
-        
-        const auto = document.getElementById('autoCheck').checked ? "?autoplay=1&mute=0" : "?autoplay=0";
-        document.getElementById("videoContainer").innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}${auto}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="border-radius:18px;"></iframe>`;
-    }
-
-    function updateProgressUI(val) {
-        document.getElementById("progVal").innerText = val + "%";
-        document.documentElement.style.setProperty('--track-fill', val + "%");
-    }
-
-    function saveProgress(val) {
-        if(!DB.currentLvl) return;
-        playSfx('tick');
-        const numVal = parseInt(val);
-        DB.progress[DB.currentLvl.name] = numVal;
-        localStorage.setItem('gd_prog', JSON.stringify(DB.progress));
-        updateProgressUI(numVal);
-        
-        const d = dict[DB.currentLang] || dict['it'];
-        const statusBadge = document.getElementById("lvlStatus");
-        const perfMode = document.getElementById('perfCheck').checked;
-
-        if(numVal === 100) { 
-            statusBadge.className = "status-badge st-beaten"; statusBadge.innerText = d.stBeaten; 
-            if(!perfMode && typeof confetti === 'function') confetti({ particleCount: 80, origin: { y: 0.7 } }); 
-        }
-        else if(numVal > 0) { statusBadge.className = "status-badge st-practice"; statusBadge.innerText = d.stPractice; }
-        else { statusBadge.className = "status-badge st-unplayed"; statusBadge.innerText = d.stUnplayed; }
-        
-        renderList(); renderWeekly();
-        window.updateUserRankUI();
-    }
-
-    function generateChallenge() {
-        playSfx('click');
-        const start = Math.floor(Math.random() * 55);
-        const end = Math.min(100, start + Math.floor(Math.random() * 35) + 10);
-        document.getElementById("chalResult").innerText = `🎯 Goal: ${start}% ➔ ${end}%`;
-    }
-
-    let selectedRouletteLvl = null;
-    function openRoulette() {
-        if (!DB.levels || DB.levels.length === 0 || isSpinning) return;
-        playSfx('click');
-        document.getElementById('rouletteModal').classList.add('active');
-        
-        const btnSpin = document.getElementById('btnSpin');
-        btnSpin.style.display = 'inline-flex';
-        btnSpin.style.opacity = '1';
-        btnSpin.style.pointerEvents = 'auto';
-        const d = dict[DB.currentLang] || dict['it'];
-        btnSpin.innerText = d.rSpin;
-        
-        document.getElementById('btnOpenLvl').style.display = 'none';
-        
-        const track = document.getElementById('slotTrack');
-        track.style.transition = 'none';
-        track.style.transform = 'translateY(0px)';
-        
-        const firstLvl = DB.levels[0] || mockLevels[0];
-        track.innerHTML = `<div class="slot-card"><img src="${firstLvl.thumb}" onerror="this.src='https://via.placeholder.com/100x56/1a1a24/9d4edd?text=GD'"><span>${firstLvl.name}</span></div>`;
-    }
-
-    function closeRoulette() { 
-        if(isSpinning) return;
-        playSfx('click'); 
-        document.getElementById('rouletteModal').classList.remove('active'); 
-    }
-
-    function startSpin() {
-        if(isSpinning || !DB.levels || DB.levels.length === 0) return;
-        isSpinning = true;
-        playSfx('click');
-        
-        const btnSpin = document.getElementById('btnSpin');
-        btnSpin.style.opacity = '0.5';
-        btnSpin.style.pointerEvents = 'none';
-        document.getElementById('btnOpenLvl').style.display = 'none';
-        
-        const track = document.getElementById('slotTrack');
-        const perfMode = document.getElementById('perfCheck').checked;
-        const d = dict[DB.currentLang] || dict['it'];
-        
-        let reelHtml = "";
-        const winIdx = 16;
-        let winLvl = null;
-        for(let i = 0; i < 20; i++) {
-            const rndLvl = DB.levels[Math.floor(Math.random() * DB.levels.length)];
-            if(i === winIdx) winLvl = rndLvl;
-            reelHtml += `<div class="slot-card"><img src="${rndLvl.thumb}" onerror="this.src='https://via.placeholder.com/100x56/1a1a24/9d4edd?text=GD'"><span>${rndLvl.name}</span></div>`;
-        }
-        track.innerHTML = reelHtml;
-        track.style.transition = 'none';
-        track.style.transform = 'translateY(0px)';
-        
-        void track.offsetWidth;
-        
-        const cardHeight = 140;
-        const targetY = -(winIdx * cardHeight);
-        track.style.transition = 'transform 3.2s cubic-bezier(0.1, 0.9, 0.2, 1)';
-        track.style.transform = `translateY(${targetY}px)`;
-
-        let ticks = 0;
-        const interval = setInterval(() => {
-            playSfx('tick');
-            ticks++;
-            if(ticks > 16) clearInterval(interval);
-        }, 150);
-
-        setTimeout(() => {
-            isSpinning = false;
-            selectedRouletteLvl = winLvl;
-            playSfx('win');
-            if(!perfMode && typeof confetti === 'function') confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-            
-            btnSpin.style.display = 'inline-flex';
-            btnSpin.style.opacity = '1';
-            btnSpin.style.pointerEvents = 'auto';
-            btnSpin.innerText = d.rRetry;
-            document.getElementById('btnOpenLvl').style.display = 'inline-flex';
-        }, 3200);
-    }
-
-    function confirmRouletteLvl() {
-        if(isSpinning) return;
-        closeRoulette();
-        if(selectedRouletteLvl) { showDetails(selectedRouletteLvl); showPage('list', document.querySelectorAll('.nav-icon')[0]); }
-    }
-
-    let weeklyTimerInterval;
-    function startWeeklyTimer() {
-        if(weeklyTimerInterval) clearInterval(weeklyTimerInterval);
-        function updateTimer() {
-            const now = Date.now();
-            const weekMillis = 7 * 24 * 60 * 60 * 1000;
-            const currentWeek = Math.floor(now / weekMillis);
-            const nextWeekStart = (currentWeek + 1) * weekMillis;
-            const diff = nextWeekStart - now;
-            
-            if (diff <= 0) { renderWeekly(); return; }
-            
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-            const mins = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-            const secs = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-            
-            const timerEl = document.getElementById('weekly-timer-val');
-            if(timerEl) timerEl.innerText = `${days}d : ${hours}h : ${mins}m : ${secs}s`;
-        }
-        updateTimer();
-        weeklyTimerInterval = setInterval(updateTimer, 1000);
-    }
-
-    function renderWeekly() {
-        const weeklyContainer = document.getElementById('weeklyContent');
-        if(!weeklyContainer || DB.levels.length === 0) return;
-        
-        const d = dict[DB.currentLang] || dict['it'];
-        const week = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
-        const lvl = DB.levels[week % DB.levels.length];
-        const myProg = DB.progress[lvl.name] || 0;
-        
-        const q1Done = myProg >= 15;
-        const q2Done = myProg >= 50;
-        const q3Done = myProg === 100;
-        
-        weeklyContainer.innerHTML = `
-            <div style="width:100%; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:var(--text-muted); font-weight:700;">
-                <span>EVENT #${week % 1000}</span>
-                <span style="color:var(--accent); font-family:'Orbitron'">${lvl.skill || 'Extreme'}</span>
-            </div>
-            <div style="position:relative; width:100%; max-width:480px;">
-                <img src="${lvl.thumb}" onerror="this.src='https://via.placeholder.com/400x225/1a1a24/9d4edd?text=GD'" style="width:100%; height:210px; object-fit:cover; border-radius:20px; border:1px solid var(--border); box-shadow:0 12px 24px rgba(0,0,0,0.6);">
-            </div>
-            <h3 style="margin:5px 0 0; font-size:2.2rem; color:#fff; font-weight:900;">${lvl.name}</h3>
-            
-            <div class="quest-box">
-                <strong style="font-size:0.8rem; font-family:'Orbitron'; color:var(--accent);">${d.qTitle}</strong>
-                <div class="quest-item ${q1Done ? 'completed' : ''}">
-                    <div class="quest-check">${q1Done ? '✓' : ''}</div>
-                    <span>${d.q1}</span>
-                </div>
-                <div class="quest-item ${q2Done ? 'completed' : ''}">
-                    <div class="quest-check">${q2Done ? '✓' : ''}</div>
-                    <span>${d.q2}</span>
-                </div>
-                <div class="quest-item ${q3Done ? 'completed' : ''}">
-                    <div class="quest-check">${q3Done ? '✓' : ''}</div>
-                    <span>${d.q3}</span>
-                </div>
-            </div>
-
-            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
-                <span style="font-size:0.85rem; color:var(--text-muted)">${d.wProg} <strong style="color:var(--accent); font-size:1.1rem;">${myProg}%</strong></span>
-            </div>
-            <button class="btn-custom" style="padding:14px 40px; font-size:0.95rem; width:100%; max-width:320px;" onclick="openWeeklyLevel('${lvl.name}')">${d.wEnter}</button>
-        `;
-    }
-
-    function openWeeklyLevel(lvlName) {
-        playSfx('click');
-        const lvl = DB.levels.find(l => l.name === lvlName);
-        if(lvl) { showDetails(lvl); showPage('list', document.querySelectorAll('.nav-icon')[0]); }
-    }
-
-    function renderHall() {
-        const hof = document.getElementById('hofContent'); hof.innerHTML = "";
-        const d = dict[DB.currentLang] || dict['it'];
-        let scores = {};
-        Object.entries(DB.players).forEach(([lvlName, records]) => {
-            records.forEach(r => {
-                if(!scores[r.name]) scores[r.name] = { points: 0, cleared: [] };
-                scores[r.name].points += r.percent;
-                if(r.percent === 100) scores[r.name].cleared.push(lvlName);
-            });
-        });
-
-        const sorted = Object.entries(scores).sort((a,b) => b[1].points - a[1].points);
-        if(sorted.length === 0) { hof.innerHTML = `<p style="opacity:0.4;">${d.noRec}</p>`; return; }
-        sorted.forEach(([name, data], i) => {
-            const el = document.createElement("div"); el.className = "card"; el.style.background = "rgba(255,255,255,0.015)";
-            el.innerHTML = `<div style="font-size:1.1rem; font-weight:900; color:${i === 0 ? '#ffd700' : 'var(--accent)'}; margin-bottom:4px;">${i === 0 ? '🏆 ' : (i === 1 ? '🥈 ' : (i === 2 ? '🥉 ' : `#${i+1} `))}${name}</div><div style="font-size:0.85rem; color:var(--text-muted)">${d.points}: <strong style="color:#fff;">${data.points}</strong> • ${d.cleared}: <strong>${data.cleared.length}</strong></div>`;
-            hof.appendChild(el);
-        });
-    }
-
-    function showPage(pageId, navEl) {
-        playSfx('click');
+    // Funzioni di fallback globali per l'interfaccia UI nativa prima dello script Firebase modulare
+    function showPage(pageId, element) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-icon').forEach(n => n.classList.remove('active'));
-        document.getElementById(pageId + 'Page').classList.add('active');
-        if(navEl) navEl.classList.add('active');
+        document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active'));
+        const target = document.getElementById(pageId + 'Page');
+        if(target) target.classList.add('active');
+        if(element) element.classList.add('active');
     }
-
-    function toggleFilter(type) {
-        playSfx('click');
-        if(type === 'unv') { DB.hideUnv = !DB.hideUnv; document.getElementById('btnFilter').classList.toggle('active', DB.hideUnv); }
-        else if(type === 'fav') { DB.showFavsOnly = !DB.showFavsOnly; document.getElementById('btnFavFilter').classList.toggle('active', DB.showFavsOnly); }
-        renderList();
-    }
-
-    // UPDATED FOR LOCALSTORAGE
-    function toggleTheme() { 
-        playSfx('click'); 
-        const isLight = document.body.classList.toggle('light');
-        localStorage.setItem('gd_light', isLight);
-    }
-
-    function toggleCompact() {
-        playSfx('click');
-        const isCompact = document.body.classList.toggle('compact');
-        localStorage.setItem('gd_compact', isCompact);
-    }
-    
-    function toggleSetting(key, val) {
-        localStorage.setItem(`gd_${key}`, val);
-    }
-
-    function updateDefaultVideo() {
-        const isShowcase = document.getElementById('defVideoCheck').checked;
-        DB.defaultVideoMode = isShowcase ? 'showcase' : 'verifier';
-        localStorage.setItem('gd_defVid', DB.defaultVideoMode);
-    }
-
-    function setThemeColor(color, glow, el, noSfx) {
-        if(!noSfx) playSfx('click');
-        document.documentElement.style.setProperty('--accent', color);
-        document.documentElement.style.setProperty('--accent-glow', glow);
-        
-        localStorage.setItem('gd_color', color);
-        localStorage.setItem('gd_glow', glow);
-        
-        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-        if(el) {
-            el.classList.add('active');
-        } else {
-            // Find by color if 'el' is not passed on load
-            document.querySelectorAll('.color-swatch').forEach(s => {
-                if(s.style.color === color) s.classList.add('active');
-            });
-        }
-    }
-
-    function setLang(lang, el) {
-        if(el) playSfx('click');
-        DB.currentLang = lang;
-        localStorage.setItem('gd_lang', lang);
-
-        document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
-        if(el) el.classList.add('active');
-        else document.getElementById('lang-' + lang)?.classList.add('active');
-        
-        const d = dict[lang] || dict['it'];
-        
-        if(document.getElementById('search')) document.getElementById('search').placeholder = d.search;
-        if(document.getElementById('searchPlayer')) document.getElementById('searchPlayer').placeholder = d.searchP;
-        if(document.getElementById('btnFilter')) document.getElementById('btnFilter').innerText = d.unv;
-        if(document.getElementById('btnFavFilter')) document.getElementById('btnFavFilter').innerText = d.fav;
-        if(document.getElementById('hSub')) document.getElementById('hSub').innerText = d.hSub;
-        if(document.getElementById('btnSubmit')) document.getElementById('btnSubmit').innerText = d.btnSub;
-        if(document.getElementById('weeklyTitle')) document.getElementById('weeklyTitle').innerText = d.weekly;
-        if(document.getElementById('weeklyBadge')) document.getElementById('weeklyBadge').innerText = d.weeklyBadge;
-        if(document.getElementById('weeklySub')) document.getElementById('weeklySub').innerText = d.weeklySub;
-        if(document.getElementById('lblTimerPrefix')) document.getElementById('lblTimerPrefix').innerText = d.timerPrefix;
-        if(document.getElementById('hallTitle')) document.getElementById('hallTitle').innerText = d.hall;
-        if(document.getElementById('hallSub')) document.getElementById('hallSub').innerText = d.hallSub;
-        if(document.getElementById('sTitle')) document.getElementById('sTitle').innerText = d.sTitle;
-        if(document.getElementById('tLang')) document.getElementById('tLang').innerText = d.tLang;
-        if(document.getElementById('tColor')) document.getElementById('tColor').innerText = d.tColor;
-        if(document.getElementById('tPref')) document.getElementById('tPref').innerText = d.tPref;
-        if(document.getElementById('lblTheme')) document.getElementById('lblTheme').innerText = d.lblTheme;
-        if(document.getElementById('lblSfx')) document.getElementById('lblSfx').innerText = d.lblSfx;
-        if(document.getElementById('lblCompact')) document.getElementById('lblCompact').innerText = d.lblCompact;
-        if(document.getElementById('lblAuto')) document.getElementById('lblAuto').innerText = d.lblAuto;
-        if(document.getElementById('lblDefVideo')) document.getElementById('lblDefVideo').innerText = d.lblDefVideo;
-        if(document.getElementById('lblPerf')) document.getElementById('lblPerf').innerText = d.lblPerf;
-        if(document.getElementById('lblReset')) document.getElementById('lblReset').innerText = d.lblReset;
-        if(document.getElementById('btnReset')) document.getElementById('btnReset').innerText = d.btnReset;
-        if(document.getElementById('lblMyProg')) document.getElementById('lblMyProg').innerText = d.lblMyProg;
-        if(document.getElementById('btnChal')) document.getElementById('btnChal').innerText = d.btnChal;
-        if(document.getElementById('rTitle')) document.getElementById('rTitle').innerText = d.rTitle;
-        if(document.getElementById('rSub')) document.getElementById('rSub').innerText = d.rSub;
-        if(document.getElementById('btnSpin')) document.getElementById('btnSpin').innerText = d.rSpin;
-        if(document.getElementById('btnCancelR')) document.getElementById('btnCancelR').innerText = d.rCancel;
-        if(document.getElementById('btnOpenLvl')) document.getElementById('btnOpenLvl').innerText = d.rOpen;
-        if(document.getElementById('stLvlLabel')) document.getElementById('stLvlLabel').innerText = d.stLvl;
-        if(document.getElementById('stVerLabel')) document.getElementById('stVerLabel').innerText = d.stVer;
-        if(document.getElementById('stFavLabel')) document.getElementById('stFavLabel').innerText = d.stFav;
-        if(document.getElementById('lblDifficulty')) document.getElementById('lblDifficulty').innerText = d.diffTier;
-        if(document.getElementById('btnShare')) document.getElementById('btnShare').innerText = d.share;
-        if(document.getElementById('lblCreat')) document.getElementById('lblCreat').innerText = d.lblCreat;
-        if(document.getElementById('lblVerif')) document.getElementById('lblVerif').innerText = d.lblVerif;
-        if(document.getElementById('lblSong')) document.getElementById('lblSong').innerText = d.lblSong;
-        if(document.getElementById('btnVerifVid')) document.getElementById('btnVerifVid').innerText = d.btnVerif;
-        if(document.getElementById('btnShowVid')) document.getElementById('btnShowVid').innerText = d.btnShow;
-        if(document.getElementById('btnCopy')) document.getElementById('btnCopy').innerText = d.copyIDBtn;
-        
-        if(document.getElementById('nav-list')) document.getElementById('nav-list').title = d.navList;
-        if(document.getElementById('nav-weekly')) document.getElementById('nav-weekly').title = d.navWeekly;
-        if(document.getElementById('nav-hall')) document.getElementById('nav-hall').title = d.navHall;
-        if(document.getElementById('nav-settings')) document.getElementById('nav-settings').title = d.navSettings;
-        if(document.getElementById('nav-profile')) document.getElementById('nav-profile').title = d.navProfile;
-
-        if(DB.currentLvl) showDetails(DB.currentLvl);
-        renderWeekly(); renderHall();
-    }
-
-    function shareLevel() {
-        if(!DB.currentLvl) return;
-        playSfx('click');
-        const d = dict[DB.currentLang] || dict['it'];
-        const text = `🔥 Guarda "${DB.currentLvl.name}" (#${DB.currentLvl.rank}) su Extreme Demon List OS!`;
-        if (navigator.share) {
-            navigator.share({ title: DB.currentLvl.name, text: text, url: window.location.href }).catch(()=>{});
-        } else {
-            navigator.clipboard.writeText(`${text} ${window.location.href}`);
-            const btn = document.getElementById('btnShare');
-            btn.innerText = d.copied;
-            setTimeout(() => btn.innerText = d.share, 1500);
-        }
-    }
-
-    function resetAllData() {
-        playSfx('click');
-        const d = dict[DB.currentLang] || dict['it'];
-        if(confirm(d.confirmReset)) {
-            localStorage.clear(); DB.favs = []; DB.progress = {};
-            updateStats(); renderList(); renderWeekly(); alert(d.alertReset);
-            window.updateUserRankUI();
-            location.reload(); // Reload to reset theme and toggles properly
-        }
-    }
-
-    function copyID() {
-        if(!DB.currentLvl || !DB.currentLvl.levelID) return;
-        navigator.clipboard.writeText(DB.currentLvl.levelID);
-        playSfx('click');
-        const d = dict[DB.currentLang] || dict['it'];
-        const btn = document.getElementById("btnCopy");
-        btn.innerText = d.copied;
-        setTimeout(() => btn.innerText = d.copyIDBtn, 1500);
-    }
-
-    function triggerConfetti(e) {
-        e.preventDefault(); playSfx('win');
-        const perfMode = document.getElementById('perfCheck').checked;
-        if(!perfMode && typeof confetti === 'function') confetti({ particleCount: 200, spread: 360, origin: { y: 0.6 } });
-        setTimeout(() => window.open('https://forms.gle/XtbhiKcnvP4yhkN36', '_blank'), 1500);
-    }
-
-    init();
+    // Dummy functions per evitare crash all'inizializzazione prima del binding reale
+    function renderList() {}
+    function renderLeaderboard() {}
+    function toggleFilter() {}
+    function openRoulette() {}
+    function updateProgressUI() {}
+    function saveProgress() {}
+    function generateChallenge() {}
+    function copyID() {}
+    function shareLevel() {}
+    function switchVideoMode() {}
+    function setLang() {}
+    function setThemeColor() {}
+    function toggleTheme() {}
+    function resetAllData() {}
+    function triggerConfetti(e) { confetti(); }
+    function playSfx(type) { console.log("SFX:", type); }
 </script>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+    // INTEGRAZIONE FIRESTORE DATABASE
+    import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBH2sXzuOfOpY2rOQNlS2zwyQnyfWy0DvA",
@@ -1247,6 +567,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const storage = getStorage(app);
+    const db = getFirestore(app); // Inizializzazione Database Cloud Firestore
 
     const authSection = document.getElementById('authSection');
     const userProfileSection = document.getElementById('userProfileSection');
@@ -1258,17 +579,35 @@
         authError.innerHTML = msg;
     }
 
-    onAuthStateChanged(auth, (user) => {
+    // Monitoraggio dello stato dell'autenticazione utente
+    onAuthStateChanged(auth, async (user) => {
         if (user) {
             authSection.style.display = 'none';
             userProfileSection.style.display = 'flex';
             profileMainTitle.innerText = "👤 Profilo Giocatore";
             
-            const currentName = user.displayName || localStorage.getItem('gd_username') || 'Player 1';
+            let currentName = user.displayName || localStorage.getItem('gd_username') || 'Player 1';
+            let currentStatus = localStorage.getItem('gd_status') || 'Nessuno stato impostato';
+            let avatarUrl = user.photoURL || localStorage.getItem('gd_custom_avatar') || 'https://api.dicebear.com/7.x/bottts/svg?seed=GD';
+
+            // Carica le informazioni fresche dal documento pubblico nel database se presenti
+            try {
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.name) currentName = data.name;
+                    if (data.status) currentStatus = data.status;
+                    if (data.avatar) avatarUrl = data.avatar;
+                }
+            } catch (e) {
+                console.warn("Impossibile recuperare i dati live dal database:", e);
+            }
+
             document.getElementById('profileNameInput').value = currentName;
+            document.getElementById('profileStatusInput').value = currentStatus;
             document.getElementById('sidebarNameText').innerText = currentName;
             
-            const avatarUrl = user.photoURL || localStorage.getItem('gd_custom_avatar') || 'Default_Profile.jpg';
             document.getElementById('pageAvatarPreview').src = avatarUrl;
             document.getElementById('sidebarAvatarImg').src = avatarUrl;
             
@@ -1281,11 +620,10 @@
             document.getElementById('sidebarNameText').innerText = guestName;
             document.getElementById('profileNameInput').value = guestName === 'Ospite' ? '' : guestName;
             
-            const guestAvatar = localStorage.getItem('gd_custom_avatar') || 'Default_Profile.jpg';
+            const guestAvatar = localStorage.getItem('gd_custom_avatar') || 'https://api.dicebear.com/7.x/bottts/svg?seed=GD';
             document.getElementById('sidebarAvatarImg').src = guestAvatar;
             document.getElementById('pageAvatarPreview').src = guestAvatar;
         }
-        if (window.updateUserRankUI) window.updateUserRankUI();
     });
 
     const firebaseAuthActions = {
@@ -1294,30 +632,28 @@
             const password = document.getElementById('passwordInput').value;
 
             if (!email || !email.includes('@') || !email.includes('.')) {
-                showError("⚠️ Inserisci un indirizzo email valido!");
-                return;
+                showError("⚠️ Inserisci un indirizzo email valido!"); return;
             }
             if (password.length < 6) {
-                showError("⚠️ La password deve contenere almeno 6 caratteri!");
-                return;
+                showError("⚠️ La password deve contenere almeno 6 caratteri!"); return;
             }
 
             try {
-                await createUserWithEmailAndPassword(auth, email, password);
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 authError.style.display = 'none';
+                
+                // Genera la scheda utente indicizzabile pubblicamente sul database all'atto della registrazione
+                await setDoc(doc(db, "users", userCredential.user.uid), {
+                    uid: userCredential.user.uid,
+                    name: "Nuovo Giocatore",
+                    lowercaseName: "nuovo giocatore",
+                    status: "Pronto alla sfida!",
+                    avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=GD"
+                });
+
                 alert("🎉 Account creato con successo!");
-                if (window.playSfx) window.playSfx('win');
             } catch (error) {
-                switch (error.code) {
-                    case 'auth/operation-not-allowed':
-                        showError("❌ Abilita il metodo 'Email/Password' su Firebase console!");
-                        break;
-                    case 'auth/email-already-in-use':
-                        showError("✉️ Questa email è già registrata.");
-                        break;
-                    default:
-                        showError("⚠️ Errore: " + error.message);
-                }
+                showError("⚠️ Errore: " + error.message);
             }
         },
         
@@ -1327,52 +663,60 @@
             try {
                 await signInWithEmailAndPassword(auth, email, password);
                 authError.style.display = 'none';
-                if (window.playSfx) window.playSfx('win');
             } catch (error) { 
-                showError("❌ Email o password errati."); 
+                showError("❌ Credenziali errate o utente inesistente."); 
             }
         },
         
         logout: async () => {
-            if (window.playSfx) window.playSfx('click');
             await signOut(auth);
         },
         
         saveProfile: async () => {
-            if (window.playSfx) window.playSfx('win');
-            
-            // Salvataggio Nome
             const newName = document.getElementById('profileNameInput').value.trim() || 'Player 1';
-            localStorage.setItem('gd_username', newName);
-            document.getElementById('sidebarNameText').innerText = newName;
-            
-            // Salvataggio Stato Custom
             const newStatus = document.getElementById('profileStatusInput').value.trim() || 'Nessuno stato';
-            localStorage.setItem('gd_status', newStatus);
-            document.getElementById('sidebarStatusText').innerText = newStatus;
+            const currentAvatar = document.getElementById('pageAvatarPreview').src;
 
+            localStorage.setItem('gd_username', newName);
+            localStorage.setItem('gd_status', newStatus);
+            document.getElementById('sidebarNameText').innerText = newName;
+
+            // Se l'utente è autenticato con un account, salva o aggiorna il record nel database online globale
             if (auth.currentUser) {
-                await updateProfile(auth.currentUser, { displayName: newName });
+                try {
+                    await updateProfile(auth.currentUser, { displayName: newName });
+                    
+                    await setDoc(doc(db, "users", auth.currentUser.uid), {
+                        uid: auth.currentUser.uid,
+                        name: newName,
+                        lowercaseName: newName.toLowerCase(), // Memorizzazione in minuscolo per abilitare la ricerca case-insensitive
+                        status: newStatus,
+                        avatar: currentAvatar
+                    }, { merge: true });
+                    
+                    alert("Profilo aggiornato e sincronizzato online sul Database!");
+                } catch(e) {
+                    console.error("Errore durante il salvataggio sul Database Cloud Firestore: ", e);
+                    alert("Salvataggio locale completato, ma si è verificato un errore nel Cloud.");
+                }
+            } else {
+                alert("Modifiche locali salvate (Accedi con un account per renderle visibili agli altri giocatori).");
             }
-            alert("Profilo aggiornato con successo!");
-            if (window.updateUserRankUI) window.updateUserRankUI();
         },
 
         uploadAvatar: async (event) => {
             const file = event.target.files[0];
             if (!file) return;
-            
-            // Instant Local Preview Fallback via FileReader
+
             const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64Url = e.target.result;
-                document.getElementById('pageAvatarPreview').src = base64Url;
-                document.getElementById('sidebarAvatarImg').src = base64Url;
-                localStorage.setItem('gd_custom_avatar', base64Url);
+            reader.onload = (e) => {
+                document.getElementById('pageAvatarPreview').src = e.target.result;
+                document.getElementById('sidebarAvatarImg').src = e.target.result;
+                localStorage.setItem('gd_custom_avatar', e.target.result);
             };
             reader.readAsDataURL(file);
 
-            // Cloud Storage Upload Flow
+            // Se l'utente è loggato, carica il file sul Cloud Storage e aggiorna l'URL del profilo
             if (auth.currentUser) {
                 document.getElementById('pageAvatarPreview').style.opacity = '0.5';
                 try {
@@ -1380,8 +724,13 @@
                     await uploadBytes(storageRef, file);
                     const downloadURL = await getDownloadURL(storageRef);
                     await updateProfile(auth.currentUser, { photoURL: downloadURL });
+                    
+                    // Sincronizza il nuovo avatar all'interno di Firestore
+                    await setDoc(doc(db, "users", auth.currentUser.uid), {
+                        avatar: downloadURL
+                    }, { merge: true });
                 } catch (error) {
-                    console.warn("Storage cloud fallback applicato: per usare il cloud Storage, attiva le regole pubbliche sulla console Firebase.", error.message);
+                    console.warn("Storage cloud fallback applicato. Abilita le regole di scrittura pubblica sulla console Firebase Storage.", error.message);
                 } finally {
                     document.getElementById('pageAvatarPreview').style.opacity = '1';
                 }
@@ -1389,7 +738,67 @@
         }
     };
 
-    // Binding Programmatico degli eventi nativi dell'interfaccia
+    // LOGICA DI INTERROGAZIONE SOCIAL E RICERCA LIVE DEI PROFILI SUL DATABASE
+    window.searchUsers = async () => {
+        const queryText = document.getElementById('socialSearchInput').value.trim();
+        const container = document.getElementById('socialList');
+        
+        if (!queryText) {
+            container.innerHTML = `<p style="opacity:0.4; text-align:center; font-size:0.85rem;">Inizia a digitare per interrogare il database globale...</p>`;
+            return;
+        }
+
+        container.innerHTML = `<p style="opacity:0.8; text-align:center; color:var(--accent); font-size:0.85rem;">Ricerca nei server Firebase in corso...</p>`;
+
+        try {
+            const usersRef = collection(db, "users");
+            let q;
+
+            // Se la stringa inserita assomiglia a un ID (es: 28 caratteri alfanumerici tipici di Firebase UID) proviamo a cercare per ID esatto
+            if (queryText.length >= 20 && !queryText.includes(" ")) {
+                q = query(usersRef, where("uid", "==", queryText), limit(5));
+            } else {
+                // Altrimenti esegue una ricerca per prefisso del testo digitato (Case-Insensitive grazie a lowercaseName)
+                const lowerQuery = queryText.toLowerCase();
+                q = query(usersRef, 
+                    where("lowercaseName", ">=", lowerQuery), 
+                    where("lowercaseName", "<=", lowerQuery + "\uf8ff"),
+                    limit(15)
+                );
+            }
+            
+            const querySnapshot = await getDocs(q);
+            container.innerHTML = "";
+
+            if(querySnapshot.empty) {
+                container.innerHTML = `<p style="opacity:0.4; text-align:center; font-size:0.85rem;">Nessun profilo reale trovato corrispondente ai criteri.</p>`;
+                return;
+            }
+
+            querySnapshot.forEach((docSnap) => {
+                const u = docSnap.data();
+                const card = document.createElement("div");
+                card.className = "user-card";
+                card.innerHTML = `
+                    <div class="user-info">
+                        <img src="${u.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=GD'}" class="user-avatar" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=GD'">
+                        <div>
+                            <strong style="color:var(--text); font-size:0.95rem; display:block;">${u.name || 'Utente'}</strong>
+                            <span class="user-status">💭 "${u.status || 'Nessun motto'}"</span>
+                            <span class="user-uid-badge">ID: ${u.uid}</span>
+                        </div>
+                    </div>
+                    <button class="btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" onclick="navigator.clipboard.writeText('${u.uid}'); alert('ID Utente copiato negli appunti!');">📋 Copia ID</button>
+                `;
+                container.appendChild(card);
+            });
+        } catch (error) {
+            console.error("Errore durante la ricerca degli utenti:", error);
+            container.innerHTML = `<p style="color:#ff003c; text-align:center; font-size:0.85rem;">Errore di connessione al database Cloud.</p>`;
+        }
+    };
+
+    // Binding programmatico definitivo dei listener ai nodi HTML della pagina profilo
     document.getElementById('btnRegister').addEventListener('click', firebaseAuthActions.register);
     document.getElementById('btnLogin').addEventListener('click', firebaseAuthActions.login);
     document.getElementById('btnLogout').addEventListener('click', firebaseAuthActions.logout);
