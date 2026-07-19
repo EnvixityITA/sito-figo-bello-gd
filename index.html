@@ -574,10 +574,8 @@
         } catch(e){}
     }
 
-    // Esponiamo playSfx globalmente per usarla nel modulo Firebase
     window.playSfx = playSfx;
 
-    /* Dizionario Multilingua */
     const dict = {
         it: { 
             search: "Cerca demone per nome...", unv: "✔ Verificati", fav: "♥ Preferiti", hSel: "Seleziona un Livello", hSub: "Classifica Record", btnSub: "🚩 Invia il tuo Record", searchP: "Cerca player nel livello...",
@@ -610,7 +608,6 @@
             alertReset: "All local data reset successfully!", confirmReset: "Are you sure you want to reset all your local progress and favorites?", copyIDBtn: "📋 Copy ID"
         }
     };
-    // Copio i fallback base anche per ES, PT, FR (usando IT/EN per semplicità in questa demo)
     dict.es = dict.en; dict.pt = dict.en; dict.fr = dict.en;
 
     async function init() {
@@ -1136,7 +1133,6 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
-    // ⚠️ INSERISCI I TUOI DATI FIREBASE QUI (Li trovi nelle impostazioni del tuo progetto Firebase)
     const firebaseConfig = {
         apiKey: "AIzaSyBH2sXzuOfOpY2rOQNlS2zwyQnyfWy0DvA",
         authDomain: "global-list-inv.firebaseapp.com",
@@ -1150,7 +1146,6 @@
     const auth = getAuth(app);
     const storage = getStorage(app);
 
-    // Gestione dell'interfaccia UI
     const authSection = document.getElementById('authSection');
     const userProfileSection = document.getElementById('userProfileSection');
     const profileMainTitle = document.getElementById('profileMainTitle');
@@ -1158,22 +1153,19 @@
     
     function showError(msg) {
         authError.style.display = 'block';
-        authError.innerText = msg;
+        authError.innerHTML = msg;
     }
 
-    // Monitora lo stato di accesso
     onAuthStateChanged(auth, (user) => {
         if (user) {
             authSection.style.display = 'none';
             userProfileSection.style.display = 'flex';
             profileMainTitle.innerText = "👤 Profilo Giocatore";
             
-            // Aggiorna UI con i dati cloud
             document.getElementById('profileNameInput').value = user.displayName || 'Player 1';
             const avatarUrl = user.photoURL || 'https://api.dicebear.com/7.x/bottts/svg?seed=GD';
             document.getElementById('pageAvatarPreview').src = avatarUrl;
             
-            // Aggiorna anche la sidebar
             document.getElementById('sidebarNameText').innerText = user.displayName || 'Player 1';
             document.getElementById('sidebarAvatarImg').src = avatarUrl;
         } else {
@@ -1185,24 +1177,56 @@
         }
     });
 
-    // Esponiamo le funzioni globalmente per poterle usare nell'HTML (onclick)
     window.firebaseAuth = {
         register: async () => {
-            const email = document.getElementById('emailInput').value;
+            const email = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value;
+
+            if (!email || !email.includes('@') || !email.includes('.')) {
+                showError("⚠️ Inserisci un indirizzo email valido!");
+                return;
+            }
+            if (password.length < 6) {
+                showError("⚠️ La password deve contenere almeno 6 caratteri!");
+                return;
+            }
+
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
+                authError.style.display = 'none';
+                alert("🎉 Account creato con successo!");
                 if (window.playSfx) window.playSfx('win');
-            } catch (error) { showError(error.message); }
+            } catch (error) {
+                console.error("Firebase Auth Error:", error.code);
+                switch (error.code) {
+                    case 'auth/operation-not-allowed':
+                        showError("❌ <strong>Errore:</strong> Devi abilitare il metodo 'Email/Password' nella console di Firebase (Authentication -> Sign-in method)!");
+                        break;
+                    case 'auth/email-already-in-use':
+                        showError("✉️ Questa email è già registrata. Prova a fare l'Accesso (Login)!");
+                        break;
+                    case 'auth/invalid-email':
+                        showError("📧 Il formato dell'email non è valido.");
+                        break;
+                    case 'auth/weak-password':
+                        showError("🔒 La password è troppo debole (minimo 6 caratteri).");
+                        break;
+                    default:
+                        showError("⚠️ Errore durante la registrazione: " + error.message);
+                }
+            }
         },
         
         login: async () => {
-            const email = document.getElementById('emailInput').value;
+            const email = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value;
             try {
                 await signInWithEmailAndPassword(auth, email, password);
+                authError.style.display = 'none';
                 if (window.playSfx) window.playSfx('win');
-            } catch (error) { showError("Email o password errati."); }
+            } catch (error) { 
+                showError("❌ Email o password errati."); 
+            }
         },
         
         logout: async () => {
@@ -1224,19 +1248,15 @@
             const file = event.target.files[0];
             if (!file || !auth.currentUser) return;
             
-            // Mostra un caricamento visivo (opzionale)
             document.getElementById('pageAvatarPreview').style.opacity = '0.5';
 
             try {
-                // Crea un riferimento in Firebase Storage (es: avatars/UID)
                 const storageRef = ref(storage, `avatars/${auth.currentUser.uid}`);
                 await uploadBytes(storageRef, file);
                 const downloadURL = await getDownloadURL(storageRef);
                 
-                // Aggiorna il profilo utente con il nuovo URL
                 await updateProfile(auth.currentUser, { photoURL: downloadURL });
                 
-                // Aggiorna l'interfaccia
                 document.getElementById('pageAvatarPreview').src = downloadURL;
                 document.getElementById('sidebarAvatarImg').src = downloadURL;
                 document.getElementById('pageAvatarPreview').style.opacity = '1';
@@ -1248,52 +1268,6 @@
             }
         }
     };
-    async function registraNuovoUtente() {
-    const email = document.getElementById('emailInput').value.trim();
-    const password = document.getElementById('passwordInput').value;
-    const errorDisplay = document.getElementById('errorDisplay'); // Il punto in cui mostri l'errore a schermo
-
-    // 1. CONTROLLO PREVENTIVO (Evita di inviare dati palesemente errati a Firebase)
-    if (!email || !email.includes('@') || !email.includes('.')) {
-        if (errorDisplay) errorDisplay.innerText = "⚠️ Inserisci un indirizzo email valido!";
-        return;
-    }
-    if (password.length < 6) {
-        if (errorDisplay) errorDisplay.innerText = "⚠️ La password deve contenere almeno 6 caratteri!";
-        return;
-    }
-
-    try {
-        // Tenta la creazione dell'account su Firebase
-        await createUserWithEmailAndPassword(auth, email, password);
-        
-        // Se va a buon fine:
-        if (errorDisplay) errorDisplay.innerText = ""; // Cancella eventuali errori precedenti
-        alert("🎉 Account creato con successo!");
-        if (window.playSfx) window.playSfx('win');
-        
-    } catch (error) {
-        // 2. GESTIONE PULITA DEGLI ERRORI DI FIREBASE
-        console.error("Firebase Auth Error:", error.code);
-        
-        switch (error.code) {
-            case 'auth/operation-not-allowed':
-                if (errorDisplay) errorDisplay.innerHTML = "❌ <strong>Errore:</strong> Devi abilitare il metodo 'Email/Password' nella console di Firebase (Authentication -> Sign-in method)!";
-                break;
-            case 'auth/email-already-in-use':
-                if (errorDisplay) errorDisplay.innerText = "✉️ Questa email è già registrata. Prova a fare l'Accesso (Login)!";
-                break;
-            case 'auth/invalid-email':
-                if (errorDisplay) errorDisplay.innerText = "📧 Il formato dell'email non è valido.";
-                break;
-            case 'auth/weak-password':
-                if (errorDisplay) errorDisplay.innerText = "🔒 La password è troppo debole (minimo 6 caratteri).";
-                break;
-            default:
-                if (errorDisplay) errorDisplay.innerText = "⚠️ Errore durante la registrazione: " + error.message;
-        }
-    }
-}
 </script>
 </body>
 </html>
