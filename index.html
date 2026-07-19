@@ -267,6 +267,10 @@
         .analyzer-box {
             display: flex; justify-content: space-between; align-items: center; background: rgba(157, 78, 221, 0.1); border: 1px dashed var(--accent); padding: 10px 16px; border-radius: 14px; font-size: 0.8rem;
         }
+
+        #pageRankTitle {
+            font-size: 0.9rem; font-weight: 800; padding: 8px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.15); display: inline-block; transition: all 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -462,8 +466,8 @@
             <input type="password" id="passwordInput" placeholder="Inserisci Password..." required>
             
             <div style="display:flex; gap:10px; margin-top:10px;">
-                <button class="btn-secondary" style="flex:1;" onclick="window.firebaseAuth.register()">Registrati</button>
-                <button class="btn-custom" style="flex:1;" onclick="window.firebaseAuth.login()">Accedi</button>
+                <button id="btnRegister" class="btn-secondary" style="flex:1;">Registrati</button>
+                <button id="btnLogin" class="btn-custom" style="flex:1;">Accedi</button>
             </div>
             <p id="authError" style="color:#ff003c; font-size:0.8rem; display:none;"></p>
         </div>
@@ -473,10 +477,10 @@
                 <img id="pageAvatarPreview" src="https://api.dicebear.com/7.x/bottts/svg?seed=GD" style="width:120px; height:120px; border-radius:50%; border:4px solid var(--accent); box-shadow:0 0 25px var(--accent-glow); object-fit:cover;">
                 
                 <label for="avatarUpload" class="btn-custom" style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); padding: 5px 10px; font-size: 0.7rem; cursor: pointer; border-radius: 10px;">📷 Cambia</label>
-                <input type="file" id="avatarUpload" accept="image/png, image/jpeg" style="display:none;" onchange="window.firebaseAuth.uploadAvatar(event)">
+                <input type="file" id="avatarUpload" accept="image/png, image/jpeg" style="display:none;">
             </div>
             
-            <span id="pageRankTitle" style="font-size:0.9rem; font-weight:800; color:#ffd700; background:rgba(255,215,0,0.15); padding:6px 16px; border-radius:12px; border:1px solid rgba(255,215,0,0.3);">🟢 Novice Demon Slayer</span>
+            <span id="pageRankTitle">🟢 Novice Demon Slayer</span>
 
             <div style="text-align:left; display:flex; flex-direction:column; gap:6px; width:100%; max-width:300px;">
                 <label style="font-size:0.85rem; font-weight:700;">Nome Utente:</label>
@@ -484,8 +488,8 @@
             </div>
 
             <div style="display:flex; gap:12px; justify-content:center; margin-top:10px;">
-                <button class="btn-secondary" style="padding:12px 20px;" onclick="window.firebaseAuth.logout()">🔴 Disconnetti</button>
-                <button class="btn-custom" style="padding:12px 20px;" onclick="window.firebaseAuth.saveProfile()">💾 Salva Modifiche</button>
+                <button id="btnLogout" class="btn-secondary" style="padding:12px 20px;">🔴 Disconnetti</button>
+                <button id="btnSaveProfile" class="btn-custom" style="padding:12px 20px;">💾 Salva Modifiche</button>
             </div>
         </div>
     </div>
@@ -532,6 +536,7 @@
         currentVideoMode: 'verifier', defaultVideoMode: 'verifier'
     };
 
+    window.DB = DB;
     let isSpinning = false;
     let audioCtx = null;
 
@@ -576,6 +581,31 @@
 
     window.playSfx = playSfx;
 
+    window.updateUserRankUI = function() {
+        let beatenCount = 0;
+        let totalProg = 0;
+        Object.values(DB.progress).forEach(p => {
+            totalProg += p;
+            if (p === 100) beatenCount++;
+        });
+        
+        let rankStr = "🟢 Novice Demon Slayer";
+        let rankColor = "#39ff14";
+        
+        if (beatenCount >= 5) { rankStr = "👑 GD Legend"; rankColor = "#ffd700"; }
+        else if (beatenCount >= 3) { rankStr = "🟣 Extreme Conqueror"; rankColor = "#9d4edd"; }
+        else if (beatenCount >= 1) { rankStr = "🔵 Advanced Slayer"; rankColor = "#00f0ff"; }
+        else if (totalProg > 0) { rankStr = "🟡 Hard Worker"; rankColor = "#ffc107"; }
+        
+        const rankEl = document.getElementById('pageRankTitle');
+        if (rankEl) {
+            rankEl.innerText = rankStr;
+            rankEl.style.color = rankColor;
+            rankEl.style.borderColor = rankColor;
+            rankEl.style.background = rankColor + "1a";
+        }
+    };
+
     const dict = {
         it: { 
             search: "Cerca demone per nome...", unv: "✔ Verificati", fav: "♥ Preferiti", hSel: "Seleziona un Livello", hSub: "Classifica Record", btnSub: "🚩 Invia il tuo Record", searchP: "Cerca player nel livello...",
@@ -619,6 +649,7 @@
             DB.players = mockPlayers;
         }
         updateStats(); renderList(); renderWeekly(); renderHall(); startWeeklyTimer();
+        window.updateUserRankUI();
     }
 
     function updateStats() {
@@ -803,6 +834,7 @@
         else { statusBadge.className = "status-badge st-unplayed"; statusBadge.innerText = d.stUnplayed; }
         
         renderList(); renderWeekly();
+        window.updateUserRankUI();
     }
 
     function generateChallenge() {
@@ -1105,6 +1137,7 @@
         if(confirm(d.confirmReset)) {
             localStorage.clear(); DB.favs = []; DB.progress = {};
             updateStats(); renderList(); renderWeekly(); alert(d.alertReset);
+            window.updateUserRankUI();
         }
     }
 
@@ -1162,22 +1195,30 @@
             userProfileSection.style.display = 'flex';
             profileMainTitle.innerText = "👤 Profilo Giocatore";
             
-            document.getElementById('profileNameInput').value = user.displayName || 'Player 1';
-            const avatarUrl = user.photoURL || 'https://api.dicebear.com/7.x/bottts/svg?seed=GD';
-            document.getElementById('pageAvatarPreview').src = avatarUrl;
+            const currentName = user.displayName || localStorage.getItem('gd_username') || 'Player 1';
+            document.getElementById('profileNameInput').value = currentName;
+            document.getElementById('sidebarNameText').innerText = currentName;
             
-            document.getElementById('sidebarNameText').innerText = user.displayName || 'Player 1';
+            const avatarUrl = user.photoURL || localStorage.getItem('gd_custom_avatar') || `https://api.dicebear.com/7.x/bottts/svg?seed=${currentName}`;
+            document.getElementById('pageAvatarPreview').src = avatarUrl;
             document.getElementById('sidebarAvatarImg').src = avatarUrl;
         } else {
             authSection.style.display = 'flex';
             userProfileSection.style.display = 'none';
             profileMainTitle.innerText = "Autenticazione Sistema";
-            document.getElementById('sidebarNameText').innerText = 'Ospite';
-            document.getElementById('sidebarAvatarImg').src = 'https://api.dicebear.com/7.x/bottts/svg?seed=Guest';
+            
+            const guestName = localStorage.getItem('gd_username') || 'Ospite';
+            document.getElementById('sidebarNameText').innerText = guestName;
+            document.getElementById('profileNameInput').value = guestName === 'Ospite' ? '' : guestName;
+            
+            const guestAvatar = localStorage.getItem('gd_custom_avatar') || `https://api.dicebear.com/7.x/bottts/svg?seed=${guestName}`;
+            document.getElementById('sidebarAvatarImg').src = guestAvatar;
+            document.getElementById('pageAvatarPreview').src = guestAvatar;
         }
+        if (window.updateUserRankUI) window.updateUserRankUI();
     });
 
-    window.firebaseAuth = {
+    const firebaseAuthActions = {
         register: async () => {
             const email = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value;
@@ -1197,22 +1238,15 @@
                 alert("🎉 Account creato con successo!");
                 if (window.playSfx) window.playSfx('win');
             } catch (error) {
-                console.error("Firebase Auth Error:", error.code);
                 switch (error.code) {
                     case 'auth/operation-not-allowed':
-                        showError("❌ <strong>Errore:</strong> Devi abilitare il metodo 'Email/Password' nella console di Firebase (Authentication -> Sign-in method)!");
+                        showError("❌ Abilita il metodo 'Email/Password' su Firebase console!");
                         break;
                     case 'auth/email-already-in-use':
-                        showError("✉️ Questa email è già registrata. Prova a fare l'Accesso (Login)!");
-                        break;
-                    case 'auth/invalid-email':
-                        showError("📧 Il formato dell'email non è valido.");
-                        break;
-                    case 'auth/weak-password':
-                        showError("🔒 La password è troppo debole (minimo 6 caratteri).");
+                        showError("✉️ Questa email è già registrata.");
                         break;
                     default:
-                        showError("⚠️ Errore durante la registrazione: " + error.message);
+                        showError("⚠️ Errore: " + error.message);
                 }
             }
         },
@@ -1236,38 +1270,54 @@
         
         saveProfile: async () => {
             if (window.playSfx) window.playSfx('win');
-            const newName = document.getElementById('profileNameInput').value;
+            const newName = document.getElementById('profileNameInput').value.trim() || 'Player 1';
+            localStorage.setItem('gd_username', newName);
+            document.getElementById('sidebarNameText').innerText = newName;
+            
             if (auth.currentUser) {
                 await updateProfile(auth.currentUser, { displayName: newName });
-                document.getElementById('sidebarNameText').innerText = newName;
-                alert("Profilo aggiornato con successo!");
             }
+            alert("Profilo aggiornato con successo!");
+            if (window.updateUserRankUI) window.updateUserRankUI();
         },
 
         uploadAvatar: async (event) => {
             const file = event.target.files[0];
-            if (!file || !auth.currentUser) return;
+            if (!file) return;
             
-            document.getElementById('pageAvatarPreview').style.opacity = '0.5';
+            // Instant Local Preview Fallback via FileReader
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Url = e.target.result;
+                document.getElementById('pageAvatarPreview').src = base64Url;
+                document.getElementById('sidebarAvatarImg').src = base64Url;
+                localStorage.setItem('gd_custom_avatar', base64Url);
+            };
+            reader.readAsDataURL(file);
 
-            try {
-                const storageRef = ref(storage, `avatars/${auth.currentUser.uid}`);
-                await uploadBytes(storageRef, file);
-                const downloadURL = await getDownloadURL(storageRef);
-                
-                await updateProfile(auth.currentUser, { photoURL: downloadURL });
-                
-                document.getElementById('pageAvatarPreview').src = downloadURL;
-                document.getElementById('sidebarAvatarImg').src = downloadURL;
-                document.getElementById('pageAvatarPreview').style.opacity = '1';
-                
-                if (window.playSfx) window.playSfx('win');
-            } catch (error) {
-                alert("Errore durante il caricamento dell'immagine: " + error.message);
-                document.getElementById('pageAvatarPreview').style.opacity = '1';
+            // Cloud Storage Upload Flow
+            if (auth.currentUser) {
+                document.getElementById('pageAvatarPreview').style.opacity = '0.5';
+                try {
+                    const storageRef = ref(storage, `avatars/${auth.currentUser.uid}`);
+                    await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(storageRef);
+                    await updateProfile(auth.currentUser, { photoURL: downloadURL });
+                } catch (error) {
+                    console.warn("Storage cloud fallback applicato: per usare il cloud Storage, attiva le regole pubbliche sulla console Firebase.", error.message);
+                } finally {
+                    document.getElementById('pageAvatarPreview').style.opacity = '1';
+                }
             }
         }
     };
+
+    // Binding Programmatico degli eventi nativi dell'interfaccia
+    document.getElementById('btnRegister').addEventListener('click', firebaseAuthActions.register);
+    document.getElementById('btnLogin').addEventListener('click', firebaseAuthActions.login);
+    document.getElementById('btnLogout').addEventListener('click', firebaseAuthActions.logout);
+    document.getElementById('btnSaveProfile').addEventListener('click', firebaseAuthActions.saveProfile);
+    document.getElementById('avatarUpload').addEventListener('change', firebaseAuthActions.uploadAvatar);
 </script>
 </body>
 </html>
