@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Extreme Demon List - Ultra Premium OS v2.5</title>
+    <title>Extreme Demon List - Ultra Premium OS v2.6</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -340,9 +340,9 @@
 <div id="socialPage" class="page">
     <div class="card" style="grid-column: span 3; max-width:900px; margin: 0 auto; width:100%;">
         <h2 style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem; display:flex; justify-content:space-between; align-items:center;">
-            <span>👥 Social Network & Cloud</span>
+            <span id="socialTitle">👥 Social Network & Cloud</span>
         </h2>
-        <p style="color:var(--text-muted); font-size:0.9rem;">Cerca i giocatori nel network Firebase, visualizza il loro stato e interagirci.</p>
+        <p id="socialSub" style="color:var(--text-muted); font-size:0.9rem;">Cerca i giocatori nel network Firebase, visualizza il loro stato e interagisci.</p>
         
         <input type="text" id="socialSearchInput" placeholder="Cerca utente per nome o stato..." oninput="if(window.renderSocialList) window.renderSocialList()">
         
@@ -358,11 +358,11 @@
         
         <label id="tLang" style="font-weight:700; margin-top:10px;">Lingua di Sistema:</label>
         <div class="lang-grid">
-            <div class="lang-card active" id="lang-it" onclick="setLang('it')">🇮🇹<br><strong>Italiano</strong></div>
-            <div class="lang-card" id="lang-en" onclick="setLang('en')">🇬🇧<br><strong>English</strong></div>
-            <div class="lang-card" id="lang-es" onclick="setLang('es')">🇪🇸<br><strong>Español</strong></div>
-            <div class="lang-card" id="lang-pt" onclick="setLang('pt')">🇧🇷 / 🇵🇹<br><strong>Português</strong></div>
-            <div class="lang-card" id="lang-fr" onclick="setLang('fr')">🇫🇷<br><strong>Français</strong></div>
+            <div class="lang-card active" id="lang-it" onclick="setLang('it', this)">🇮🇹<br><strong>Italiano</strong></div>
+            <div class="lang-card" id="lang-en" onclick="setLang('en', this)">🇬🇧<br><strong>English</strong></div>
+            <div class="lang-card" id="lang-es" onclick="setLang('es', this)">🇪🇸<br><strong>Español</strong></div>
+            <div class="lang-card" id="lang-pt" onclick="setLang('pt', this)">🇧🇷 / 🇵🇹<br><strong>Português</strong></div>
+            <div class="lang-card" id="lang-fr" onclick="setLang('fr', this)">🇫🇷<br><strong>Français</strong></div>
         </div>
 
         <label id="tColor" style="font-weight:700; margin-top:15px;">Colore Neon Principale:</label>
@@ -414,7 +414,7 @@
         <h2 id="profileMainTitle" style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem;">Autenticazione Sistema</h2>
         
         <div id="authSection" style="display:flex; flex-direction:column; gap:15px; max-width:400px; margin: 20px auto;">
-            <p style="color:var(--text-muted); font-size:0.9rem;">Accedi per salvare i tuoi progressi nel cloud e interagire sui social.</p>
+            <p id="authSubText" style="color:var(--text-muted); font-size:0.9rem;">Accedi per salvare i tuoi progressi nel cloud e interagire sui social.</p>
             <input type="email" id="emailInput" placeholder="Inserisci Email..." required>
             <input type="password" id="passwordInput" placeholder="Inserisci Password..." required>
             
@@ -429,7 +429,7 @@
             <div style="position: relative;">
                 <img id="pageAvatarPreview" src="Default_Profile.jpg" style="width:120px; height:120px; border-radius:50%; border:4px solid var(--accent); box-shadow:0 0 25px var(--accent-glow); object-fit:cover;">
                 
-                <label for="avatarUpload" class="btn-custom" style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); padding: 5px 10px; font-size: 0.7rem; cursor: pointer; border-radius: 10px;">📷 Cambia</label>
+                <label for="avatarUpload" class="btn-custom" style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); padding: 5px 10px; font-size: 0.7rem; cursor: pointer; border-radius: 10px;" id="lblChangeImg">📷 Cambia</label>
                 <input type="file" id="avatarUpload" accept="image/png, image/jpeg" style="display:none;">
             </div>
             
@@ -437,11 +437,11 @@
 
             <div style="text-align:left; display:flex; flex-direction:column; gap:10px; width:100%; max-width:320px;">
                 <div>
-                    <label style="font-size:0.85rem; font-weight:700;">Nome Utente:</label>
+                    <label style="font-size:0.85rem; font-weight:700;" id="lblUsername">Nome Utente:</label>
                     <input type="text" id="profileNameInput" placeholder="Il tuo nick..." maxlength="16">
                 </div>
                 <div>
-                    <label style="font-size:0.85rem; font-weight:700;">Il tuo Stato (visibile agli altri):</label>
+                    <label style="font-size:0.85rem; font-weight:700;" id="lblStatus">Il tuo Stato (visibile agli altri):</label>
                     <input type="text" id="profileStatusInput" placeholder="Es. Sto grindando Tidal Wave..." maxlength="40">
                 </div>
             </div>
@@ -577,10 +577,12 @@
             rTitle: "🎰 Cyber-Slot Roulette", rSub: "Estrazione casuale estrema senza perdere il segno nella lista.", rSpin: "🎲 Gira Rullo", rRetry: "🎲 Riprova", rCancel: "Annulla", rOpen: "Apri Livello",
             stUnplayed: "⚪ Non Giocato", stPractice: "🟡 In Pratica", stBeaten: "🟢 Completato", skillKey: "ABILITÀ CHIAVE:", diffTier: "Tier Difficoltà:", share: "📤 Condividi", copied: "✔ Copiato!",
             lblCreat: "Creatore:", lblVerif: "Verificatore:", lblSong: "Canzone:", noVid: "Nessun video disponibile.", noRec: "Nessun record registrato per questa ricerca.", points: "Punti Totali", cleared: "Completati",
-            qTitle: "🏆 OBIETTIVI WEEKLY:", q1: "Avvia la scalata: Raggiungi almeno il 15%", q2: "Veterano della Pratica: Raggiungi almeno il 50%", q3: "Leggenda Assoluta: Completa il livello al 100%", wProg: "Progresso Registrado:", wEnter: "⚡ ENTRA IN PRATICA NOW",
+            qTitle: "🏆 OBIETTIVI WEEKLY:", q1: "Avvia la scalata: Raggiungi almeno il 15%", q2: "Veterano della Pratica: Raggiungi almeno il 50%", q3: "Leggenda Assoluta: Completa il livello al 100%", wProg: "Progresso Registrato:", wEnter: "⚡ ENTRA IN PRATICA ORA",
             tierGod: "🔴 God-Tier (Estremo Assoluto)", tierHigh: "🟠 High Extreme (Molto Duro)", tierMid: "🟡 Mid Extreme (Intermedio)", tierLow: "🟢 Entry Extreme (Accessibile)",
             btnVerif: "🎥 Verificatore", btnShow: "🎬 Showcase", navList: "Lista", navWeekly: "Weekly Demon", navHall: "Hall of Fame", navSettings: "Impostazioni", navProfile: "Profilo Utente",
-            alertReset: "Dati resettati con successo!", confirmReset: "Sei sicuro di voler resettare tutti i progressi e preferiti locali?", copyIDBtn: "📋 Copia ID"
+            alertReset: "Dati resettati con successo!", confirmReset: "Sei sicuro di voler resettare tutti i progressi e preferiti locali?", copyIDBtn: "📋 Copia ID",
+            authMain: "Autenticazione Sistema", authSub: "Accedi per salvare i tuoi progressi nel cloud e interagire sui social.", emailHolder: "Inserisci Email...", passHolder: "Inserisci Password...", btnReg: "Registrati", btnLog: "Accedi",
+            socialTitle: "👥 Social Network & Cloud", socialSub: "Cerca i giocatori nel network, visualizza il loro stato e interagisci.", socialHolder: "Cerca utente per nome o stato...", btnAdd: "➕ Aggiungi", btnLogout: "🔴 Disconnetti", btnSaveP: "💾 Salva in Cloud", lblUser: "Nome Utente:", lblStat: "Il tuo Stato (visibile agli altri):", lblChange: "📷 Cambia"
         },
         en: { 
             search: "Search demon by name...", unv: "✔ Verified Only", fav: "♥ Favorites", hSel: "Select a Level", hSub: "Record Leaderboard", btnSub: "🚩 Submit Your Record", searchP: "Search player in level...",
@@ -595,10 +597,62 @@
             qTitle: "🏆 WEEKLY TARGETS:", q1: "Start the climb: Reach at least 15%", q2: "Practice Veteran: Reach at least 50%", q3: "Absolute Legend: Complete the level at 100%", wProg: "Recorded Progress:", wEnter: "⚡ ENTER PRACTICE NOW",
             tierGod: "🔴 God-Tier (Absolute Extreme)", tierHigh: "🟠 High Extreme (Very Hard)", tierMid: "🟡 Mid Extreme (Intermediate)", tierLow: "🟢 Entry Extreme (Accessible)",
             btnVerif: "🎥 Verifier", btnShow: "🎬 Showcase", navList: "Demon List", navWeekly: "Weekly Demon", navHall: "Hall of Fame", navSettings: "Settings", navProfile: "User Profile",
-            alertReset: "All local data reset successfully!", confirmReset: "Are you sure you want to reset all your local progress and favorites?", copyIDBtn: "📋 Copy ID"
+            alertReset: "All local data reset successfully!", confirmReset: "Are you sure you want to reset all your local progress and favorites?", copyIDBtn: "📋 Copy ID",
+            authMain: "System Authentication", authSub: "Sign in to save your progress in the cloud and interact on socials.", emailHolder: "Enter Email...", passHolder: "Enter Password...", btnReg: "Register", btnLog: "Sign In",
+            socialTitle: "👥 Social Network & Cloud", socialSub: "Search players across the network, view their status and interact.", socialHolder: "Search user by name or status...", btnAdd: "➕ Add", btnLogout: "🔴 Sign Out", btnSaveP: "💾 Save to Cloud", lblUser: "Username:", lblStat: "Your Status (visible to others):", lblChange: "📷 Change"
+        },
+        es: { 
+            search: "Buscar demonio por nombre...", unv: "✔ Verificados", fav: "♥ Favoritos", hSel: "Selecciona un Nivel", hSub: "Tabla de Récords", btnSub: "🚩 Enviar tu Récord", searchP: "Buscar jugador en el nivel...",
+            weekly: "⏰ Demonio Semanal", weeklyBadge: "⏰ EVENTO SEMANAL", weeklySub: "¡Completa los objetivos del demonio de la semana para probar tu constancia!", timerPrefix: "⏳ EXPIRA EN:", 
+            hall: "🏆 Salón de la Fama", hallSub: "Jugadores legendarios clasificados según las métricas generales de la lista.", 
+            sTitle: "Configuración y OS", tLang: "Idioma del Sistema:", tColor: "Color Neón Principal:", tPref: "Preferencias de Interfaz:", 
+            lblTheme: "Tema Claro (Light Mode)", lblSfx: "Efectos de Sonido UI (SFX)", lblCompact: "Modo Compacto (Lista Densa)", lblAuto: "Autoplay de Video en YouTube", lblDefVideo: "Iniciar videos en modo Showcase por defecto", lblPerf: "Modo Rendimiento (Desactivar animaciones pesadas)", lblReset: "Borrar favoritos y progreso guardado localmente", btnReset: "🗑 Restablecer Datos", 
+            lblMyProg: "Progreso Personal (Práctica/Normal):", btnChal: "⚡ Desafío de Práctica Aleatorio", stLvl: "DEMONIOS", stVer: "VERIFICADOS", stFav: "FAVORITOS", 
+            rTitle: "🎰 Ruleta Cyber-Slot", rSub: "Selección aleatoria extrema sin perder el progreso de búsqueda en la lista.", rSpin: "🎲 Girar Ruleta", rRetry: "🎲 Intentar de Nuevo", rCancel: "Cancelar", rOpen: "Abrir Nivel",
+            stUnplayed: "⚪ No Jugado", stPractice: "🟡 En Práctica", stBeaten: "🟢 Completado", skillKey: "HABILIDAD CLAVE:", diffTier: "Nivel de Dificultad:", share: "📤 Compartir", copied: "✔ ¡Copiado!",
+            lblCreat: "Creador:", lblVerif: "Verificador:", lblSong: "Canción:", noVid: "No hay video disponible.", noRec: "No se encontraron récords para esta búsqueda.", points: "Puntos Totales", cleared: "Completados",
+            qTitle: "🏆 OBJETIVOS SEMANALES:", q1: "Inicia la escalada: Alcanza al menos un 15%", q2: "Veterano de Práctica: Alcanza al menos un 50%", q3: "Leyenda Absoluta: Completa el nivel al 100%", wProg: "Progreso Registrado:", wEnter: "⚡ ENTRAR EN PRÁCTICA AHORA",
+            tierGod: "🔴 God-Tier (Extremo Absoluto)", tierHigh: "🟠 High Extreme (Muy Difícil)", tierMid: "🟡 Mid Extreme (Intermedio)", tierLow: "🟢 Entry Extreme (Accesible)",
+            btnVerif: "🎥 Verificador", btnShow: "🎬 Showcase", navList: "Lista de Demonios", navWeekly: "Demonio Semanal", navHall: "Salón de la Fama", navSettings: "Configuración", navProfile: "Perfil de Usuario",
+            alertReset: "¡Todos los datos locales fueron restablecidos!", confirmReset: "¿Estás seguro de que deseas restablecer todo tu progreso y favoritos?", copyIDBtn: "📋 Copiar ID",
+            authMain: "Autenticación del Sistema", authSub: "Inicia sesión para guardar tu progreso en la nube e interactuar en redes.", emailHolder: "Introduce Correo...", passHolder: "Introduce Contraseña...", btnReg: "Registrarse", btnLog: "Acceder",
+            socialTitle: "👥 Red Social y Nube", socialSub: "Busca jugadores en la red, ve su estado e interactúa con ellos.", socialHolder: "Buscar usuario por nombre o estado...", btnAdd: "➕ Añadir", btnLogout: "🔴 Cerrar Sesión", btnSaveP: "💾 Guardar en Nube", lblUser: "Nombre de Usuario:", lblStat: "Tu Estado (visible para otros):", lblChange: "📷 Cambiar"
+        },
+        pt: { 
+            search: "Buscar demônio por nome...", unv: "✔ Verificados", fav: "♥ Favoritos", hSel: "Selecione um Nível", hSub: "Tabela de Recordes", btnSub: "🚩 Enviar seu Recorde", searchP: "Buscar jogador no nível...",
+            weekly: "⏰ Demônio Semanal", weeklyBadge: "⏰ EVENTO SEMANAL", weeklySub: "Complete os objetivos semanais para provar sua consistência no grinding!", timerPrefix: "⏳ EXPIRA EM:", 
+            hall: "🏆 Hall da Fama", hallSub: "Jogadores lendários ranqueados pelas métricas gerais da lista.", 
+            sTitle: "Configurações e OS", tLang: "Idioma do Sistema:", tColor: "Cor Neon Principal:", tPref: "Preferências de Interface:", 
+            lblTheme: "Tema Claro (Light Mode)", lblSfx: "Efeitos Sonoros UI (SFX)", lblCompact: "Modo Compacto (Lista Densa)", lblAuto: "Autoplay de Vídeo do YouTube", lblDefVideo: "Iniciar vídeos no modo Showcase por padrão", lblPerf: "Modo Desempenho (Desativar animações pesadas)", lblReset: "Limpar favoritos e progresso salvos localmente", btnReset: "🗑 Resetar Dados", 
+            lblMyProg: "Progresso Pessoal (Prática/Normal):", btnChal: "⚡ Desafio de Prática Aleatório", stLvl: "DEMÔNIOS", stVer: "VERIFICADOS", stFav: "FAVORITOS", 
+            rTitle: "🎰 Roleta Cyber-Slot", rSub: "Seleção aleatória extrema sem perder seu lugar na lista.", rSpin: "🎲 Girar Roleta", rRetry: "🎲 Tentar Novamente", rCancel: "Cancelar", rOpen: "Abrir Nível",
+            stUnplayed: "⚪ Não Jogado", stPractice: "🟡 Em Prática", stBeaten: "🟢 Concluído", skillKey: "HABILIDADE CHAVE:", diffTier: "Nível de Dificuldade:", share: "📤 Compartilhar", copied: "✔ Copiado!",
+            lblCreat: "Criador:", lblVerif: "Verificador:", lblSong: "Música:", noVid: "Nenhum vídeo disponível.", noRec: "Nenhum recorde encontrado para esta busca.", points: "Pontos Totais", cleared: "Concluídos",
+            qTitle: "🏆 OBJETIVOS SEMANAIS:", q1: "Inicie a escalada: Alcance pelo menos 15%", q2: "Veterano de Prática: Alcance pelo menos 50%", q3: "Lenda Absoluta: Complete o nível 100%", wProg: "Progresso Registrado:", wEnter: "⚡ ENTRAR EM PRÁTICA AGORA",
+            tierGod: "🔴 God-Tier (Extremo Absoluto)", tierHigh: "🟠 High Extreme (Muito Difícil)", tierMid: "🟡 Mid Extreme (Intermediário)", tierLow: "🟢 Entry Extreme (Acessível)",
+            btnVerif: "🎥 Verificador", btnShow: "🎬 Showcase", navList: "Lista de Demônios", navWeekly: "Demônio Semanal", navHall: "Hall da Fama", navSettings: "Configurações", navProfile: "Perfil de Usuário",
+            alertReset: "Todos os dados locais foram resetados com sucesso!", confirmReset: "Tem certeza de que deseja resetar todo o seu progresso e favoritos?", copyIDBtn: "📋 Copiar ID",
+            authMain: "Autenticação do Sistema", authSub: "Faça login para salvar seu progresso na nuvem e interagir no social.", emailHolder: "Digite o E-mail...", passHolder: "Digite a Senha...", btnReg: "Registrar", btnLog: "Entrar",
+            socialTitle: "👥 Rede Social e Nuvem", socialSub: "Busque jogadores na rede, veja seus status e interaja.", socialHolder: "Buscar usuário por nome ou status...", btnAdd: "➕ Adicionar", btnLogout: "🔴 Sair", btnSaveP: "💾 Salvar na Nuvem", lblUser: "Nome de Usuário:", lblStat: "Seu Status (visível para outros):", lblChange: "📷 Alterar"
+        },
+        fr: { 
+            search: "Rechercher un démon par nom...", unv: "✔ Vérifiés", fav: "♥ Favoris", hSel: "Sélectionnez un Niveau", hSub: "Classement des Records", btnSub: "🚩 Soumettre votre Record", searchP: "Rechercher un joueur...",
+            weekly: "⏰ Démon de la Semaine", weeklyBadge: "⏰ ÉVÉNEMENT HEBDOMADAIRE", weeklySub: "Complétez les objectifs hebdomadaires pour prouver votre régularité !", timerPrefix: "⏳ EXPIRE DANS :", 
+            hall: "🏆 Panthéon", hallSub: "Joueurs légendaires classés selon leurs performances globales sur la liste.", 
+            sTitle: "Paramètres & OS", tLang: "Langue du Système :", tColor: "Couleur Néon Principale :", tPref: "Préférences d'Interface :", 
+            lblTheme: "Thème Clair (Light Mode)", lblSfx: "Effets Sonores UI (SFX)", lblCompact: "Mode Compact (Liste Dense)", lblAuto: "Lecture automatique YouTube", lblDefVideo: "Lancer les vidéos en mode Showcase par défaut", lblPerf: "Mode Performance (Désactiver les animations lourdes)", lblReset: "Effacer les favoris et la progression enregistrés localement", btnReset: "🗑 Réinitialiser les Données", 
+            lblMyProg: "Progression Personnelle (Pratique/Normal) :", btnChal: "⚡ Défi de Pratique Aléatoire", stLvl: "DÉMONS", stVer: "VÉRIFIÉS", stFav: "FAVORIS", 
+            rTitle: "🎰 Roulette Cyber-Slot", rSub: "Sélection aléatoire extrême sans perdre votre place dans la liste.", rSpin: "🎲 Lancer la Roue", rRetry: "🎲 Réessayer", rCancel: "Annuler", rOpen: "Ouvrir le Niveau",
+            stUnplayed: "⚪ Non Joué", stPractice: "🟡 En Pratique", stBeaten: "🟢 Terminé", skillKey: "COMPÉTENCE CLÉ :", diffTier: "Niveau de Difficulté :", share: "📤 Partager", copied: "✔ Copié !",
+            lblCreat: "Créateur :", lblVerif: "Vérificateur :", lblSong: "Musique :", noVid: "Aucune vidéo disponible.", noRec: "Aucun record trouvé pour cette recherche.", points: "Points Totaux", cleared: "Terminés",
+            qTitle: "🏆 OBJECTIFS HEBDOMADAIRES :", q1: "Débutez l'ascension : Atteignez au moins 15%", q2: "Vétéran de Pratique : Atteignez au moins 50%", q3: "Légende Absolue : Terminez le niveau à 100%", wProg: "Progression Enregistrée :", wEnter: "⚡ ENTRER EN PRATIQUE MAINTENANT",
+            tierGod: "🔴 God-Tier (Extrême Absolu)", tierHigh: "🟠 High Extreme (Très Difficile)", tierMid: "🟡 Mid Extreme (Intermédiaire)", tierLow: "🟢 Entry Extreme (Accessible)",
+            btnVerif: "🎥 Vérificateur", btnShow: "🎬 Showcase", navList: "Liste des Démons", navWeekly: "Démon de la Semaine", navHall: "Panthéon", navSettings: "Paramètres", navProfile: "Profil Utilisateur",
+            alertReset: "Toutes les données locales ont été réinitialisées !", confirmReset: "Êtes-vous sûr de vouloir réinitialiser toute votre progression et vos favoris ?", copyIDBtn: "📋 Copier l'ID",
+            authMain: "Authentification Système", authSub: "Connectez-vous pour sauvegarder votre progression sur le cloud.", emailHolder: "Entrez l'Email...", passHolder: "Entrez le Mot de passe...", btnReg: "S'inscrire", btnLog: "Se Connecter",
+            socialTitle: "👥 Réseau Social & Cloud", socialSub: "Recherchez des joueurs sur le réseau, consultez leur statut et interagissez.", socialHolder: "Rechercher un utilisateur par nom ou statut...", btnAdd: "➕ Ajouter", btnLogout: "🔴 Déconnexion", btnSaveP: "💾 Sauvegarder", lblUser: "Nom d'Utilisateur :", lblStat: "Votre Statut (visible par les autres) :", lblChange: "📷 Modifier"
         }
     };
-    dict.es = dict.en; dict.pt = dict.en; dict.fr = dict.en;
 
     async function init() {
         try {
@@ -615,7 +669,9 @@
     }
 
     function loadSettings() {
-        setLang(DB.currentLang);
+        const savedLang = localStorage.getItem('gd_lang') || 'it';
+        setLang(savedLang);
+        
         const savedColor = localStorage.getItem('gd_color') || '#9d4edd';
         const savedGlow = localStorage.getItem('gd_glow') || 'rgba(157, 78, 221, 0.45)';
         setThemeColor(savedColor, savedGlow, null, true);
@@ -1125,6 +1181,22 @@
         if(document.getElementById('btnShowVid')) document.getElementById('btnShowVid').innerText = d.btnShow;
         if(document.getElementById('btnCopy')) document.getElementById('btnCopy').innerText = d.copyIDBtn;
         
+        // Nuove traduzioni
+        if(document.getElementById('profileMainTitle')) document.getElementById('profileMainTitle').innerText = d.authMain;
+        if(document.getElementById('authSubText')) document.getElementById('authSubText').innerText = d.authSub;
+        if(document.getElementById('emailInput')) document.getElementById('emailInput').placeholder = d.emailHolder;
+        if(document.getElementById('passwordInput')) document.getElementById('passwordInput').placeholder = d.passHolder;
+        if(document.getElementById('btnRegister')) document.getElementById('btnRegister').innerText = d.btnReg;
+        if(document.getElementById('btnLogin')) document.getElementById('btnLogin').innerText = d.btnLog;
+        if(document.getElementById('socialTitle')) document.getElementById('socialTitle').innerText = d.socialTitle;
+        if(document.getElementById('socialSub')) document.getElementById('socialSub').innerText = d.socialSub;
+        if(document.getElementById('socialSearchInput')) document.getElementById('socialSearchInput').placeholder = d.socialHolder;
+        if(document.getElementById('btnLogout')) document.getElementById('btnLogout').innerText = d.btnLogout;
+        if(document.getElementById('btnSaveProfile')) document.getElementById('btnSaveProfile').innerText = d.btnSaveP;
+        if(document.getElementById('lblUsername')) document.getElementById('lblUsername').innerText = d.lblUser;
+        if(document.getElementById('lblStatus')) document.getElementById('lblStatus').innerText = d.lblStat;
+        if(document.getElementById('lblChangeImg')) document.getElementById('lblChangeImg').innerText = d.lblChange;
+        
         if(document.getElementById('nav-list')) document.getElementById('nav-list').title = d.navList;
         if(document.getElementById('nav-weekly')) document.getElementById('nav-weekly').title = d.navWeekly;
         if(document.getElementById('nav-hall')) document.getElementById('nav-hall').title = d.navHall;
@@ -1133,6 +1205,7 @@
 
         if(DB.currentLvl) showDetails(DB.currentLvl);
         renderWeekly(); renderHall();
+        if(window.renderSocialList) window.renderSocialList();
     }
 
     function shareLevel() {
@@ -1211,9 +1284,28 @@
         authError.innerHTML = msg;
     }
 
-    // Integriamo la lettura live degli utenti per il tab SOCIAL
+    // LISTA DI SUPPORTO CON UTENTI STORICI GEOMETRY DASH (PER GARANTIRE IL FUNZIONAMENTO DELLA RICERCA ANCHE OFFLINE/SENZA DB)
+    const backupGDUsers = [
+        { name: "Zoink", status: "Chilling in Acheron & Tidal Wave", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
+        { name: "Trick", status: "Grinding top 1 extreme demons 🌊", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
+        { name: "SpaceUK", status: "Returning to the scene...", avatar: "Default_Profile.jpg", rank: "🟣 Extreme Conqueror" },
+        { name: "Doggie", status: "Editing the next verification video 🎬", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
+        { name: "Riot", status: "Bloodbathed forever 🩸", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
+        { name: "Cursed", status: "Playing Silent Clubstep practice", avatar: "Default_Profile.jpg", rank: "🟣 Extreme Conqueror" },
+        { name: "Technical", status: "Zodiac verification memories ✨", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
+        { name: "npesta", status: "Kenos reaction legendary speedrun 😱", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
+        { name: "Diamond", status: "Avernus top verifier 🚀", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
+        { name: "Paqoe", status: "Silent Clubstep verified at last 🧠", avatar: "Default_Profile.jpg", rank: "🟣 Extreme Conqueror" },
+        { name: "Viper", status: "Looking for new wave challenges", avatar: "Default_Profile.jpg", rank: "🔵 Advanced Slayer" },
+        { name: "Brandon", status: "Creating a new impossible layout", avatar: "Default_Profile.jpg", rank: "🟡 Hard Worker" },
+        { name: "Sunix", status: "Sonic Wave infinity grind", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
+        { name: "Nifty", status: "Warming up on entry extreme demons", avatar: "Default_Profile.jpg", rank: "🟢 Novice Demon Slayer" },
+        { name: "Nexus", status: "Showcase recording in 4K 60FPS", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" }
+    ];
+
+    // MOTORE DI RICERCA USERNAME MIGLIORATO E PRECISO
     window.renderSocialList = async function() {
-        const query = (document.getElementById('socialSearchInput')?.value || "").toLowerCase();
+        const query = (document.getElementById('socialSearchInput')?.value || "").trim().toLowerCase();
         const container = document.getElementById('socialList');
         if(!container) return;
 
@@ -1233,25 +1325,39 @@
                 }
             });
         } catch (e) {
-            console.warn("Mancato recupero da Firestore (regole di sicurezza o offline), uso utenti di riserva.");
-            usersList = [
-                { name: "Zoink", status: "Chilling in Acheron", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
-                { name: "Trick", status: "Grindando il Top 1 🌊", avatar: "Default_Profile.jpg", rank: "👑 GD Legend" },
-                { name: "SpaceUK", status: "Ritorno in scena...", avatar: "Default_Profile.jpg", rank: "🟣 Extreme Conqueror" },
-                { name: "Doggie", status: "Editing il prossimo video", avatar: "Default_Profile.jpg", rank: "🔵 Advanced Slayer" }
-            ];
+            console.warn("Mancato recupero da Firestore, utilizzo database giocatori GD di riserva.");
+            usersList = [...backupGDUsers];
         }
 
-        const filtered = usersList.filter(u => u.name.toLowerCase().includes(query) || u.status.toLowerCase().includes(query));
+        // Se l'utente locale non è tra i risultati o nel DB, lo aggiungiamo in testa per visualizzarlo sempre nel network
+        const localName = localStorage.getItem('gd_username');
+        if(localName && !usersList.some(u => u.name.toLowerCase() === localName.toLowerCase())) {
+            usersList.unshift({
+                id: auth.currentUser ? auth.currentUser.uid : "local_me",
+                name: localName,
+                status: localStorage.getItem('gd_status') || "Nessuno stato",
+                avatar: localStorage.getItem('gd_custom_avatar') || "Default_Profile.jpg",
+                rank: window.updateUserRankUI ? window.updateUserRankUI() : "🟢 Novice Demon Slayer"
+            });
+        }
+
+        // Filtro preciso per Username o per Status
+        const filtered = usersList.filter(u => 
+            u.name.toLowerCase().includes(query) || 
+            (u.status && u.status.toLowerCase().includes(query))
+        );
+        
         container.innerHTML = "";
         
         if (filtered.length === 0) {
-            container.innerHTML = `<p style="opacity:0.4; text-align:center;">Nessun giocatore trovato nel network.</p>`;
+            const d = dict[DB.currentLang] || dict['it'];
+            container.innerHTML = `<p style="opacity:0.4; text-align:center; padding: 20px 0;">${d.noRec}</p>`;
             return;
         }
 
+        const d = dict[DB.currentLang] || dict['it'];
         filtered.forEach(u => {
-            const isMe = auth.currentUser && auth.currentUser.uid === u.id;
+            const isMe = (auth.currentUser && auth.currentUser.uid === u.id) || (u.name === localStorage.getItem('gd_username'));
             const el = document.createElement("div");
             el.className = "user-card";
             el.innerHTML = `
@@ -1263,19 +1369,19 @@
                         <div class="user-status">💭 "${u.status}"</div>
                     </div>
                 </div>
-                <button class="btn-secondary" onclick="if(window.playSfx) window.playSfx('click'); alert('Richiesta di amicizia inviata a ${u.name}!');">➕ Aggiungi</button>
+                <button class="btn-secondary" onclick="if(window.playSfx) window.playSfx('click'); alert('Richiesta di amicizia inviata a ${u.name}!');">${d.btnAdd}</button>
             `;
             container.appendChild(el);
         });
     };
 
     onAuthStateChanged(auth, async (user) => {
+        const d = dict[DB.currentLang] || dict['it'];
         if (user) {
             authSection.style.display = 'none';
             userProfileSection.style.display = 'flex';
             profileMainTitle.innerText = "👤 Profilo Cloud";
             
-            // All'avvio recupera dal documento del DB o dal LocalStorage se assente
             let cloudName = user.displayName;
             let cloudStatus = "Nessuno stato";
             let cloudAvatar = user.photoURL;
@@ -1283,10 +1389,10 @@
             try {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if(userDoc.exists()){
-                    const d = userDoc.data();
-                    if(d.name) cloudName = d.name;
-                    if(d.status) cloudStatus = d.status;
-                    if(d.avatar) cloudAvatar = d.avatar;
+                    const data = userDoc.data();
+                    if(data.name) cloudName = data.name;
+                    if(data.status) cloudStatus = data.status;
+                    if(data.avatar) cloudAvatar = data.avatar;
                 }
             } catch(e){}
 
@@ -1304,7 +1410,7 @@
         } else {
             authSection.style.display = 'flex';
             userProfileSection.style.display = 'none';
-            profileMainTitle.innerText = "Autenticazione Sistema";
+            profileMainTitle.innerText = d.authMain;
             
             const guestName = localStorage.getItem('gd_username') || 'Ospite';
             document.getElementById('sidebarNameText').innerText = guestName;
@@ -1336,7 +1442,6 @@
                 const cred = await createUserWithEmailAndPassword(auth, email, password);
                 authError.style.display = 'none';
                 
-                // Creazione automatica del doc utente in Firestore
                 const initialRank = window.updateUserRankUI ? window.updateUserRankUI() : "🟢 Novice Demon Slayer";
                 await setDoc(doc(db, "users", cred.user.uid), {
                     name: email.split('@')[0],
