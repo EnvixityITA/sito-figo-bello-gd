@@ -4,25 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Inv's Level List</title>
-<meta name="theme-color" content="#0a0909">
+<meta name="theme-color" content="#08070d">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <style>
     :root {
-        --bg: #0a0909;
-        --bg-2: #100e0f;
-        --panel: rgba(24, 21, 21, 0.62);
-        --panel-solid: #161313;
-        --accent: #c8442c;
-        --accent-glow: rgba(200, 68, 44, 0.35);
-        --accent-2: #e0603f;
-        --gold: #c9a24b;
-        --gold-glow: rgba(201, 162, 75, 0.32);
-        --text: #ece8e2;
-        --text-muted: #8b847e;
-        --border: rgba(238, 232, 220, 0.08);
-        --border-hover: rgba(200, 68, 44, 0.5);
+        --bg: #08070d;
+        --bg-2: #0d0b16;
+        --panel: rgba(20, 18, 32, 0.62);
+        --panel-solid: #14121f;
+        --accent: #7c5cff;
+        --accent-glow: rgba(124, 92, 255, 0.35);
+        --accent-2: #b48cff;
+        --gold: #29e0c9;
+        --gold-glow: rgba(41, 224, 201, 0.32);
+        --text: #eeeafc;
+        --text-muted: #8985a3;
+        --border: rgba(230, 224, 255, 0.08);
+        --border-hover: rgba(124, 92, 255, 0.5);
         --item-pad: 14px;
         --track-fill: 0%;
         --radius-lg: 18px;
@@ -40,14 +40,14 @@
     }
 
     .light {
-        --bg: #f3f0ea;
-        --bg-2: #ebe7de;
+        --bg: #f3f1fa;
+        --bg-2: #eae6f7;
         --panel: rgba(255, 255, 255, 0.72);
         --panel-solid: #ffffff;
-        --text: #1c1917;
-        --text-muted: #756e66;
-        --border: rgba(28, 25, 23, 0.1);
-        --border-hover: rgba(200, 68, 44, 0.4);
+        --text: #1a1726;
+        --text-muted: #6f6a85;
+        --border: rgba(26, 23, 38, 0.1);
+        --border-hover: rgba(124, 92, 255, 0.4);
     }
 
     .compact { --item-pad: 8px; }
@@ -148,8 +148,26 @@
         transition: 0.2s var(--ease); display: flex; align-items: center; justify-content: center;
         width: 46px; height: 46px; border-radius: var(--radius-md); border: 1px solid transparent;
     }
-    .nav-icon:hover { opacity: 0.85; background: rgba(238,232,220,0.05); }
-    .nav-icon.active { opacity: 1; color: var(--accent); background: rgba(200, 68, 44, 0.12); border-color: rgba(200, 68, 44, 0.3); }
+    .nav-icon:hover { opacity: 0.85; background: rgba(230,224,255,0.05); }
+    .nav-icon.active { opacity: 1; color: var(--accent); background: rgba(124, 92, 255, 0.12); border-color: rgba(124, 92, 255, 0.3); }
+
+    /* Icone SVG custom (no emoji) */
+    .icon-svg { width: 22px; height: 22px; display: block; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; color: inherit; pointer-events: none; }
+    .nav-icon { color: var(--text-muted); }
+    .nav-icon.active .icon-svg { filter: drop-shadow(0 0 6px var(--accent-glow)); }
+    .empty-icon .icon-svg, .toast-icon .icon-svg { width: 26px; height: 26px; }
+    .section-icon { display: inline-flex; vertical-align: -6px; margin-right: 6px; color: var(--accent); }
+    .section-icon .icon-svg { width: 24px; height: 24px; }
+
+    /* Animazione "pop" quando un'icona viene cliccata */
+    @keyframes iconPop {
+        0%   { transform: scale(1) rotate(0deg); }
+        35%  { transform: scale(0.72) rotate(-8deg); }
+        65%  { transform: scale(1.28) rotate(6deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+    .icon-pop-anim { animation: iconPop 0.55s var(--ease-spring); }
+    .nav-icon .live-dot, .nav-icon .req-badge { animation: pulse 1.8s infinite; }
 
     .live-dot {
         position: absolute; top: 8px; right: 8px; width: 7px; height: 7px;
@@ -330,7 +348,8 @@
     @keyframes skeleton { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
 
     .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 40px 20px; opacity: 0.55; text-align: center; }
-    .empty-state .empty-icon { font-size: 2.4rem; }
+    .empty-state .empty-icon { display: flex; align-items: center; justify-content: center; opacity: 0.55; color: var(--accent); }
+    .empty-state .empty-icon .icon-svg { width: 46px; height: 46px; stroke-width: 1.4; }
 
     kbd { background: rgba(255,255,255,0.08); border: 1px solid var(--border); border-radius: 6px; padding: 2px 7px; font-size: 0.75rem; font-family: monospace; }
 
@@ -382,11 +401,23 @@
         <img src="logo.png" alt="Logo" onerror="this.src='https://via.placeholder.com/48/ff5a1f/ffffff?text=OS'">
     </div>
 
-    <div class="nav-icon active" onclick="showPage('list', this)" id="nav-list" title="Lista">📊</div>
-    <div class="nav-icon" onclick="showPage('weekly', this)" id="nav-weekly" title="Weekly Demon">🗓️<div class="live-dot"></div></div>
-    <div class="nav-icon" onclick="showPage('hall', this)" id="nav-hall" title="Hall of Fame">🏆</div>
-    <div class="nav-icon" onclick="showPage('social', this)" id="nav-social" title="Social">👥<div class="req-badge" id="reqBadge">0</div></div>
-    <div class="nav-icon" onclick="showPage('settings', this)" id="nav-settings" title="Impostazioni">⚙️</div>
+    <div class="nav-icon active" onclick="showPage('list', this)" id="nav-list" title="Lista">
+        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 19V10"/><path d="M12 19V5"/><path d="M20 19v-7"/></svg>
+    </div>
+    <div class="nav-icon" onclick="showPage('weekly', this)" id="nav-weekly" title="Weekly Demon">
+        <svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18"/><path d="M8 2.5v4"/><path d="M16 2.5v4"/><path d="M8 14l2.4 2.4L16 11"/></svg>
+        <div class="live-dot"></div>
+    </div>
+    <div class="nav-icon" onclick="showPage('hall', this)" id="nav-hall" title="Hall of Fame">
+        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 5.5H4a1 1 0 0 0-1 1.2c.4 2 1.7 3.6 4 4"/><path d="M17 5.5h3a1 1 0 0 1 1 1.2c-.4 2-1.7 3.6-4 4"/><path d="M12 14v3"/><path d="M8.5 21h7"/><path d="M9.5 17.5h5l1 3.5h-7l1-3.5Z"/></svg>
+    </div>
+    <div class="nav-icon" onclick="showPage('social', this)" id="nav-social" title="Social">
+        <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="8.5" cy="8" r="3"/><path d="M2.5 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17.5" cy="8.5" r="2.4"/><path d="M15.6 13.7c2.6.3 4.9 2.2 4.9 5.3"/></svg>
+        <div class="req-badge" id="reqBadge">0</div>
+    </div>
+    <div class="nav-icon" onclick="showPage('settings', this)" id="nav-settings" title="Impostazioni">
+        <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.55 1.55M17.55 17.55 19.1 19.1M2 12h2.2M19.8 12H22M4.9 19.1l1.55-1.55M17.55 6.45 19.1 4.9"/></svg>
+    </div>
 
     <div class="sidebar-profile-container">
         <div class="profile-btn-sidebar nav-icon" onclick="showPage('profile', document.getElementById('nav-profile'))" id="nav-profile" title="Profilo Utente">
@@ -711,7 +742,10 @@
         if (!host) return;
         const el = document.createElement('div');
         el.className = `toast ${type}`;
-        const defaultIcon = type === 'success' ? '✅' : (type === 'error' ? '⚠️' : '💬');
+        const svgCheck = '<svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6"/></svg>';
+        const svgWarn = '<svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 3.5 22 20H2L12 3.5Z"/><path d="M12 10v4"/><path d="M12 16.8v.1"/></svg>';
+        const svgChat = '<svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Z"/></svg>';
+        const defaultIcon = type === 'success' ? svgCheck : (type === 'error' ? svgWarn : svgChat);
         el.innerHTML = `<span class="toast-icon">${icon || defaultIcon}</span><span>${msg}</span>`;
         host.appendChild(el);
         setTimeout(() => {
@@ -1043,7 +1077,7 @@
 
         if (filtered.length === 0) {
             const d = dict[DB.currentLang] || dict['it'];
-            body.innerHTML = `<div class="empty-state"><span class="empty-icon">🔍</span><span>${d.noRec}</span></div>`;
+            body.innerHTML = `<div class="empty-state"><span class="empty-icon"><svg class="icon-svg" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.5-4.5"/></svg></span><span>${d.noRec}</span></div>`;
             return;
         }
 
@@ -1125,13 +1159,13 @@
         filteredRecs.sort((a,b) => b.percent - a.percent);
 
         if(filteredRecs.length === 0) {
-            lbContainer.innerHTML = `<div class="empty-state"><span class="empty-icon">🏳️</span><span style="font-size:0.85rem;">${d.noRec}</span></div>`;
+            lbContainer.innerHTML = `<div class="empty-state"><span class="empty-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h13l-3 4 3 4H5"/></svg></span><span style="font-size:0.85rem;">${d.noRec}</span></div>`;
         } else {
             lbContainer.innerHTML = filteredRecs.map((p, idx) => {
                 let rankClass = "lb-rank-other"; let medal = "";
-                if(idx === 0) { rankClass = "lb-rank-1"; medal = "🏆 "; }
-                else if(idx === 1) { rankClass = "lb-rank-2"; medal = "🥈 "; }
-                else if(idx === 2) { rankClass = "lb-rank-3"; medal = "🥉 "; }
+                if(idx === 0) { rankClass = "lb-rank-1"; medal = `<svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;stroke:#ffd257;margin-right:2px;"><circle cx="12" cy="13" r="6.2"/><path d="M9.2 3h5.6l-2 6.2h-1.6L9.2 3Z"/><path d="M10.8 13l1 1.6 2-2.6"/></svg>`; }
+                else if(idx === 1) { rankClass = "lb-rank-2"; medal = `<svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;stroke:#d6d9e0;margin-right:2px;"><circle cx="12" cy="13" r="6.2"/><path d="M9.2 3h5.6l-2 6.2h-1.6L9.2 3Z"/><path d="M10.8 13l1 1.6 2-2.6"/></svg>`; }
+                else if(idx === 2) { rankClass = "lb-rank-3"; medal = `<svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;stroke:#e0995a;margin-right:2px;"><circle cx="12" cy="13" r="6.2"/><path d="M9.2 3h5.6l-2 6.2h-1.6L9.2 3Z"/><path d="M10.8 13l1 1.6 2-2.6"/></svg>`; }
                 
                 const safePercent = Math.max(0, Math.min(100, Number(p.percent) || 0));
                 return `
@@ -1411,11 +1445,11 @@
         });
 
         const sorted = Object.entries(scores).sort((a,b) => b[1].points - a[1].points);
-        if(sorted.length === 0) { hof.innerHTML = `<div class="empty-state"><span class="empty-icon">🏆</span><span>${d.noRec}</span></div>`; return; }
+        if(sorted.length === 0) { hof.innerHTML = `<div class="empty-state"><span class="empty-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 5.5H4a1 1 0 0 0-1 1.2c.4 2 1.7 3.6 4 4"/><path d="M17 5.5h3a1 1 0 0 1 1 1.2c-.4 2-1.7 3.6-4 4"/><path d="M12 14v3"/><path d="M8.5 21h7"/><path d="M9.5 17.5h5l1 3.5h-7l1-3.5Z"/></svg></span><span>${d.noRec}</span></div>`; return; }
         sorted.forEach(([name, data], i) => {
             const el = document.createElement("div"); el.className = "card"; el.style.background = "rgba(255,255,255,0.015)";
             el.style.animationDelay = (Math.min(i,10) * 0.04) + 's';
-            const medal = i === 0 ? '🏆 ' : (i === 1 ? '🥈 ' : (i === 2 ? '🥉 ' : `#${i+1} `));
+            const medal = i === 0 ? `<svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;stroke:#ffd257;margin-right:2px;"><circle cx="12" cy="13" r="6.2"/><path d="M9.2 3h5.6l-2 6.2h-1.6L9.2 3Z"/><path d="M10.8 13l1 1.6 2-2.6"/></svg>` : (i === 1 ? `<svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;stroke:#d6d9e0;margin-right:2px;"><circle cx="12" cy="13" r="6.2"/><path d="M9.2 3h5.6l-2 6.2h-1.6L9.2 3Z"/><path d="M10.8 13l1 1.6 2-2.6"/></svg>` : (i === 2 ? `<svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;stroke:#e0995a;margin-right:2px;"><circle cx="12" cy="13" r="6.2"/><path d="M9.2 3h5.6l-2 6.2h-1.6L9.2 3Z"/><path d="M10.8 13l1 1.6 2-2.6"/></svg>` : `#${i+1} `));
             el.innerHTML = `<div style="font-size:1.1rem; font-weight:900; color:${i === 0 ? '#ffb703' : 'var(--accent)'}; margin-bottom:4px;">${medal}${escapeHtml(name)}</div><div style="font-size:0.85rem; color:var(--text-muted)">${d.points}: <strong style="color:#fff;">${data.points}</strong> • ${d.cleared}: <strong>${data.cleared.length}</strong></div>`;
             hof.appendChild(el);
         });
@@ -1427,6 +1461,10 @@
         document.querySelectorAll('.nav-icon').forEach(n => n.classList.remove('active'));
         document.getElementById(pageId + 'Page').classList.add('active');
         if(navEl) navEl.classList.add('active');
+        if(navEl){
+            const svg = navEl.querySelector('.icon-svg');
+            if(svg){ svg.classList.remove('icon-pop-anim'); void svg.offsetWidth; svg.classList.add('icon-pop-anim'); }
+        }
         closeMobileNav();
         if(pageId === 'social' && window.renderSocialList) window.renderSocialList();
         document.querySelector('.main-scroll').scrollTop = 0;
@@ -1786,7 +1824,7 @@
             }, { merge: true });
 
             if (window.playSfx) window.playSfx('notify');
-            showToast(d ? d.reqSent : 'Friend request sent!', 'success', '📨');
+            showToast(d ? d.reqSent : 'Friend request sent!', 'success', '<svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 6l9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>');
             if (window.renderSocialList) window.renderSocialList();
         } catch (e) {
             console.warn("sendFriendRequest failed", e);
@@ -1818,7 +1856,7 @@
             }, { merge: true });
 
             if (window.playSfx) window.playSfx('win');
-            showToast(d ? d.reqAccepted : 'Request accepted!', 'success', '🤝');
+            showToast(d ? d.reqAccepted : 'Request accepted!', 'success', '<svg class="icon-svg" viewBox="0 0 24 24"><circle cx="8.5" cy="8" r="3"/><circle cx="17.5" cy="8.5" r="2.4"/><path d="M2.5 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M15.6 13.7c2.6.3 4.9 2.2 4.9 5.3"/></svg>');
             if (window.renderSocialList) window.renderSocialList();
             updateRequestBadge();
         } catch (e) {
@@ -1921,7 +1959,7 @@
         const tab = (window.DB && window.DB.socialTab) || 'browse';
 
         if (!auth.currentUser && tab !== 'browse') {
-            container.innerHTML = `<div class="empty-state"><span class="empty-icon">🔒</span><span>${d.authRequired || 'Sign in required'}</span></div>`;
+            container.innerHTML = `<div class="empty-state"><span class="empty-icon"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span><span>${d.authRequired || 'Sign in required'}</span></div>`;
             return;
         }
 
@@ -1972,7 +2010,7 @@
 
         if (displayList.length === 0) {
             const emptyMsg = tab === 'browse' ? (d.noUsers || 'No users found') : (tab === 'friends' ? (d.noFriends || 'No friends yet') : (d.noRequests || 'No requests'));
-            const emptyIcon = tab === 'browse' ? '🔍' : (tab === 'friends' ? '🤝' : '📩');
+            const emptyIcon = tab === 'browse' ? `<svg class="icon-svg" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.5-4.5"/></svg>` : (tab === 'friends' ? `<svg class="icon-svg" viewBox="0 0 24 24"><circle cx="8.5" cy="8" r="3"/><circle cx="17.5" cy="8.5" r="2.4"/><path d="M2.5 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M15.6 13.7c2.6.3 4.9 2.2 4.9 5.3"/></svg>` : `<svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 6l9 6 9-6"/></svg>`);
             container.innerHTML = `<div class="empty-state"><span class="empty-icon">${emptyIcon}</span><span>${emptyMsg}</span></div>`;
             return;
         }
@@ -2167,7 +2205,7 @@
             try {
                 await sendPasswordResetEmail(auth, email);
                 authError.style.display = 'none';
-                showToast(d.resetPwSent || "Reset email sent!", 'success', '📧');
+                showToast(d.resetPwSent || "Reset email sent!", 'success', '<svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 6l9 6 9-6"/></svg>');
             } catch (error) {
                 showError(mapAuthError(error, d));
             }
@@ -2264,6 +2302,17 @@
     // Allow Enter key to submit login form
     document.getElementById('passwordInput').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') firebaseAuthActions.login();
+    });
+
+    // Animazione "pop" universale: ogni icona SVG cliccata rimbalza
+    document.addEventListener('click', (e) => {
+        const iconHost = e.target.closest('.icon-svg, .nav-icon, .empty-icon, .toast-icon, .section-icon');
+        if (!iconHost) return;
+        const svg = iconHost.classList.contains('icon-svg') ? iconHost : iconHost.querySelector('.icon-svg');
+        if (!svg) return;
+        svg.classList.remove('icon-pop-anim');
+        void svg.offsetWidth;
+        svg.classList.add('icon-pop-anim');
     });
 </script>
 </body>
