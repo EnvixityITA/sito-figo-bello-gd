@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Inv's Level List</title>
+<meta name="theme-color" content="#0a0909">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+    :root {
+        --bg: #0a0909;
+        --bg-2: #100e0f;
+        --panel: rgba(24, 21, 21, 0.62);
+        --panel-solid: #161313;
+        --accent: #c8442c;
+        --accent-glow: rgba(200, 68, 44, 0.35);
+        --accent-2: #e0603f;
+        --gold: #c9a24b;
+        --gold-glow: rgba(201, 162, 75, 0.32);
+        --text: #ece8e2;
+        --text-muted: #8b847e;
+        --border: rgba(238, 232, 220, 0.08);
+        --border-hover: rgba(200, 68, 44, 0.5);
+        --item-pad: 14px;
+        --track-fill: 0%;
+        --radius-lg: 18px;
+        --radius-md: 12px;
+        --radius-sm: 8px;
+        --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        --dur-fast: 0.18s;
+        --dur: 0.32s;
+        --dur-slow: 0.5s;
+        --font-display: 'Fraunces', serif;
+        --font-num: 'Fraunces', serif;
+        --font-body: 'Inter', sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    .light {
+        --bg: #f3f0ea;
+        --bg-2: #ebe7de;
+        --panel: rgba(255, 255, 255, 0.72);
+        --panel-solid: #ffffff;
+        --text: #1c1917;
+        --text-muted: #756e66;
+        --border: rgba(28, 25, 23, 0.1);
+        --border-hover: rgba(200, 68, 44, 0.4);
+    }
+
+    .compact { --item-pad: 8px; }
+
+    .perf-mode * { animation-duration: 0.001s !important; transition-duration: 0.001s !important; }
+    .perf-mode body::before { display: none; }
+
+    * { box-sizing: border-box; user-select: none; }
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+        background: var(--bg); color: var(--text); font-family: var(--font-body);
+        margin: 0; display: flex; height: 100vh; height: 100dvh; overflow: hidden;
+        transition: background var(--dur-slow) var(--ease), color var(--dur-slow) var(--ease); position: relative;
+    }
+
+    h2, h3, .top1-text, #weeklyTitle, #hallTitle, #sTitle, #rTitle, #profileMainTitle, .font-orbitron {
+        font-family: var(--font-display);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        font-optical-sizing: auto;
+    }
+
+    .rank-num, .lb-rank, .stats-bar strong, #progVal, .lb-rank-1, .lb-rank-2, .lb-rank-3 {
+        font-family: var(--font-num);
+        font-variant-numeric: tabular-nums;
+        font-feature-settings: "tnum" 1;
+    }
+
+    body::before {
+        content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-image:
+            radial-gradient(ellipse 1100px 600px at 20% -10%, var(--accent-glow) 0%, transparent 60%),
+            radial-gradient(ellipse 800px 500px at 100% 110%, var(--gold-glow) 0%, transparent 55%);
+        pointer-events: none; z-index: 0; opacity: 0.5;
+    }
+    body::after {
+        content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.035; mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Loading splash */
+    #splash {
+        position: fixed; inset: 0; z-index: 9999; background: var(--bg);
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+        transition: opacity 0.6s var(--ease), visibility 0.6s var(--ease);
+    }
+    #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .splash-logo { width: 64px; height: 64px; border-radius: 18px; box-shadow: 0 0 40px var(--accent-glow); animation: splashPulse 1.4s ease-in-out infinite; }
+    @keyframes splashPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    .splash-bar { width: 180px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.08); overflow: hidden; }
+    .splash-bar-fill { height: 100%; width: 40%; background: linear-gradient(90deg, var(--accent), #00f0ff); border-radius: 4px; animation: splashLoad 1.1s ease-in-out infinite; }
+    @keyframes splashLoad { 0% { transform: translateX(-100%); } 100% { transform: translateX(340%); } }
+    .splash-text { font-family: 'Space Grotesk', sans-serif; letter-spacing: 2px; font-size: 0.75rem; color: var(--text-muted); }
+
+    /* Toasts */
+    #toastHost { position: fixed; top: 18px; right: 18px; z-index: 5000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 360px; }
+    .toast {
+        pointer-events: auto; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)), var(--panel-solid);
+        border: 1px solid var(--border-hover); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.5); font-size: 0.85rem; font-weight: 600; color: var(--text);
+        animation: toastIn 0.35s var(--ease-spring); backdrop-filter: blur(20px);
+    }
+    .toast.leaving { animation: toastOut 0.3s var(--ease) forwards; }
+    .toast .toast-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .toast.success { border-color: rgba(57,255,20,0.5); }
+    .toast.error { border-color: rgba(255,0,60,0.5); }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(40px) scale(0.9); } to { opacity: 1; transform: translateX(0) scale(1); } }
+    @keyframes toastOut { to { opacity: 0; transform: translateX(40px) scale(0.9); } }
+
+    /* Confirm dialog (replaces confirm()) */
+    .confirm-actions { display: flex; gap: 10px; justify-content: center; margin-top: 6px; }
+
+    .sidebar {
+        width: 84px; background: var(--bg-2); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center;
+        padding: 25px 0; gap: 20px; z-index: 100; flex-shrink: 0;
+        transition: transform var(--dur) var(--ease);
+    }
+
+    .brand-logo {
+        width: 50px; height: 50px; border-radius: 12px; overflow: hidden;
+        border: 1px solid var(--border); cursor: pointer;
+        transition: all var(--dur) var(--ease);
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(238,232,220,0.03);
+    }
+    .brand-logo:hover { border-color: var(--accent); }
+    .brand-logo img { width: 85%; height: 85%; object-fit: contain; }
+
+    .nav-icon {
+        cursor: pointer; font-size: 1.3rem; opacity: 0.45; position: relative;
+        transition: 0.2s var(--ease); display: flex; align-items: center; justify-content: center;
+        width: 46px; height: 46px; border-radius: var(--radius-md); border: 1px solid transparent;
+    }
+    .nav-icon:hover { opacity: 0.85; background: rgba(238,232,220,0.05); }
+    .nav-icon.active { opacity: 1; color: var(--accent); background: rgba(200, 68, 44, 0.12); border-color: rgba(200, 68, 44, 0.3); }
+
+    .live-dot {
+        position: absolute; top: 8px; right: 8px; width: 7px; height: 7px;
+        background: var(--accent); border-radius: 50%;
+        animation: pulse 1.8s infinite;
+    }
+    .req-badge {
+        position: absolute; top: -4px; right: -4px; min-width: 17px; height: 17px; padding: 0 3px; border-radius: 9px;
+        background: var(--accent); color: #fff; font-size: 0.62rem; font-weight: 800; display: none; align-items: center; justify-content: center;
+        font-family: 'Inter', sans-serif; animation: pulse 1.8s infinite;
+    }
+    .req-badge.show { display: flex; }
+    @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.25); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.7; } }
+
+    .sidebar-profile-container { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
+    .profile-btn-sidebar {
+        width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--border);
+        cursor: pointer; overflow: hidden; position: relative; transition: all 0.2s var(--ease);
+        background: #000;
+    }
+    .profile-btn-sidebar:hover { border-color: var(--accent); }
+    .profile-btn-sidebar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-name-mini { font-size: 0.65rem; font-weight: 600; color: var(--text-muted); max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
+
+    .main-scroll { flex: 1; overflow: hidden; position: relative; }
+
+    .page {
+        display: none; width: 100%; height: 100%; padding: 25px; overflow-y: auto;
+        grid-template-columns: 430px 1fr 360px; gap: 20px; z-index: 2;
+    }
+    .page.active { display: grid; animation: fadeIn 0.45s var(--ease); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(14px) scale(0.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .card {
+        background: var(--panel);
+        backdrop-filter: blur(24px) saturate(120%); -webkit-backdrop-filter: blur(24px) saturate(120%);
+        border: 1px solid var(--border); padding: 24px; border-radius: var(--radius-lg);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35); overflow-y: auto;
+        display: flex; flex-direction: column; gap: 16px; position: relative;
+        transition: border-color var(--dur) ease, box-shadow var(--dur) ease;
+        animation: cardIn 0.5s var(--ease) backwards;
+    }
+    .card::before {
+        content: ""; position: absolute; top: 0; left: 24px; right: 24px; height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(238,232,220,0.16), transparent); pointer-events: none;
+    }
+    .card:nth-of-type(1) { animation-delay: 0.02s; }
+    .card:nth-of-type(2) { animation-delay: 0.08s; }
+    .card:nth-of-type(3) { animation-delay: 0.14s; }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    .card:hover { border-color: var(--border-hover); box-shadow: 0 24px 48px rgba(0, 0, 0, 0.42); }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+        background: rgba(0, 0, 0, 0.35); border: 1px solid var(--border); color: var(--text);
+        padding: 14px 18px; border-radius: var(--radius-md); font-family: 'Inter', sans-serif; font-size: 0.9rem; outline: none; transition: 0.25s var(--ease);
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
+        width: 100%;
+    }
+    input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow), inset 0 2px 5px rgba(0,0,0,0.6); background: rgba(0,0,0,0.55); }
+
+    .btn-custom {
+        background: var(--accent); color: white; border: 1px solid rgba(238,232,220,0.14); padding: 13px 20px; border-radius: var(--radius-md);
+        font-weight: 700; font-size: 0.86rem; cursor: pointer; transition: 0.22s var(--ease); position: relative; overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.28); text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        letter-spacing: 0.01em;
+    }
+    .btn-custom:hover { background: var(--accent-2); transform: translateY(-1px); box-shadow: 0 8px 22px rgba(0,0,0,0.34); }
+    .btn-custom:active { transform: translateY(0); }
+    .btn-custom:disabled { opacity: 0.5; pointer-events: none; }
+
+    .btn-secondary {
+        background: rgba(238, 232, 220, 0.03); border: 1px solid var(--border); color: var(--text);
+        padding: 12px 14px; border-radius: var(--radius-md); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.2s var(--ease);
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-secondary:hover { background: rgba(238, 232, 220, 0.06); border-color: var(--border-hover); }
+    .btn-secondary:active { transform: translateY(0); }
+    .btn-secondary.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+    .custom-slider-container { width: 100%; padding: 4px 0; }
+    .custom-slider { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 10px; background: linear-gradient(to right, var(--accent) var(--track-fill), rgba(255, 255, 255, 0.06) var(--track-fill)); outline: none; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); transition: background 0.1s linear; }
+    .custom-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #ffffff; border: 4px solid var(--accent); cursor: pointer; box-shadow: 0 0 12px var(--accent); transition: transform 0.15s var(--ease-spring); }
+    .custom-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
+    .lvl-item {
+        display: flex; align-items: center; gap: 16px; padding: var(--item-pad) 12px var(--item-pad) 0;
+        border: none; border-bottom: 1px solid var(--border);
+        background: transparent; cursor: pointer; transition: 0.25s var(--ease);
+        animation: itemIn 0.35s var(--ease) backwards; position: relative; overflow: hidden;
+    }
+    @keyframes itemIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+    .lvl-item:hover { background: rgba(238, 232, 220, 0.025); padding-left: 6px; }
+    .lvl-item.selected { background: rgba(200, 68, 44, 0.09); padding-left: 6px; box-shadow: inset 3px 0 0 var(--accent); }
+    .lvl-item.top1 { background: linear-gradient(90deg, rgba(201,162,75,0.07), transparent 60%); }
+    .lvl-item.top1:hover, .lvl-item.top1.selected { box-shadow: inset 3px 0 0 var(--gold); }
+    .rank-num {
+        width: 52px; flex-shrink: 0; text-align: center; font-size: 1.9rem; font-weight: 600;
+        color: var(--text-muted); opacity: 0.32; font-variant-numeric: tabular-nums; line-height: 1;
+        transition: 0.25s var(--ease), opacity 0.25s var(--ease);
+    }
+    .lvl-item.top1 .rank-num { color: var(--gold); opacity: 0.85; }
+    .lvl-item:not(.top1):hover .rank-num, .lvl-item:not(.top1).selected .rank-num { color: var(--accent); opacity: 0.9; }
+    .thumb { width: 64px; height: 36px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: #111; flex-shrink: 0; }
+    .fav-btn { font-size: 1.15rem; color: rgba(255, 255, 255, 0.14); transition: 0.2s var(--ease-spring); cursor: pointer; flex-shrink: 0; }
+    .fav-btn:hover { transform: scale(1.15); color: var(--accent); }
+    .fav-active { color: var(--accent); animation: favPop 0.4s var(--ease-spring); }
+    @keyframes favPop { 0% { transform: scale(1); } 40% { transform: scale(1.5); } 100% { transform: scale(1); } }
+    .status-badge { font-size: 0.72rem; padding: 5px 10px; border-radius: var(--radius-sm); font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; backdrop-filter: blur(5px); transition: 0.3s var(--ease); }
+    .st-unplayed { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+    .st-practice { background: rgba(255, 183, 3, 0.15); color: var(--gold); border: 1px solid rgba(255, 183, 3, 0.3); }
+    .st-beaten { background: rgba(138, 154, 107, 0.15); color: #8a9a6b; border: 1px solid rgba(138, 154, 107, 0.3); }
+    .top1-text { color: var(--gold); font-weight: 700; }
+    .leaderboard-title-box { border-bottom: 1px solid var(--border); padding-bottom: 12px; display:flex; flex-direction:column; gap:10px; }
+    .lb-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(238, 232, 220, 0.02); border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 0.9rem; transition: 0.2s ease; animation: itemIn 0.35s var(--ease) backwards; }
+    .lb-row:hover { background: rgba(200, 68, 44, 0.06); border-color: var(--border-hover); }
+    .lb-rank { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.75rem; margin-right: 10px; font-family: var(--font-mono); }
+    .lb-rank-1 { background: var(--gold); color: #17130a; }
+    .lb-rank-2 { background: #c7c2b8; color: #17130a; }
+    .lb-rank-3 { background: #b8815e; color: #17130a; }
+    .lb-rank-other { background: rgba(238,232,220,0.06); color: var(--text-muted); }
+    .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); background: rgba(0,0,0,0.3); padding: 14px 0; border-radius: var(--radius-md); font-size: 0.68rem; border: 1px solid var(--border); text-align: center; }
+    .stats-bar > div { position: relative; }
+    .stats-bar > div:not(:last-child)::after { content:""; position:absolute; right:0; top:15%; bottom:15%; width:1px; background:var(--border); }
+    .stats-bar span { letter-spacing: 0.06em; }
+    .stats-bar strong { display: inline-block; font-size: 1.35rem; transition: transform 0.3s var(--ease-spring); margin-top: 2px; }
+    .meta-tag { background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .quest-box { background: rgba(255, 90, 31, 0.05); border: 1px solid var(--border); border-radius: 16px; padding: 15px; width: 100%; max-width: 500px; text-align: left; display: flex; flex-direction: column; gap: 10px; }
+    .quest-item { display: flex; align-items: center; gap: 12px; font-size: 0.88rem; opacity: 0.7; transition: 0.3s var(--ease); }
+    .quest-item.completed { opacity: 1; color: #8a9a6b; text-decoration: line-through rgba(138, 154, 107, 0.4); }
+    .quest-check { width: 18px; height: 18px; border-radius: 6px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; transition: 0.3s var(--ease-spring); }
+    .quest-item.completed .quest-check { background: #8a9a6b; border-color: #8a9a6b; color: #17130a; transform: scale(1.05); }
+    .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .lang-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s var(--ease-spring); }
+    .lang-card:hover { border-color: var(--accent); background: rgba(255, 90, 31, 0.08); transform: translateY(-2px); }
+    .lang-card.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .color-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+    .color-swatch { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.15); transition: 0.2s var(--ease-spring); }
+    .color-swatch:hover, .color-swatch.active { transform: scale(1.15); border-color: white; box-shadow: 0 0 15px currentColor; }
+    .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: rgba(0,0,0,0.25); border-radius: 16px; border: 1px solid var(--border); transition: 0.2s ease; gap: 12px; }
+    .setting-row:hover { border-color: var(--border-hover); }
+
+    /* toggle switch */
+    .switch { position: relative; display: inline-block; width: 44px; height: 25px; flex-shrink: 0; cursor: pointer; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch-track { position: absolute; inset: 0; background: rgba(255,255,255,0.12); border: 1px solid var(--border); border-radius: 30px; transition: 0.3s var(--ease); }
+    .switch-thumb { position: absolute; top: 2px; left: 2px; width: 19px; height: 19px; background: #fff; border-radius: 50%; transition: 0.3s var(--ease-spring); box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+    .switch input:checked + .switch-track { background: var(--accent); }
+    .switch input:checked + .switch-track .switch-thumb { transform: translateX(19px); }
+
+    .timer-badge { background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border); border-radius: 16px; padding: 12px 24px; font-family: monospace; font-size: 1.2rem; font-weight: 700; color: #fff; display: inline-flex; align-items: center; gap: 10px; margin: 10px 0; }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 2, 6, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+    .modal-overlay.active { display: flex; opacity: 1; }
+    .modal-box { background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%), var(--panel-solid); border: 2px solid var(--accent); border-radius: 28px; padding: 35px; width: 480px; max-width: 92vw; text-align: center; box-shadow: 0 0 60px rgba(255, 90, 31, 0.45); display: flex; flex-direction: column; gap: 20px; animation: modalIn 0.4s var(--ease-spring); max-height: 88vh; overflow-y: auto; }
+    @keyframes modalIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .slot-window { height: 140px; background: rgba(0, 0, 0, 0.85); border: 2px solid var(--accent); border-radius: 20px; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; position: relative; box-shadow: inset 0 0 35px rgba(0,0,0,0.9); }
+    .slot-window::before, .slot-window::after { content: ""; position: absolute; left:0; width:100%; height:30px; z-index: 2; pointer-events:none; }
+    .slot-window::before { top:0; background: linear-gradient(to bottom, rgba(0,0,0,1), transparent); }
+    .slot-window::after { bottom:0; background: linear-gradient(to top, rgba(0,0,0,1), transparent); }
+    .slot-track { display: flex; flex-direction: column; align-items: center; transition: transform 0.1s linear; width: 100%; will-change: transform; }
+    .slot-card { height: 140px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 15px; font-size: 1.5rem; font-weight: 900; color: #fff; font-family: 'Space Grotesk', sans-serif; flex-shrink: 0; }
+    .slot-card img { width: 100px; height: 56px; border-radius: 10px; border: 1px solid var(--border); object-fit: cover; }
+    .analyzer-box { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 90, 31, 0.1); border: 1px dashed var(--accent); padding: 10px 16px; border-radius: 14px; font-size: 0.8rem; }
+    #pageRankTitle { font-size: 0.9rem; font-weight: 800; padding: 8px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.15); display: inline-block; transition: all 0.3s ease; }
+
+    .user-card { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255, 255, 255, 0.02); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); transition: 0.25s var(--ease); animation: itemIn 0.35s var(--ease) backwards; gap: 10px; flex-wrap: wrap; }
+    .user-card:hover { border-color: var(--accent); background: rgba(255, 90, 31, 0.1); }
+    .user-info { display: flex; align-items: center; gap: 15px; min-width: 0; }
+    .user-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; flex-shrink: 0; background: #111; }
+    .user-status { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px; }
+    .user-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+    .tabs-row { display: flex; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 12px; flex-wrap: wrap; }
+    .tab-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 9px 16px; border-radius: 12px; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: 0.2s var(--ease); position: relative; }
+    .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+    .tab-btn.active { color: #fff; background: rgba(200, 68, 44, 0.18); border-color: var(--accent); }
+    .tab-count { background: var(--accent); color: #fff; border-radius: 8px; padding: 1px 6px; font-size: 0.68rem; margin-left: 5px; }
+
+    .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 37%, rgba(255,255,255,0.04) 63%); background-size: 400% 100%; animation: skeleton 1.4s ease infinite; border-radius: 14px; }
+    @keyframes skeleton { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+    .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 40px 20px; opacity: 0.55; text-align: center; }
+    .empty-state .empty-icon { font-size: 2.4rem; }
+
+    kbd { background: rgba(255,255,255,0.08); border: 1px solid var(--border); border-radius: 6px; padding: 2px 7px; font-size: 0.75rem; font-family: monospace; }
+
+    /* Mobile nav */
+    .mobile-topbar { display: none; }
+    .mobile-nav-toggle { display: none; }
+
+    @media (max-width: 980px) {
+        body { flex-direction: column; }
+        .sidebar {
+            position: fixed; left: 0; top: 0; bottom: 0; width: 78px; z-index: 200;
+            transform: translateX(-100%);
+        }
+        .sidebar.open { transform: translateX(0); box-shadow: 20px 0 60px rgba(0,0,0,0.7); }
+        .mobile-topbar {
+            display: flex; align-items: center; justify-content: space-between; padding: 14px 16px;
+            background: rgba(8,6,12,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 150; flex-shrink: 0;
+        }
+        .mobile-nav-toggle { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 12px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; }
+        .sidebar-scrim { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 190; backdrop-filter: blur(2px); }
+        .sidebar-scrim.show { display: block; animation: fadeIn 0.25s ease; }
+        .main-scroll { width: 100%; }
+        .page { grid-template-columns: 1fr; padding: 16px; }
+        .modal-box { padding: 24px; }
+    }
+</style>
+</head>
+<body>
+
+<div id="splash">
+    <img src="logo.png" class="splash-logo" alt="Logo" onerror="this.style.display='none'">
+    <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+    <span class="splash-text" id="splashText">CARICAMENTO SISTEMA...</span>
+</div>
+
+<div id="toastHost"></div>
+<div class="sidebar-scrim" id="sidebarScrim" onclick="closeMobileNav()"></div>
+
+<div class="mobile-topbar">
+    <div class="mobile-nav-toggle" onclick="openMobileNav()">☰</div>
+    <strong style="font-family: 'Space Grotesk',sans-serif; font-size:0.85rem; letter-spacing:1px;">INV'S LEVEL LIST</strong>
+    <div class="profile-btn-sidebar" style="width:36px;height:36px;" onclick="showPage('profile', document.getElementById('nav-profile'))">
+        <img id="sidebarAvatarImgMobile" src="Default_Profile.jpg" alt="User" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+</div>
+
+<nav class="sidebar" id="sidebarNav">
+    <div class="brand-logo" onclick="showPage('list', document.querySelectorAll('.nav-icon')[0]); closeMobileNav();" title="Home OS">
+        <img src="logo.png" alt="Logo" onerror="this.src='https://via.placeholder.com/48/ff5a1f/ffffff?text=OS'">
+    </div>
+
+    <div class="nav-icon active" onclick="showPage('list', this)" id="nav-list" title="Lista">📊</div>
+    <div class="nav-icon" onclick="showPage('weekly', this)" id="nav-weekly" title="Weekly Demon">🗓️<div class="live-dot"></div></div>
+    <div class="nav-icon" onclick="showPage('hall', this)" id="nav-hall" title="Hall of Fame">🏆</div>
+    <div class="nav-icon" onclick="showPage('social', this)" id="nav-social" title="Social">👥<div class="req-badge" id="reqBadge">0</div></div>
+    <div class="nav-icon" onclick="showPage('settings', this)" id="nav-settings" title="Impostazioni">⚙️</div>
+
+    <div class="sidebar-profile-container">
+        <div class="profile-btn-sidebar nav-icon" onclick="showPage('profile', document.getElementById('nav-profile'))" id="nav-profile" title="Profilo Utente">
+            <img id="sidebarAvatarImg" src="Default_Profile.jpg" alt="User">
+        </div>
+        <span class="profile-name-mini" id="sidebarNameText">Ospite</span>
+        <span id="sidebarStatusText" style="font-size: 0.55rem; color: var(--accent); text-align: center; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Nessuno stato</span>
+    </div>
+</nav>
+
+<div class="main-scroll">
+
+<div id="listPage" class="page active">
+    <div class="card">
+        <div class="stats-bar">
+            <div><span style="opacity:0.5; display:block;" id="stLvlLabel">DEMONI</span><strong id="stTotal" style="font-size:1.2rem; color:var(--accent);">0</strong></div>
+            <div><span style="opacity:0.5; display:block;" id="stVerLabel">VERIFICATI</span><strong id="stVer" style="font-size:1.2rem;">0</strong></div>
+            <div><span style="opacity:0.5; display:block;" id="stFavLabel">PREFERITI</span><strong id="stFav" style="font-size:1.2rem; color:var(--accent);">0</strong></div>
+        </div>
+
+        <input type="text" id="search" placeholder="Cerca demone per nome..." oninput="renderList()">
+
+        <div style="display: flex; gap: 8px;">
+            <button id="btnFilter" class="btn-secondary" style="flex:1;" onclick="toggleFilter('unv')">✔ Verificati</button>
+            <button id="btnFavFilter" class="btn-secondary" style="flex:1;" onclick="toggleFilter('fav')">♥ Preferiti</button>
+            <button class="btn-custom" style="padding: 12px 16px; font-size:1.1rem; box-shadow:none;" onclick="openRoulette()" id="btnRouletteIcon" title="Apri Cyber-Slot Roulette">🎰</button>
+        </div>
+
+        <div id="listBody" style="display:flex; flex-direction:column; gap:8px; overflow-y:auto; padding-right:4px;"></div>
+    </div>
+    
+    <div class="card" style="justify-content:flex-start;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <span id="lvlSkillBadge" style="font-size:0.75rem; color:var(--accent); font-weight:700; letter-spacing:1px; display:block; margin-bottom:2px;">-</span>
+                <h2 id="lvlName" style="margin:0; font-size:1.7rem; font-weight:900;">Seleziona un Livello</h2>
+            </div>
+            <span id="lvlStatus" class="status-badge st-unplayed">⚪ Non Giocato</span>
+        </div>
+
+        <div id="analyzerBox" class="analyzer-box" style="display:none;">
+            <div><span style="opacity:0.6;" id="lblDifficulty">Tier Difficoltà:</span> <strong id="valTier" style="color:#fff;">-</strong></div>
+            <button class="btn-secondary" style="padding: 6px 12px; font-size:0.75rem;" onclick="shareLevel()" id="btnShare">📤 Condividi</button>
+        </div>
+        
+        <div id="videoToggles" style="display:none; justify-content:flex-end; gap:8px;">
+            <button id="btnVerifVid" class="btn-secondary active" onclick="switchVideoMode('verifier')">🎥 Verificatore</button>
+            <button id="btnShowVid" class="btn-secondary" onclick="switchVideoMode('showcase')">🎬 Showcase</button>
+        </div>
+
+        <div id="videoContainer" style="aspect-ratio:16/9; background:rgba(0,0,0,0.5); border-radius:20px; overflow:hidden; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-weight:600; text-align:center; padding:10px;">
+            Seleziona un livello dalla lista per visualizzare i dettagli
+        </div>
+
+        <div id="progressSection" style="display:none; background: rgba(0,0,0,0.35); padding: 18px; border-radius: 20px; border: 1px solid var(--border); flex-direction: column; gap: 12px;">
+            <div style="display:flex; justify-content:space-between; font-size:0.85rem; align-items:center;">
+                <strong id="lblMyProg" style="color:var(--text);">Progresso Personale (Pratica/Normal):</strong>
+                <span id="progVal" style="color:var(--accent); font-weight:900; font-size:1.2rem;">0%</span>
+            </div>
+            
+            <div class="custom-slider-container">
+                <input type="range" id="progSlider" min="0" max="100" value="0" class="custom-slider" oninput="updateProgressUI(this.value)" onchange="saveProgress(this.value)">
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px; flex-wrap:wrap; gap:8px;">
+                <button class="btn-secondary" style="padding: 10px 14px; font-size:0.8rem; border-color:var(--accent);" onclick="generateChallenge()" id="btnChal">⚡ Sfida di Pratica Casuale</button>
+                <span id="chalResult" style="font-size:0.88rem; font-weight:700; color:#8a9a6b; font-family:var(--font-mono);"></span>
+            </div>
+        </div>
+        
+        <div id="lvlMeta" style="display:none; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="meta-tag"><span id="lblCreat" style="opacity:0.6;">Creatore:</span> <strong id="mCreator">-</strong></div>
+            <div class="meta-tag"><span id="lblVerif" style="opacity:0.6;">Verificatore:</span> <strong id="mVerifier">-</strong></div>
+            <div class="meta-tag" style="grid-column: span 2;"><span id="lblSong" style="opacity:0.6;">Canzone:</span> <strong id="mSong" style="color:var(--accent);">-</strong></div>
+            <div class="meta-tag" style="grid-column: span 2;">
+                <span>ID: <strong id="mID">-</strong></span>
+                <button class="btn-secondary" style="padding:6px 12px; font-size:0.78rem;" onclick="copyID()" id="btnCopy">📋 Copia ID</button>
+            </div>
+        </div>
+
+        <p id="lvlDesc" style="font-size:0.88rem; opacity:0.75; line-height:1.6; margin:0;"></p>
+    </div>
+    
+    <div class="card">
+        <div class="leaderboard-title-box">
+            <h3 id="hSub" style="margin:0; font-weight:900; font-size: 1.1rem; color: #fff;">Classifica Record</h3>
+            <input type="text" id="searchPlayer" placeholder="Cerca player nel livello..." style="padding:8px 12px; font-size:0.8rem;" oninput="renderLeaderboard()">
+        </div>
+        <div id="leaderboard" style="display:flex; flex-direction:column; gap:8px; overflow-y:auto;">
+            <p style="opacity:0.4; text-align:center; font-size:0.85rem; padding: 20px 0;">Seleziona un demone per vedere i record</p>
+        </div>
+        <button id="btnSubmit" class="btn-custom" style="margin-top: auto;" onclick="triggerConfetti(event)">🚩 Invia il tuo Record</button>
+    </div>
+</div>
+
+<div id="weeklyPage" class="page">
+    <div class="card" style="grid-column: span 3; text-align:center; align-items:center; justify-content:center; max-width:800px; margin:0 auto; width:100%;">
+        <span id="weeklyBadge" style="font-size:0.8rem; letter-spacing:2px; font-weight:800; color:var(--accent); background:rgba(255, 90, 31, 0.15); padding:6px 16px; border-radius:20px; border:1px solid var(--border); margin-bottom:4px;">⏰ EVENTO SETTIMANALE</span>
+        <h2 id="weeklyTitle" style="font-size:2.6rem; margin:0; font-weight:600; color:#fff; font-family:var(--font-display);">Weekly Demon</h2>
+        <p id="weeklySub" style="color:var(--text-muted); max-width:520px; margin: 8px 0; font-size:0.95rem;">Completa gli obiettivi del demone della settimana per testare la tua costanza!</p>
+        
+        <div class="timer-badge">
+            <span id="lblTimerPrefix" style="opacity:0.6; font-size:0.85rem;">⏳ SCADE TRA:</span>
+            <span id="weekly-timer-val" style="color:var(--accent); font-family:var(--font-mono);">Calcolo...</span>
+        </div>
+        
+        <div id="weeklyContent" style="width:100%; margin:15px 0; background:rgba(0,0,0,0.45); border:1px solid var(--border); border-radius:28px; padding:25px; display:flex; flex-direction:column; align-items:center; gap:20px; box-shadow:0 15px 35px rgba(0,0,0,0.5);"></div>
+    </div>
+</div>
+
+<div id="hallPage" class="page">
+    <div class="card" style="grid-column: span 3;">
+        <h2 id="hallTitle" style="margin:0; font-weight:900; color:var(--accent);">🏆 Hall of Fame</h2>
+        <p id="hallSub" style="color:var(--text-muted); margin-top:4px;">I giocatori leggendari classificati in base alle performance generali nella lista.</p>
+        <div id="hofContent" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px; margin-top:16px;"></div>
+    </div>
+</div>
+
+<div id="socialPage" class="page">
+    <div class="card" style="grid-column: span 3; max-width:900px; margin: 0 auto; width:100%;">
+        <h2 style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem; display:flex; justify-content:space-between; align-items:center;">
+            <span id="socialTitle">👥 Social Network & Cloud</span>
+        </h2>
+        <p id="socialSub" style="color:var(--text-muted); font-size:0.9rem;">Cerca i giocatori nel network Firebase, visualizza il loro stato e interagisci.</p>
+
+        <div class="tabs-row">
+            <button class="tab-btn active" id="tabBrowse" onclick="switchSocialTab('browse')">🌐 <span id="tabBrowseLbl">Esplora</span></button>
+            <button class="tab-btn" id="tabFriends" onclick="switchSocialTab('friends')">🤝 <span id="tabFriendsLbl">Amici</span><span class="tab-count" id="friendsCount">0</span></button>
+            <button class="tab-btn" id="tabRequests" onclick="switchSocialTab('requests')">📩 <span id="tabRequestsLbl">Richieste</span><span class="tab-count" id="requestsCount" style="display:none;">0</span></button>
+        </div>
+        
+        <input type="text" id="socialSearchInput" placeholder="Cerca utente per nome o stato..." oninput="if(window.renderSocialList) window.renderSocialList()">
+        
+        <div id="socialList" style="display:flex; flex-direction:column; gap:12px; margin-top: 8px; overflow-y:auto; max-height: 55vh; padding-right:10px;">
+            <p style="opacity:0.4; text-align:center;">Caricamento giocatori dal Cloud...</p>
+        </div>
+    </div>
+</div>
+
+<div id="settingsPage" class="page">
+    <div class="card" style="grid-column: span 3; max-width:850px; margin: 0 auto; width:100%;">
+        <h2 id="sTitle" style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem;">Impostazioni & OS</h2>
+        
+        <label id="tLang" style="font-weight:700; margin-top:10px;">Lingua di Sistema:</label>
+        <div class="lang-grid">
+            <div class="lang-card active" id="lang-it" onclick="setLang('it', this)">🇮🇹<br><strong>Italiano</strong></div>
+            <div class="lang-card" id="lang-en" onclick="setLang('en', this)">🇬🇧<br><strong>English</strong></div>
+            <div class="lang-card" id="lang-es" onclick="setLang('es', this)">🇪🇸<br><strong>Español</strong></div>
+            <div class="lang-card" id="lang-pt" onclick="setLang('pt', this)">🇧🇷 / 🇵🇹<br><strong>Português</strong></div>
+            <div class="lang-card" id="lang-fr" onclick="setLang('fr', this)">🇫🇷<br><strong>Français</strong></div>
+            <div class="lang-card" id="lang-de" onclick="setLang('de', this)">🇩🇪<br><strong>Deutsch</strong></div>
+        </div>
+
+        <label id="tColor" style="font-weight:700; margin-top:15px;">Colore Neon Principale:</label>
+        <div class="color-grid">
+            <div class="color-swatch active" id="color-magma" style="background:#ff5a1f; color:#ff5a1f;" onclick="setThemeColor('#ff5a1f', 'rgba(255, 90, 31, 0.45)', this)" title="Magma Orange"></div>
+            <div class="color-swatch" id="color-green" style="background:#39ff14; color:#39ff14;" onclick="setThemeColor('#39ff14', 'rgba(57, 255, 20, 0.45)', this)" title="Cyber Green"></div>
+            <div class="color-swatch" id="color-cyan" style="background:#00f0ff; color:#00f0ff;" onclick="setThemeColor('#00f0ff', 'rgba(0, 240, 255, 0.45)', this)" title="Neon Cyan"></div>
+            <div class="color-swatch" id="color-red" style="background:#ff003c; color:#ff003c;" onclick="setThemeColor('#ff003c', 'rgba(255, 0, 60, 0.45)', this)" title="Blood Red"></div>
+            <div class="color-swatch" id="color-gold" style="background:#ffb703; color:#ffb703;" onclick="setThemeColor('#ffb703', 'rgba(255, 183, 3, 0.45)', this)" title="Luxury Gold"></div>
+            <div class="color-swatch" id="color-purple" style="background:#9d4edd; color:#9d4edd;" onclick="setThemeColor('#9d4edd', 'rgba(157, 78, 221, 0.45)', this)" title="Void Purple"></div>
+        </div>
+
+        <label style="font-weight:700; margin-top:15px;" id="tPref">Preferenze Interfaccia:</label>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="setting-row">
+                <span id="lblTheme">Tema Chiaroscuro (Light Mode)</span>
+                <label class="switch"><input type="checkbox" id="themeCheck" onchange="toggleTheme()"><span class="switch-track"><span class="switch-thumb"></span></span></label>
+            </div>
+            <div class="setting-row">
+                <span id="lblSfx">Effetti Sonori UI (SFX)</span>
+                <label class="switch"><input type="checkbox" id="sfxCheck" onchange="toggleSetting('sfx', this.checked)" checked><span class="switch-track"><span class="switch-thumb"></span></span></label>
+            </div>
+            <div class="setting-row">
+                <span id="lblCompact">Modalità Compatta (Lista Densa)</span>
+                <label class="switch"><input type="checkbox" id="compactCheck" onchange="toggleCompact()"><span class="switch-track"><span class="switch-thumb"></span></span></label>
+            </div>
+            <div class="setting-row">
+                <span id="lblAuto">Autoplay Video YouTube</span>
+                <label class="switch"><input type="checkbox" id="autoCheck" onchange="toggleSetting('auto', this.checked)" checked><span class="switch-track"><span class="switch-thumb"></span></span></label>
+            </div>
+            <div class="setting-row">
+                <span id="lblDefVideo">Avvia Video di default in modalità Showcase</span>
+                <label class="switch"><input type="checkbox" id="defVideoCheck" onchange="updateDefaultVideo()"><span class="switch-track"><span class="switch-thumb"></span></span></label>
+            </div>
+            <div class="setting-row">
+                <span id="lblPerf">Modalità Prestazioni (Disabilita animazioni pesanti)</span>
+                <label class="switch"><input type="checkbox" id="perfCheck" onchange="togglePerf(this.checked)"><span class="switch-track"><span class="switch-thumb"></span></span></label>
+            </div>
+            <div class="setting-row">
+                <span id="lblReduceMotion">Riduci Animazioni (Accessibilità)</span>
+                <label class="switch"><input type="checkbox" id="reduceMotionCheck" onchange="toggleSetting('reduceMotion', this.checked)"><span class="switch-track"><span class="switch-thumb"></span></span></label>
+            </div>
+        </div>
+
+        <div style="margin-top:15px; padding-top:15px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <span id="lblReset" style="font-size:0.85rem; opacity:0.6;">Cancella preferiti e progressi salvati localmente</span>
+            <button class="btn-custom" style="background:#ff003c; box-shadow:none; padding:10px 20px;" onclick="resetAllData()" id="btnReset">🗑 Resetta Dati</button>
+        </div>
+    </div>
+</div>
+
+<div id="profilePage" class="page">
+    <div class="card" style="grid-column: span 3; max-width:850px; margin: 0 auto; width:100%; text-align: center;">
+        <h2 id="profileMainTitle" style="margin:0; color:var(--accent); font-weight:900; font-size:1.8rem;">Autenticazione Sistema</h2>
+        
+        <div id="authSection" style="display:flex; flex-direction:column; gap:15px; max-width:400px; margin: 20px auto;">
+            <p id="authSubText" style="color:var(--text-muted); font-size:0.9rem;">Accedi per salvare i tuoi progressi nel cloud e interagire sui social.</p>
+            <input type="email" id="emailInput" placeholder="Inserisci Email..." required autocomplete="email">
+            <input type="password" id="passwordInput" placeholder="Inserisci Password..." required autocomplete="current-password">
+            
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <button id="btnRegister" class="btn-secondary" style="flex:1;">Registrati</button>
+                <button id="btnLogin" class="btn-custom" style="flex:1;">Accedi</button>
+            </div>
+            <button id="btnForgotPw" class="btn-secondary" style="font-size:0.75rem; opacity:0.7; padding:8px;">Password dimenticata?</button>
+            <p id="authError" style="color:#ff003c; font-size:0.8rem; display:none;"></p>
+        </div>
+
+        <div id="userProfileSection" style="display:none; flex-direction:column; align-items:center; gap:20px; margin-top:20px;">
+            <div style="position: relative;">
+                <img id="pageAvatarPreview" src="Default_Profile.jpg" style="width:120px; height:120px; border-radius:50%; border:2px solid var(--accent); object-fit:cover;">
+                
+                <label for="avatarUpload" class="btn-custom" style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); padding: 5px 10px; font-size: 0.7rem; cursor: pointer; border-radius: 10px;" id="lblChangeImg">📷 Cambia</label>
+                <input type="file" id="avatarUpload" accept="image/png, image/jpeg, image/webp" style="display:none;">
+            </div>
+            
+            <span id="pageRankTitle">🟢 Novice Demon Slayer</span>
+
+            <div style="text-align:left; display:flex; flex-direction:column; gap:10px; width:100%; max-width:320px;">
+                <div>
+                    <label style="font-size:0.85rem; font-weight:700;" id="lblUsername">Nome Utente:</label>
+                    <input type="text" id="profileNameInput" placeholder="Il tuo nick..." maxlength="16">
+                </div>
+                <div>
+                    <label style="font-size:0.85rem; font-weight:700;" id="lblStatus">Il tuo Stato (visibile agli altri):</label>
+                    <input type="text" id="profileStatusInput" placeholder="Es. Sto grindando Tidal Wave..." maxlength="40">
+                </div>
+            </div>
+
+            <div style="display:flex; gap:12px; justify-content:center; margin-top:10px; flex-wrap:wrap;">
+                <button id="btnLogout" class="btn-secondary" style="padding:12px 20px;">🔴 Disconnetti</button>
+                <button id="btnSaveProfile" class="btn-custom" style="padding:12px 20px;">💾 Salva in Cloud</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div id="rouletteModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3 id="rTitle" style="margin:0; font-size:1.5rem; color:var(--accent); font-weight:900;">🎰 Cyber-Slot Roulette</h3>
+        <p id="rSub" style="margin:0; font-size:0.85rem; opacity:0.7;">Estrazione casuale estrema senza perdere il segno nella lista.</p>
+        
+        <div class="slot-window">
+            <div id="slotTrack" class="slot-track"></div>
+        </div>
+
+        <div style="display:flex; gap:12px; justify-content:center; margin-top:10px;">
+            <button class="btn-secondary" style="flex:1; padding:14px;" onclick="closeRoulette()" id="btnCancelR">Annulla</button>
+            <button class="btn-custom" style="flex:1; padding:14px;" id="btnSpin" onclick="startSpin()">🎲 Gira Rullo</button>
+            <button class="btn-custom" style="flex:1; padding:14px; display:none; background:#8a9a6b; color:#17130a;" id="btnOpenLvl" onclick="confirmRouletteLvl()">Apri Livello</button>
+        </div>
+    </div>
+</div>
+
+<div id="confirmModal" class="modal-overlay">
+    <div class="modal-box" style="width:400px;">
+        <h3 id="confirmModalTitle" style="margin:0; font-size:1.2rem; color:var(--accent); font-weight:900;">⚠️ Conferma</h3>
+        <p id="confirmModalText" style="margin:0; font-size:0.9rem; opacity:0.85;"></p>
+        <div class="confirm-actions">
+            <button class="btn-secondary" style="flex:1; padding:12px;" id="confirmModalCancel">Annulla</button>
+            <button class="btn-custom" style="flex:1; padding:12px; background:#ff003c;" id="confirmModalOk">Conferma</button>
+        </div>
+    </div>
+</div>
+<script>
+    const mockLevels = [
+        { rank: 1, name: "Tidal Wave", thumb: "https://i.ytimg.com/vi/4T3mZ9QG6W0/mqdefault.jpg", videoVerifier: "4T3mZ9QG6W0", videoShowcase: "P75R562qf9c", verified: true, creator: "OniLink", verifier: "Zoink", levelID: "95638150", song: "Shiawase VIP - Dion Timmer", desc: "L'Extreme Demon attuale Top 1. Difficoltà leggendaria guidata interamente dal wave.", skill: "🌊 Wave" },
+        { rank: 2, name: "Avernus", thumb: "https://i.ytimg.com/vi/8n8q4g882c0/mqdefault.jpg", videoVerifier: "8n8q4g882c0", videoShowcase: "h5M0w8X7634", verified: true, creator: "PockeWindfish", verifier: "Diamond", levelID: "89012488", song: "Thermodynamix - dj-Nate", desc: "Verificato di recente! Ostacolo infernale che requires precisione chirurgica nei salti e nel volo con la navicella.", skill: "🚀 Ship" },
+        { rank: 3, name: "Acheron", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: true, creator: "Ryamu", verifier: "Zoink", levelID: "83905761", song: "Thermaldynamix - dj-Nate", desc: "Ex Top 1 per lunghissimo tempo. Design oscuro, stretto e punitivo in ogni singola transizione.", skill: "⏱️ Timing" },
+        { rank: 4, name: "Silent Clubstep", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: false, creator: "TheRealSailent", verifier: "Paqoe", levelID: "79140416", song: "Clubstep - DJ-Nate", desc: "Il livello impossibile storico di GD, rigenerato con sezioni di memoria estreme e infine domato dopo anni di tentativi.", skill: "🧠 Memory" },
+        { rank: 5, name: "Zodiac", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: true, creator: "Biancoox & More", verifier: "Technical", levelID: "55866685", song: "Sphere - Creo", desc: "Un megacollab storico lunghissimo e snervante che testa ogni singola abilità di gioco.", skill: "⏱️ Timing" },
+        { rank: 6, name: "Slaughterhouse", thumb: "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg", videoVerifier: "dQw4w9WgXcQ", videoShowcase: "dQw4w9WgXcQ", verified: true, creator: "IcedCave", verifier: "SpaceUK", levelID: "74480749", song: "Lost - Crim3s", desc: "La perfetta definizione di wave estremo e rilascio rapidissimo in spazi microscopici.", skill: "🌊 Wave" }
+    ];
+
+    const mockPlayers = {
+        "Tidal Wave": [{ name: "Zoink", percent: 100 }, { name: "Trick", percent: 98 }, { name: "Riot", percent: 85 }],
+        "Avernus": [{ name: "Diamond", percent: 100 }, { name: "SpaceUK", percent: 92 }],
+        "Acheron": [{ name: "Zoink", percent: 100 }]
+    };
+
+    let DB = {
+        levels: [], players: {},
+        favs: JSON.parse(localStorage.getItem('gd_favs') || '[]'),
+        progress: JSON.parse(localStorage.getItem('gd_prog') || '{}'),
+        hideUnv: false, showFavsOnly: false, currentLvl: null, currentLang: localStorage.getItem('gd_lang') || 'it',
+        currentVideoMode: 'verifier', defaultVideoMode: localStorage.getItem('gd_defVid') || 'verifier',
+        socialTab: 'browse'
+    };
+
+    window.DB = DB;
+    let isSpinning = false;
+    let audioCtx = null;
+
+    /* ---------------- SECURITY: escape any string injected via innerHTML ---------------- */
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+    window.escapeHtml = escapeHtml;
+
+    /* ---------------- TOASTS (replaces alert()) ---------------- */
+    function showToast(msg, type = 'info', icon = null) {
+        const host = document.getElementById('toastHost');
+        if (!host) return;
+        const el = document.createElement('div');
+        el.className = `toast ${type}`;
+        const defaultIcon = type === 'success' ? '✅' : (type === 'error' ? '⚠️' : '💬');
+        el.innerHTML = `<span class="toast-icon">${icon || defaultIcon}</span><span>${msg}</span>`;
+        host.appendChild(el);
+        setTimeout(() => {
+            el.classList.add('leaving');
+            setTimeout(() => el.remove(), 320);
+        }, 3600);
+    }
+    window.showToast = showToast;
+
+    /* ---------------- CONFIRM MODAL (replaces confirm()) ---------------- */
+    function showConfirm(text, title) {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('confirmModal');
+            document.getElementById('confirmModalText').innerText = text;
+            if (title) document.getElementById('confirmModalTitle').innerText = title;
+            modal.classList.add('active');
+            const okBtn = document.getElementById('confirmModalOk');
+            const cancelBtn = document.getElementById('confirmModalCancel');
+            const cleanup = (result) => {
+                modal.classList.remove('active');
+                okBtn.removeEventListener('click', onOk);
+                cancelBtn.removeEventListener('click', onCancel);
+                resolve(result);
+            };
+            const onOk = () => cleanup(true);
+            const onCancel = () => cleanup(false);
+            okBtn.addEventListener('click', onOk);
+            cancelBtn.addEventListener('click', onCancel);
+        });
+    }
+
+    /* ---------------- MOBILE NAV ---------------- */
+    function openMobileNav() {
+        document.getElementById('sidebarNav').classList.add('open');
+        document.getElementById('sidebarScrim').classList.add('show');
+    }
+    function closeMobileNav() {
+        document.getElementById('sidebarNav').classList.remove('open');
+        document.getElementById('sidebarScrim').classList.remove('show');
+    }
+    window.openMobileNav = openMobileNav;
+    window.closeMobileNav = closeMobileNav;
+
+    function getAudioCtx() {
+        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+        return audioCtx;
+    }
+
+    function playSfx(type) {
+        const sfxCheck = document.getElementById('sfxCheck');
+        if(!sfxCheck || !sfxCheck.checked) return;
+        try {
+            const ctx = getAudioCtx();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            
+            if(type === 'click') {
+                osc.frequency.setValueAtTime(350, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(700, ctx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.04);
+                osc.start(); osc.stop(ctx.currentTime + 0.04);
+            } else if(type === 'tick') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(900, ctx.currentTime);
+                gain.gain.setValueAtTime(0.04, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.015);
+                osc.start(); osc.stop(ctx.currentTime + 0.015);
+            } else if(type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
+                osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16);
+                osc.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.24);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.45);
+                osc.start(); osc.stop(ctx.currentTime + 0.45);
+            } else if(type === 'notify') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(700, ctx.currentTime);
+                osc.frequency.setValueAtTime(950, ctx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+                osc.start(); osc.stop(ctx.currentTime + 0.25);
+            }
+        } catch(e){}
+    }
+
+    window.playSfx = playSfx;
+
+    window.updateUserRankUI = function() {
+        let beatenCount = 0;
+        let totalProg = 0;
+        Object.values(DB.progress).forEach(p => {
+            totalProg += p;
+            if (p === 100) beatenCount++;
+        });
+        
+        let rankStr = "🟢 Novice Demon Slayer";
+        let rankColor = "#8a9a6b";
+        
+        if (beatenCount >= 5) { rankStr = "👑 GD Legend"; rankColor = "#c9a24b"; }
+        else if (beatenCount >= 3) { rankStr = "🟣 Extreme Conqueror"; rankColor = "#c8442c"; }
+        else if (beatenCount >= 1) { rankStr = "🔵 Advanced Slayer"; rankColor = "#6b8fa3"; }
+        else if (totalProg > 0) { rankStr = "🟡 Hard Worker"; rankColor = "#c9a24b"; }
+        
+        const rankEl = document.getElementById('pageRankTitle');
+        if (rankEl) {
+            rankEl.innerText = rankStr;
+            rankEl.style.color = rankColor;
+            rankEl.style.borderColor = rankColor;
+            rankEl.style.background = rankColor + "1a";
+        }
+        return rankStr;
+    };
+    const dict = {
+        it: { 
+            search: "Cerca demone per nome...", unv: "✔ Verificati", fav: "♥ Preferiti", hSel: "Seleziona un Livello", hSub: "Classifica Record", btnSub: "🚩 Invia il tuo Record", searchP: "Cerca player nel livello...",
+            weekly: "⏰ Weekly Demon", weeklyBadge: "⏰ EVENTO SETTIMANALE", weeklySub: "Completa gli obiettivi del demone della settimana per testare la tua costanza!", timerPrefix: "⏳ SCADE TRA:", 
+            hall: "🏆 Hall of Fame", hallSub: "I giocatori leggendari classificati in base alle performance generali nella lista.", 
+            sTitle: "Impostazioni & OS", tLang: "Lingua di Sistema:", tColor: "Colore Neon Principale:", tPref: "Preferenze Interfaccia:", 
+            lblTheme: "Tema Chiaroscuro (Light Mode)", lblSfx: "Effetti Sonori UI (SFX)", lblCompact: "Modalità Compatta (Lista Densa)", lblAuto: "Autoplay Video YouTube", lblDefVideo: "Avvia Video di default in modalità Showcase", lblPerf: "Modalità Prestazioni (Disabilita animazioni pesanti)", lblReset: "Cancella preferiti e progressi salvati localmente", btnReset: "🗑 Resetta Dati", 
+            lblMyProg: "Progresso Personale (Pratica/Normal):", btnChal: "⚡ Sfida di Pratica Casuale", stLvl: "DEMONI", stVer: "VERIFICATI", stFav: "PREFERITI", 
+            rTitle: "🎰 Cyber-Slot Roulette", rSub: "Estrazione casuale estrema senza perdere il segno nella lista.", rSpin: "🎲 Gira Rullo", rRetry: "🎲 Riprova", rCancel: "Annulla", rOpen: "Apri Livello",
+            stUnplayed: "⚪ Non Giocato", stPractice: "🟡 In Pratica", stBeaten: "🟢 Completato", skillKey: "ABILITÀ CHIAVE:", diffTier: "Tier Difficoltà:", share: "📤 Condividi", copied: "✔ Copiato!",
+            lblCreat: "Creatore:", lblVerif: "Verificatore:", lblSong: "Canzone:", noVid: "Nessun video disponibile.", noRec: "Nessun record registrato per questa ricerca.", points: "Punti Totali", cleared: "Completati",
+            qTitle: "🏆 OBIETTIVI WEEKLY:", q1: "Avvia la scalata: Raggiungi almeno il 15%", q2: "Veterano della Pratica: Raggiungi almeno il 50%", q3: "Leggenda Assoluta: Completa il livello al 100%", wProg: "Progresso Registrato:", wEnter: "⚡ ENTRA IN PRATICA ORA",
+            tierGod: "🔴 God-Tier (Estremo Assoluto)", tierHigh: "🟠 High Extreme (Molto Duro)", tierMid: "🟡 Mid Extreme (Intermedio)", tierLow: "🟢 Entry Extreme (Accessibile)",
+            btnVerif: "🎥 Verificatore", btnShow: "🎬 Showcase", navList: "Lista", navWeekly: "Weekly Demon", navHall: "Hall of Fame", navSettings: "Impostazioni", navProfile: "Profilo Utente",
+            alertReset: "Dati resettati con successo!", confirmReset: "Sei sicuro di voler resettare tutti i progressi e preferiti locali?", copyIDBtn: "📋 Copia ID",
+            authMain: "Autenticazione Sistema", authSub: "Accedi per salvare i tuoi progressi nel cloud e interagire sui social.", emailHolder: "Inserisci Email...", passHolder: "Inserisci Password...", btnReg: "Registrati", btnLog: "Accedi",
+            socialTitle: "👥 Social Network & Cloud", socialSub: "Cerca i giocatori nel network, visualizza il loro stato e interagisci.", socialHolder: "Cerca utente per nome o stato...", btnAdd: "➕ Aggiungi", btnLogout: "🔴 Disconnetti", btnSaveP: "💾 Salva in Cloud", lblUser: "Nome Utente:", lblStat: "Il tuo Stato (visibile agli altri):", lblChange: "📷 Cambia",
+            tabBrowse: "Esplora", tabFriends: "Amici", tabRequests: "Richieste", btnAccept: "✔ Accetta", btnDecline: "✖ Rifiuta", btnRemove: "🗑 Rimuovi", btnPending: "⏳ Inviata", btnMessage: "💬 Messaggio", noFriends: "Nessun amico ancora. Esplora il network e invia richieste!", noRequests: "Nessuna richiesta in sospeso.", noUsers: "Nessun utente trovato nel network.", reqSent: "Richiesta di amicizia inviata!", reqAccepted: "Richiesta accettata! Ora siete amici.", reqDeclined: "Richiesta rifiutata.", friendRemoved: "Amico rimosso.", reqAlreadySent: "Richiesta già inviata a questo utente.", reqFromSelf: "Non puoi aggiungere te stesso.", newReqNotif: "Nuova richiesta di amicizia ricevuta!", loadingUsers: "Caricamento giocatori dal Cloud...", authRequired: "Accedi al tuo account per usare le funzioni social.", lblReduceMotion: "Riduci Animazioni (Accessibilità)", forgotPw: "Password dimenticata?", resetPwSent: "Email di reset inviata! Controlla la posta.", weakPw: "Password troppo debole (minimo 6 caratteri).", invalidEmail: "Formato email non valido.", tooManyReq: "Troppi tentativi, riprova tra poco.", networkErr: "Errore di rete. Controlla la connessione.", splashLoading: "CARICAMENTO SISTEMA..."
+        },
+        en: { 
+            search: "Search demon by name...", unv: "✔ Verified Only", fav: "♥ Favorites", hSel: "Select a Level", hSub: "Record Leaderboard", btnSub: "🚩 Submit Your Record", searchP: "Search player in level...",
+            weekly: "⏰ Weekly Demon", weeklyBadge: "⏰ WEEKLY EVENT", weeklySub: "Complete the weekly targets to prove your grinding consistency!", timerPrefix: "⏳ EXPIRES IN:", 
+            hall: "🏆 Hall of Fame", hallSub: "Legendary players ranked by overall leaderboards metrics.", 
+            sTitle: "Settings & OS", tLang: "System Language:", tColor: "Primary Neon Accent:", tPref: "Interface Preferences:", 
+            lblTheme: "Light Mode Theme", lblSfx: "UI Sound Effects (SFX)", lblCompact: "Compact Mode (Dense List)", lblAuto: "YouTube Video Autoplay", lblDefVideo: "Start videos in Showcase mode by default", lblPerf: "Performance Mode (Disable heavy animations)", lblReset: "Clear favorites and practice progress saved locally", btnReset: "🗑 Reset Data", 
+            lblMyProg: "Personal Progress (Practice/Normal):", btnChal: "⚡ Random Practice Challenge", stLvl: "DEMONS", stVer: "VERIFIED", stFav: "FAVORITES", 
+            rTitle: "🎰 Cyber-Slot Roulette", rSub: "Extreme random selection without losing your place in the list.", rSpin: "🎲 Spin Reel", rRetry: "🎲 Try Again", rCancel: "Cancel", rOpen: "Open Level",
+            stUnplayed: "⚪ Unplayed", stPractice: "🟡 In Practice", stBeaten: "🟢 Completed", skillKey: "KEY SKILL:", diffTier: "Difficulty Tier:", share: "📤 Share", copied: "✔ Copied!",
+            lblCreat: "Creator:", lblVerif: "Verifier:", lblSong: "Song:", noVid: "No video available.", noRec: "No records found for this search.", points: "Total Points", cleared: "Completed",
+            qTitle: "🏆 WEEKLY TARGETS:", q1: "Start the climb: Reach at least 15%", q2: "Practice Veteran: Reach at least 50%", q3: "Absolute Legend: Complete the level at 100%", wProg: "Recorded Progress:", wEnter: "⚡ ENTER PRACTICE NOW",
+            tierGod: "🔴 God-Tier (Absolute Extreme)", tierHigh: "🟠 High Extreme (Very Hard)", tierMid: "🟡 Mid Extreme (Intermediate)", tierLow: "🟢 Entry Extreme (Accessible)",
+            btnVerif: "🎥 Verifier", btnShow: "🎬 Showcase", navList: "Demon List", navWeekly: "Weekly Demon", navHall: "Hall of Fame", navSettings: "Settings", navProfile: "User Profile",
+            alertReset: "All local data reset successfully!", confirmReset: "Are you sure you want to reset all your local progress and favorites?", copyIDBtn: "📋 Copy ID",
+            authMain: "System Authentication", authSub: "Sign in to save your progress in the cloud and interact on socials.", emailHolder: "Enter Email...", passHolder: "Enter Password...", btnReg: "Register", btnLog: "Sign In",
+            socialTitle: "👥 Social Network & Cloud", socialSub: "Search players across the network, view their status and interact.", socialHolder: "Search user by name or status...", btnAdd: "➕ Add", btnLogout: "🔴 Sign Out", btnSaveP: "💾 Save to Cloud", lblUser: "Username:", lblStat: "Your Status (visible to others):", lblChange: "📷 Change",
+            tabBrowse: "Browse", tabFriends: "Friends", tabRequests: "Requests", btnAccept: "✔ Accept", btnDecline: "✖ Decline", btnRemove: "🗑 Remove", btnPending: "⏳ Sent", btnMessage: "💬 Message", noFriends: "No friends yet. Browse the network and send requests!", noRequests: "No pending requests.", noUsers: "No users found in the network.", reqSent: "Friend request sent!", reqAccepted: "Request accepted! You are now friends.", reqDeclined: "Request declined.", friendRemoved: "Friend removed.", reqAlreadySent: "Request already sent to this user.", reqFromSelf: "You can't add yourself.", newReqNotif: "New friend request received!", loadingUsers: "Loading players from the Cloud...", authRequired: "Sign in to your account to use social features.", lblReduceMotion: "Reduce Motion (Accessibility)", forgotPw: "Forgot password?", resetPwSent: "Reset email sent! Check your inbox.", weakPw: "Password too weak (minimum 6 characters).", invalidEmail: "Invalid email format.", tooManyReq: "Too many attempts, try again soon.", networkErr: "Network error. Check your connection.", splashLoading: "BOOTING SYSTEM..."
+        },
+        es: { 
+            search: "Buscar demonio por nombre...", unv: "✔ Verificados", fav: "♥ Favoritos", hSel: "Selecciona un Nivel", hSub: "Tabla de Récords", btnSub: "🚩 Enviar tu Récord", searchP: "Buscar jugador en el nivel...",
+            weekly: "⏰ Demonio Semanal", weeklyBadge: "⏰ EVENTO SEMANAL", weeklySub: "¡Completa los objetivos del demonio de la semana para probar tu constancia!", timerPrefix: "⏳ EXPIRA EN:", 
+            hall: "🏆 Salón de la Fama", hallSub: "Jugadores legendarios clasificados según las métricas generales de la lista.", 
+            sTitle: "Configuración y OS", tLang: "Idioma del Sistema:", tColor: "Color Neón Principal:", tPref: "Preferencias de Interfaz:", 
+            lblTheme: "Tema Claro (Light Mode)", lblSfx: "Efectos de Sonido UI (SFX)", lblCompact: "Modo Compacto (Lista Densa)", lblAuto: "Autoplay de Video en YouTube", lblDefVideo: "Iniciar videos en modo Showcase por defecto", lblPerf: "Modo Rendimiento (Desactivar animaciones pesadas)", lblReset: "Borrar favoritos y progreso guardado localmente", btnReset: "🗑 Restablecer Datos", 
+            lblMyProg: "Progreso Personal (Práctica/Normal):", btnChal: "⚡ Desafío de Práctica Aleatorio", stLvl: "DEMONIOS", stVer: "VERIFICADOS", stFav: "FAVORITOS", 
+            rTitle: "🎰 Ruleta Cyber-Slot", rSub: "Selección aleatoria extrema sin perder el progreso de búsqueda en la lista.", rSpin: "🎲 Girar Ruleta", rRetry: "🎲 Intentar de Nuevo", rCancel: "Cancelar", rOpen: "Abrir Nivel",
+            stUnplayed: "⚪ No Jugado", stPractice: "🟡 En Práctica", stBeaten: "🟢 Completado", skillKey: "HABILIDAD CLAVE:", diffTier: "Nivel de Dificultad:", share: "📤 Compartir", copied: "✔ ¡Copiado!",
+            lblCreat: "Creador:", lblVerif: "Verificador:", lblSong: "Canción:", noVid: "No hay video disponible.", noRec: "No se encontraron récords para esta búsqueda.", points: "Puntos Totales", cleared: "Completados",
+            qTitle: "🏆 OBJETIVOS SEMANALES:", q1: "Inicia la escalada: Alcanza al menos un 15%", q2: "Veterano de Práctica: Alcanza al menos un 50%", q3: "Leyenda Absoluta: Completa el nivel al 100%", wProg: "Progreso Registrado:", wEnter: "⚡ ENTRAR EN PRÁCTICA AHORA",
+            tierGod: "🔴 God-Tier (Extremo Absoluto)", tierHigh: "🟠 High Extreme (Muy Difícil)", tierMid: "🟡 Mid Extreme (Intermedio)", tierLow: "🟢 Entry Extreme (Accesible)",
+            btnVerif: "🎥 Verificador", btnShow: "🎬 Showcase", navList: "Lista de Demonios", navWeekly: "Demonio Semanal", navHall: "Salón de la Fama", navSettings: "Configuración", navProfile: "Perfil de Usuario",
+            alertReset: "¡Todos los datos locales fueron restablecidos!", confirmReset: "¿Estás seguro de que deseas restablecer todo tu progreso y favoritos?", copyIDBtn: "📋 Copiar ID",
+            authMain: "Autenticación del Sistema", authSub: "Inicia sesión para guardar tu progreso en la nube e interactuar en redes.", emailHolder: "Introduce Correo...", passHolder: "Introduce Contraseña...", btnReg: "Registrarse", btnLog: "Acceder",
+            socialTitle: "👥 Red Social y Nube", socialSub: "Busca jugadores en la red, ve su estado e interactúa con ellos.", socialHolder: "Buscar usuario por nombre o estado...", btnAdd: "➕ Añadir", btnLogout: "🔴 Cerrar Sesión", btnSaveP: "💾 Guardar en Nube", lblUser: "Nombre de Usuario:", lblStat: "Tu Estado (visible para otros):", lblChange: "📷 Cambiar",
+            tabBrowse: "Explorar", tabFriends: "Amigos", tabRequests: "Solicitudes", btnAccept: "✔ Aceptar", btnDecline: "✖ Rechazar", btnRemove: "🗑 Eliminar", btnPending: "⏳ Enviada", btnMessage: "💬 Mensaje", noFriends: "Aún no tienes amigos. ¡Explora la red y envía solicitudes!", noRequests: "No hay solicitudes pendientes.", noUsers: "No se encontraron usuarios en la red.", reqSent: "¡Solicitud de amistad enviada!", reqAccepted: "¡Solicitud aceptada! Ahora son amigos.", reqDeclined: "Solicitud rechazada.", friendRemoved: "Amigo eliminado.", reqAlreadySent: "Solicitud ya enviada a este usuario.", reqFromSelf: "No puedes agregarte a ti mismo.", newReqNotif: "¡Nueva solicitud de amistad recibida!", loadingUsers: "Cargando jugadores desde la Nube...", authRequired: "Inicia sesión para usar las funciones sociales.", lblReduceMotion: "Reducir Movimiento (Accesibilidad)", forgotPw: "¿Olvidaste tu contraseña?", resetPwSent: "¡Correo de restablecimiento enviado! Revisa tu bandeja.", weakPw: "Contraseña demasiado débil (mínimo 6 caracteres).", invalidEmail: "Formato de correo inválido.", tooManyReq: "Demasiados intentos, inténtalo más tarde.", networkErr: "Error de red. Revisa tu conexión.", splashLoading: "CARGANDO SISTEMA..."
+        },
+        pt: { 
+            search: "Buscar demônio por nome...", unv: "✔ Verificados", fav: "♥ Favoritos", hSel: "Selecione um Nível", hSub: "Tabela de Recordes", btnSub: "🚩 Enviar seu Recorde", searchP: "Buscar jogador no nível...",
+            weekly: "⏰ Demônio Semanal", weeklyBadge: "⏰ EVENTO SEMANAL", weeklySub: "Complete os objetivos semanais para provar sua consistência no grinding!", timerPrefix: "⏳ EXPIRA EM:", 
+            hall: "🏆 Hall da Fama", hallSub: "Jogadores lendários ranqueados pelas métricas gerais da lista.", 
+            sTitle: "Configurações e OS", tLang: "Idioma do Sistema:", tColor: "Cor Neon Principal:", tPref: "Preferências de Interface:", 
+            lblTheme: "Tema Claro (Light Mode)", lblSfx: "Efeitos Sonoros UI (SFX)", lblCompact: "Modo Compacto (Lista Densa)", lblAuto: "Autoplay de Vídeo do YouTube", lblDefVideo: "Iniciar vídeos no modo Showcase por padrão", lblPerf: "Modo Desempenho (Desativar animações pesadas)", lblReset: "Limpar favoritos e progresso salvos localmente", btnReset: "🗑 Resetar Dados", 
+            lblMyProg: "Progresso Pessoal (Prática/Normal):", btnChal: "⚡ Desafio de Prática Aleatório", stLvl: "DEMÔNIOS", stVer: "VERIFICADOS", stFav: "FAVORITOS", 
+            rTitle: "🎰 Roleta Cyber-Slot", rSub: "Seleção aleatória extrema sem perder seu lugar na lista.", rSpin: "🎲 Girar Roleta", rRetry: "🎲 Tentar Novamente", rCancel: "Cancelar", rOpen: "Abrir Nível",
+            stUnplayed: "⚪ Não Jogado", stPractice: "🟡 Em Prática", stBeaten: "🟢 Concluído", skillKey: "HABILIDADE CHAVE:", diffTier: "Nível de Dificuldade:", share: "📤 Compartilhar", copied: "✔ Copiado!",
+            lblCreat: "Criador:", lblVerif: "Verificador:", lblSong: "Música:", noVid: "Nenhum vídeo disponível.", noRec: "Nenhum recorde encontrado para esta busca.", points: "Pontos Totais", cleared: "Concluídos",
+            qTitle: "🏆 OBJETIVOS SEMANAIS:", q1: "Inicie a escalada: Alcance pelo menos 15%", q2: "Veterano de Prática: Alcance pelo menos 50%", q3: "Lenda Absoluta: Complete o nível 100%", wProg: "Progresso Registrado:", wEnter: "⚡ ENTRAR EM PRÁTICA AGORA",
+            tierGod: "🔴 God-Tier (Extremo Absoluto)", tierHigh: "🟠 High Extreme (Muito Difícil)", tierMid: "🟡 Mid Extreme (Intermediário)", tierLow: "🟢 Entry Extreme (Acessível)",
+            btnVerif: "🎥 Verificador", btnShow: "🎬 Showcase", navList: "Lista de Demônios", navWeekly: "Demônio Semanal", navHall: "Hall da Fama", navSettings: "Configurações", navProfile: "Perfil de Usuário",
+            alertReset: "Todos os dados locais foram resetados com sucesso!", confirmReset: "Tem certeza de que deseja resetar todo o seu progresso e favoritos?", copyIDBtn: "📋 Copiar ID",
+            authMain: "Autenticação do Sistema", authSub: "Faça login para salvar seu progresso na nuvem e interagir no social.", emailHolder: "Digite o E-mail...", passHolder: "Digite a Senha...", btnReg: "Registrar", btnLog: "Entrar",
+            socialTitle: "👥 Rede Social e Nuvem", socialSub: "Busque jogadores na rede, veja seus status e interaja.", socialHolder: "Buscar usuário por nome ou status...", btnAdd: "➕ Adicionar", btnLogout: "🔴 Sair", btnSaveP: "💾 Salvar na Nuvem", lblUser: "Nome de Usuário:", lblStat: "Seu Status (visível para outros):", lblChange: "📷 Alterar",
+            tabBrowse: "Explorar", tabFriends: "Amigos", tabRequests: "Solicitações", btnAccept: "✔ Aceitar", btnDecline: "✖ Recusar", btnRemove: "🗑 Remover", btnPending: "⏳ Enviada", btnMessage: "💬 Mensagem", noFriends: "Ainda sem amigos. Explore a rede e envie solicitações!", noRequests: "Nenhuma solicitação pendente.", noUsers: "Nenhum usuário encontrado na rede.", reqSent: "Solicitação de amizade enviada!", reqAccepted: "Solicitação aceita! Agora vocês são amigos.", reqDeclined: "Solicitação recusada.", friendRemoved: "Amigo removido.", reqAlreadySent: "Solicitação já enviada a este usuário.", reqFromSelf: "Você não pode se adicionar.", newReqNotif: "Nova solicitação de amizade recebida!", loadingUsers: "Carregando jogadores da Nuvem...", authRequired: "Faça login para usar os recursos sociais.", lblReduceMotion: "Reduzir Movimento (Acessibilidade)", forgotPw: "Esqueceu a senha?", resetPwSent: "E-mail de redefinição enviado! Verifique sua caixa de entrada.", weakPw: "Senha muito fraca (mínimo 6 caracteres).", invalidEmail: "Formato de e-mail inválido.", tooManyReq: "Muitas tentativas, tente novamente em breve.", networkErr: "Erro de rede. Verifique sua conexão.", splashLoading: "CARREGANDO SISTEMA..."
+        },
+        fr: { 
+            search: "Rechercher un démon par nom...", unv: "✔ Vérifiés", fav: "♥ Favoris", hSel: "Sélectionnez un Niveau", hSub: "Classement des Records", btnSub: "🚩 Soumettre votre Record", searchP: "Rechercher un joueur...",
+            weekly: "⏰ Démon de la Semaine", weeklyBadge: "⏰ ÉVÉNEMENT HEBDOMADAIRE", weeklySub: "Complétez les objectifs hebdomadaires pour prouver votre régularité !", timerPrefix: "⏳ EXPIRE DANS :", 
+            hall: "🏆 Panthéon", hallSub: "Joueurs légendaires classés selon leurs performances globales sur la liste.", 
+            sTitle: "Paramètres & OS", tLang: "Langue du Système :", tColor: "Couleur Néon Principale :", tPref: "Préférences d'Interface :", 
+            lblTheme: "Thème Clair (Light Mode)", lblSfx: "Effets Sonores UI (SFX)", lblCompact: "Mode Compact (Liste Dense)", lblAuto: "Lecture automatique YouTube", lblDefVideo: "Lancer les vidéos en mode Showcase par défaut", lblPerf: "Mode Performance (Désactiver les animations lourdes)", lblReset: "Effacer les favoris et la progression enregistrés localement", btnReset: "🗑 Réinitialiser les Données", 
+            lblMyProg: "Progression Personnelle (Pratique/Normal) :", btnChal: "⚡ Défi de Pratique Aléatoire", stLvl: "DÉMONS", stVer: "VÉRIFIÉS", stFav: "FAVORIS", 
+            rTitle: "🎰 Roulette Cyber-Slot", rSub: "Sélection aléatoire extrême sans perdre votre place dans la liste.", rSpin: "🎲 Lancer la Roue", rRetry: "🎲 Réessayer", rCancel: "Annuler", rOpen: "Ouvrir le Niveau",
+            stUnplayed: "⚪ Non Joué", stPractice: "🟡 En Pratique", stBeaten: "🟢 Terminé", skillKey: "COMPÉTENCE CLÉ :", diffTier: "Niveau de Difficulté :", share: "📤 Partager", copied: "✔ Copié !",
+            lblCreat: "Créateur :", lblVerif: "Vérificateur :", lblSong: "Musique :", noVid: "Aucune vidéo disponible.", noRec: "Aucun record trouvé pour cette recherche.", points: "Points Totaux", cleared: "Terminés",
+            qTitle: "🏆 OBJECTIFS HEBDOMADAIRES :", q1: "Débutez l'ascension : Atteignez au moins 15%", q2: "Vétéran de Pratique : Atteignez au moins 50%", q3: "Légende Absolue : Terminez le niveau à 100%", wProg: "Progression Enregistrée :", wEnter: "⚡ ENTRER EN PRATIQUE MAINTENANT",
+            tierGod: "🔴 God-Tier (Extrême Absolu)", tierHigh: "🟠 High Extreme (Très Difficile)", tierMid: "🟡 Mid Extreme (Intermédiaire)", tierLow: "🟢 Entry Extreme (Accessible)",
+            btnVerif: "🎥 Vérificateur", btnShow: "🎬 Showcase", navList: "Liste des Démons", navWeekly: "Démon de la Semaine", navHall: "Panthéon", navSettings: "Paramètres", navProfile: "Profil Utilisateur",
+            alertReset: "Toutes les données locales ont été réinitialisées !", confirmReset: "Êtes-vous sûr de vouloir réinitialiser toute votre progression et vos favoris ?", copyIDBtn: "📋 Copier l'ID",
+            authMain: "Authentification Système", authSub: "Connectez-vous pour sauvegarder votre progression sur le cloud.", emailHolder: "Entrez l'Email...", passHolder: "Entrez le Mot de passe...", btnReg: "S'inscrire", btnLog: "Se Connecter",
+            socialTitle: "👥 Réseau Social & Cloud", socialSub: "Recherchez des joueurs sur le réseau, consultez leur statut et interagissez.", socialHolder: "Rechercher un utilisateur par nom ou statut...", btnAdd: "➕ Ajouter", btnLogout: "🔴 Déconnexion", btnSaveP: "💾 Sauvegarder", lblUser: "Nom d'Utilisateur :", lblStat: "Votre Statut (visible par les autres) :", lblChange: "📷 Modifier",
+            tabBrowse: "Explorer", tabFriends: "Amis", tabRequests: "Demandes", btnAccept: "✔ Accepter", btnDecline: "✖ Refuser", btnRemove: "🗑 Retirer", btnPending: "⏳ Envoyée", btnMessage: "💬 Message", noFriends: "Pas encore d'amis. Explorez le réseau et envoyez des demandes !", noRequests: "Aucune demande en attente.", noUsers: "Aucun utilisateur trouvé dans le réseau.", reqSent: "Demande d'ami envoyée !", reqAccepted: "Demande acceptée ! Vous êtes maintenant amis.", reqDeclined: "Demande refusée.", friendRemoved: "Ami retiré.", reqAlreadySent: "Demande déjà envoyée à cet utilisateur.", reqFromSelf: "Vous ne pouvez pas vous ajouter vous-même.", newReqNotif: "Nouvelle demande d'ami reçue !", loadingUsers: "Chargement des joueurs depuis le Cloud...", authRequired: "Connectez-vous pour utiliser les fonctions sociales.", lblReduceMotion: "Réduire les Animations (Accessibilité)", forgotPw: "Mot de passe oublié ?", resetPwSent: "E-mail de réinitialisation envoyé ! Vérifiez votre boîte.", weakPw: "Mot de passe trop faible (minimum 6 caractères).", invalidEmail: "Format d'e-mail invalide.", tooManyReq: "Trop de tentatives, réessayez bientôt.", networkErr: "Erreur réseau. Vérifiez votre connexion.", splashLoading: "DÉMARRAGE DU SYSTÈME..."
+        },
+        de: { 
+            search: "Dämon nach Namen suchen...", unv: "✔ Nur Verifiziert", fav: "♥ Favoriten", hSel: "Wähle ein Level", hSub: "Rekord-Bestenliste", btnSub: "🚩 Rekord Einreichen", searchP: "Spieler im Level suchen...",
+            weekly: "⏰ Weekly Demon", weeklyBadge: "⏰ WÖCHENTLICHES EVENT", weeklySub: "Erfülle die wöchentlichen Ziele, um deine Beständigkeit zu beweisen!", timerPrefix: "⏳ LÄUFT AB IN:",
+            hall: "🏆 Ruhmeshalle", hallSub: "Legendäre Spieler, eingestuft nach Gesamtleistung in der Liste.",
+            sTitle: "Einstellungen & OS", tLang: "Systemsprache:", tColor: "Primäre Neonfarbe:", tPref: "Oberflächen-Einstellungen:",
+            lblTheme: "Heller Modus (Light Mode)", lblSfx: "UI-Soundeffekte (SFX)", lblCompact: "Kompaktmodus (dichte Liste)", lblAuto: "YouTube-Video Autoplay", lblDefVideo: "Videos standardmäßig im Showcase-Modus starten", lblPerf: "Leistungsmodus (schwere Animationen deaktivieren)", lblReset: "Lokal gespeicherte Favoriten und Fortschritte löschen", btnReset: "🗑 Daten Zurücksetzen",
+            lblMyProg: "Persönlicher Fortschritt (Practice/Normal):", btnChal: "⚡ Zufällige Übungs-Challenge", stLvl: "DÄMONEN", stVer: "VERIFIZIERT", stFav: "FAVORITEN",
+            rTitle: "🎰 Cyber-Slot Roulette", rSub: "Extreme Zufallsauswahl, ohne deine Position in der Liste zu verlieren.", rSpin: "🎲 Rolle Drehen", rRetry: "🎲 Erneut Versuchen", rCancel: "Abbrechen", rOpen: "Level Öffnen",
+            stUnplayed: "⚪ Nicht Gespielt", stPractice: "🟡 In Übung", stBeaten: "🟢 Abgeschlossen", skillKey: "KERNFÄHIGKEIT:", diffTier: "Schwierigkeitsstufe:", share: "📤 Teilen", copied: "✔ Kopiert!",
+            lblCreat: "Ersteller:", lblVerif: "Verifizierer:", lblSong: "Lied:", noVid: "Kein Video verfügbar.", noRec: "Keine Rekorde für diese Suche gefunden.", points: "Gesamtpunkte", cleared: "Abgeschlossen",
+            qTitle: "🏆 WÖCHENTLICHE ZIELE:", q1: "Starte den Aufstieg: Erreiche mindestens 15%", q2: "Übungsveteran: Erreiche mindestens 50%", q3: "Absolute Legende: Schließe das Level zu 100% ab", wProg: "Gespeicherter Fortschritt:", wEnter: "⚡ JETZT ÜBEN",
+            tierGod: "🔴 God-Tier (Absolutes Extrem)", tierHigh: "🟠 High Extreme (Sehr Schwer)", tierMid: "🟡 Mid Extreme (Mittel)", tierLow: "🟢 Entry Extreme (Zugänglich)",
+            btnVerif: "🎥 Verifizierer", btnShow: "🎬 Showcase", navList: "Dämonenliste", navWeekly: "Weekly Demon", navHall: "Ruhmeshalle", navSettings: "Einstellungen", navProfile: "Benutzerprofil",
+            alertReset: "Alle lokalen Daten wurden erfolgreich zurückgesetzt!", confirmReset: "Bist du sicher, dass du deinen gesamten Fortschritt und deine Favoriten zurücksetzen möchtest?", copyIDBtn: "📋 ID Kopieren",
+            authMain: "Systemauthentifizierung", authSub: "Melde dich an, um deinen Fortschritt in der Cloud zu speichern und sozial zu interagieren.", emailHolder: "E-Mail eingeben...", passHolder: "Passwort eingeben...", btnReg: "Registrieren", btnLog: "Anmelden",
+            socialTitle: "👥 Soziales Netzwerk & Cloud", socialSub: "Suche Spieler im Netzwerk, sieh ihren Status und interagiere mit ihnen.", socialHolder: "Nutzer nach Name oder Status suchen...", btnAdd: "➕ Hinzufügen", btnLogout: "🔴 Abmelden", btnSaveP: "💾 In Cloud Speichern", lblUser: "Benutzername:", lblStat: "Dein Status (für andere sichtbar):", lblChange: "📷 Ändern",
+            tabBrowse: "Entdecken", tabFriends: "Freunde", tabRequests: "Anfragen", btnAccept: "✔ Annehmen", btnDecline: "✖ Ablehnen", btnRemove: "🗑 Entfernen", btnPending: "⏳ Gesendet", btnMessage: "💬 Nachricht", noFriends: "Noch keine Freunde. Entdecke das Netzwerk und sende Anfragen!", noRequests: "Keine ausstehenden Anfragen.", noUsers: "Keine Nutzer im Netzwerk gefunden.", reqSent: "Freundschaftsanfrage gesendet!", reqAccepted: "Anfrage angenommen! Ihr seid jetzt Freunde.", reqDeclined: "Anfrage abgelehnt.", friendRemoved: "Freund entfernt.", reqAlreadySent: "Anfrage bereits an diesen Nutzer gesendet.", reqFromSelf: "Du kannst dich nicht selbst hinzufügen.", newReqNotif: "Neue Freundschaftsanfrage erhalten!", loadingUsers: "Lade Spieler aus der Cloud...", authRequired: "Melde dich an, um soziale Funktionen zu nutzen.", lblReduceMotion: "Bewegung Reduzieren (Barrierefreiheit)", forgotPw: "Passwort vergessen?", resetPwSent: "Reset-E-Mail gesendet! Prüfe dein Postfach.", weakPw: "Passwort zu schwach (mindestens 6 Zeichen).", invalidEmail: "Ungültiges E-Mail-Format.", tooManyReq: "Zu viele Versuche, bitte später erneut versuchen.", networkErr: "Netzwerkfehler. Überprüfe deine Verbindung.", splashLoading: "SYSTEM WIRD GESTARTET..."
+        }
+    };
+
+    async function init() {
+        renderListSkeleton();
+        try {
+            const [lvlRes, plRes] = await Promise.all([fetch('levels.json'), fetch('players.json')]);
+            if (!lvlRes.ok || !plRes.ok) throw new Error('bad response');
+            DB.levels = await lvlRes.json();
+            DB.players = await plRes.json();
+        } catch(e) {
+            console.warn('Impossibile caricare levels.json / players.json, uso dati demo.', e);
+            DB.levels = mockLevels;
+            DB.players = mockPlayers;
+            setTimeout(() => showToast('⚠️ Dati reali non trovati: sto mostrando la lista demo.', 'error'), 500);
+        }
+        loadSettings();
+        updateStats(); renderList(); renderWeekly(); renderHall(); startWeeklyTimer();
+        window.updateUserRankUI();
+        if(window.renderSocialList) window.renderSocialList();
+
+        setTimeout(() => {
+            document.getElementById('splash').classList.add('hidden');
+        }, 350);
+    }
+
+    function renderListSkeleton() {
+        const body = document.getElementById('listBody');
+        if(!body) return;
+        let html = '';
+        for(let i=0;i<7;i++) html += `<div class="skeleton" style="height:56px;"></div>`;
+        body.innerHTML = html;
+    }
+
+    function loadSettings() {
+        const savedLang = localStorage.getItem('gd_lang') || 'it';
+        setLang(savedLang);
+        
+        const savedColor = localStorage.getItem('gd_color') || '#ff5a1f';
+        const savedGlow = localStorage.getItem('gd_glow') || 'rgba(255, 90, 31, 0.45)';
+        setThemeColor(savedColor, savedGlow, null, true);
+
+        const isLight = localStorage.getItem('gd_light') === 'true';
+        document.getElementById('themeCheck').checked = isLight;
+        if(isLight) document.body.classList.add('light');
+
+        document.getElementById('sfxCheck').checked = localStorage.getItem('gd_sfx') !== 'false';
+        
+        const isCompact = localStorage.getItem('gd_compact') === 'true';
+        document.getElementById('compactCheck').checked = isCompact;
+        if(isCompact) document.body.classList.add('compact');
+
+        document.getElementById('autoCheck').checked = localStorage.getItem('gd_auto') !== 'false';
+        
+        const isDefShowcase = localStorage.getItem('gd_defVid') === 'showcase';
+        document.getElementById('defVideoCheck').checked = isDefShowcase;
+        
+        const isPerf = localStorage.getItem('gd_perf') === 'true';
+        document.getElementById('perfCheck').checked = isPerf;
+        if(isPerf) document.body.classList.add('perf-mode');
+
+        const isReduceMotion = localStorage.getItem('gd_reduceMotion') === 'true';
+        document.getElementById('reduceMotionCheck').checked = isReduceMotion;
+        if(isReduceMotion) document.body.classList.add('perf-mode');
+
+        const savedStatus = localStorage.getItem('gd_status') || 'Nessuno stato';
+        document.getElementById('sidebarStatusText').innerText = savedStatus;
+        document.getElementById('profileStatusInput').value = savedStatus === 'Nessuno stato' ? '' : savedStatus;
+    }
+
+    function togglePerf(val) {
+        toggleSetting('perf', val);
+        document.body.classList.toggle('perf-mode', val || document.getElementById('reduceMotionCheck').checked);
+    }
+
+    function updateStats() {
+        document.getElementById('stTotal').innerText = DB.levels.length;
+        document.getElementById('stVer').innerText = DB.levels.filter(l => l.verified).length;
+        document.getElementById('stFav').innerText = DB.favs.length;
+    }
+
+    function toggleFav(name, event) {
+        event.stopPropagation(); playSfx('click');
+        if(DB.favs.includes(name)) DB.favs = DB.favs.filter(f => f !== name);
+        else DB.favs.push(name);
+        localStorage.setItem('gd_favs', JSON.stringify(DB.favs));
+        updateStats(); renderList(); if(DB.currentLvl && DB.currentLvl.name === name) renderWeekly();
+    }
+    window.toggleFav = toggleFav;
+
+    function renderList() {
+        const body = document.getElementById('listBody');
+        const searchQuery = document.getElementById('search').value.toLowerCase();
+        body.innerHTML = "";
+
+        let filtered = DB.levels.filter(l => {
+            const matchQuery = l.name.toLowerCase().includes(searchQuery);
+            const matchUnv = !DB.hideUnv || l.verified;
+            const matchFav = !DB.showFavsOnly || DB.favs.includes(l.name);
+            return matchQuery && matchUnv && matchFav;
+        });
+
+        filtered.sort((a, b) => a.rank - b.rank);
+
+        if (filtered.length === 0) {
+            const d = dict[DB.currentLang] || dict['it'];
+            body.innerHTML = `<div class="empty-state"><span class="empty-icon">🔍</span><span>${d.noRec}</span></div>`;
+            return;
+        }
+
+        filtered.forEach((lvl, idx) => {
+            const el = document.createElement("div");
+            const isTop1 = (lvl.rank === 1);
+            el.className = `lvl-item ${isTop1 ? 'top1' : ''} ${DB.currentLvl && DB.currentLvl.name === lvl.name ? 'selected' : ''}`;
+            el.style.animationDelay = (Math.min(idx, 14) * 0.025) + 's';
+
+            const isFav = DB.favs.includes(lvl.name);
+            const myProg = DB.progress[lvl.name] || 0;
+            const statusColor = myProg === 100 ? '#8a9a6b' : (myProg > 0 ? 'var(--gold)' : 'var(--text-muted)');
+
+            el.innerHTML = `
+                <span class="rank-num">${lvl.rank}</span>
+                <img src="${escapeHtml(lvl.thumb)}" class="thumb" loading="lazy" onerror="this.src='https://via.placeholder.com/64x36/16121e/ff5a1f?text=GD'">
+                <div style="flex:1; min-width:0;">
+                    <span class="${isTop1 ? 'top1-text' : ''}" style="font-weight:700; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${isTop1 ? '👑 ' : ''}${escapeHtml(lvl.name)}</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">${escapeHtml(lvl.skill || '⚡ Normal')} • <strong style="color:${statusColor}">${myProg}%</strong></span>
+                </div>
+                <span class="fav-btn ${isFav ? 'fav-active' : ''}" data-fav-name="${escapeHtml(lvl.name)}">♥</span>
+            `;
+
+            el.querySelector('.fav-btn').addEventListener('click', (event) => toggleFav(lvl.name, event));
+            el.onclick = () => {
+                playSfx('click'); showDetails(lvl);
+                document.querySelectorAll('.lvl-item').forEach(item => item.classList.remove('selected'));
+                el.classList.add('selected');
+            };
+            body.appendChild(el);
+        });
+    }
+
+    function showDetails(lvl) {
+        DB.currentLvl = lvl;
+        const d = dict[DB.currentLang] || dict['it'];
+        document.getElementById("lvlName").innerText = (lvl.rank === 1 ? "👑 " : "") + lvl.name;
+        document.getElementById("lvlSkillBadge").innerText = lvl.skill ? `${d.skillKey} ${lvl.skill.toUpperCase()}` : "EXTREME DEMON";
+        document.getElementById("lvlDesc").innerText = lvl.desc || "No description available.";
+        
+        document.getElementById("analyzerBox").style.display = "flex";
+        let tierText = d.tierLow;
+        if(lvl.rank <= 5) tierText = d.tierGod;
+        else if(lvl.rank <= 25) tierText = d.tierHigh;
+        else if(lvl.rank <= 75) tierText = d.tierMid;
+        document.getElementById("valTier").innerText = tierText;
+
+        document.getElementById("progressSection").style.display = "flex";
+        const myVal = parseInt(DB.progress[lvl.name] || 0);
+        document.getElementById("progSlider").value = myVal;
+        updateProgressUI(myVal);
+        document.getElementById("chalResult").innerText = "";
+
+        const statusBadge = document.getElementById("lvlStatus");
+        if(myVal === 100) { statusBadge.className = "status-badge st-beaten"; statusBadge.innerText = d.stBeaten; }
+        else if(myVal > 0) { statusBadge.className = "status-badge st-practice"; statusBadge.innerText = d.stPractice; }
+        else { statusBadge.className = "status-badge st-unplayed"; statusBadge.innerText = d.stUnplayed; }
+
+        document.getElementById("lvlMeta").style.display = "grid";
+        document.getElementById("mCreator").innerText = lvl.creator || "-";
+        document.getElementById("mVerifier").innerText = lvl.verifierName || lvl.verifier || "-";
+        document.getElementById("mSong").innerText = lvl.song || "Audio Original";
+        document.getElementById("mID").innerText = lvl.levelID || "N/A";
+
+        document.getElementById("videoToggles").style.display = "flex";
+        switchVideoMode(DB.defaultVideoMode);
+        
+        renderLeaderboard();
+    }
+
+    function renderLeaderboard() {
+        if(!DB.currentLvl) return;
+        const d = dict[DB.currentLang] || dict['it'];
+        const queryP = document.getElementById('searchPlayer').value.toLowerCase();
+        const recs = DB.players[DB.currentLvl.name] || [];
+        const lbContainer = document.getElementById("leaderboard");
+        
+        let filteredRecs = recs.filter(p => p.name.toLowerCase().includes(queryP));
+        filteredRecs.sort((a,b) => b.percent - a.percent);
+
+        if(filteredRecs.length === 0) {
+            lbContainer.innerHTML = `<div class="empty-state"><span class="empty-icon">🏳️</span><span style="font-size:0.85rem;">${d.noRec}</span></div>`;
+        } else {
+            lbContainer.innerHTML = filteredRecs.map((p, idx) => {
+                let rankClass = "lb-rank-other"; let medal = "";
+                if(idx === 0) { rankClass = "lb-rank-1"; medal = "🏆 "; }
+                else if(idx === 1) { rankClass = "lb-rank-2"; medal = "🥈 "; }
+                else if(idx === 2) { rankClass = "lb-rank-3"; medal = "🥉 "; }
+                
+                const safePercent = Math.max(0, Math.min(100, Number(p.percent) || 0));
+                return `
+                    <div class="lb-row" style="animation-delay:${Math.min(idx,10)*0.03}s">
+                        <div style="display: flex; align-items: center;">
+                            <span class="lb-rank ${rankClass}">${idx + 1}</span>
+                            <span style="font-weight: ${idx < 3 ? '800' : '600'}; color: ${idx === 0 ? '#ffb703' : '#fff'};">${medal}${escapeHtml(p.name)}</span>
+                        </div>
+                        <span style="color:${safePercent === 100 ? '#8a9a6b' : 'var(--accent)'}; font-weight:700;">${safePercent}%</span>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+
+    function switchVideoMode(mode) {
+        if (!DB.currentLvl) return;
+        DB.currentVideoMode = mode;
+        const d = dict[DB.currentLang] || dict['it'];
+        
+        document.getElementById('btnVerifVid').classList.toggle('active', mode === 'verifier');
+        document.getElementById('btnShowVid').classList.toggle('active', mode === 'showcase');
+        
+        let rawVideoId = mode === 'verifier' ? 
+            (DB.currentLvl.videoVerifier || DB.currentLvl.videoID) : 
+            (DB.currentLvl.videoShowcase || DB.currentLvl.verifierID || DB.currentLvl.videoID);
+        
+        if (!rawVideoId) {
+            document.getElementById("videoContainer").innerHTML = `<p style="opacity:0.4; text-align:center; font-size:0.85rem;">${d.noVid}</p>`;
+            return;
+        }
+
+        let id = '';
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = rawVideoId.match(regExp);
+        if (match && match[2].length === 11) { id = match[2]; } 
+        else { id = rawVideoId.split('v=').pop().split('&')[0].split('?')[0].split('/').pop(); }
+        
+        const auto = document.getElementById('autoCheck').checked ? "?autoplay=1&mute=0" : "?autoplay=0";
+        document.getElementById("videoContainer").innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}${auto}" title="${DB.currentLvl.name}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="border-radius:18px;"></iframe>`;
+    }
+
+    function updateProgressUI(val) {
+        document.getElementById("progVal").innerText = val + "%";
+        document.documentElement.style.setProperty('--track-fill', val + "%");
+    }
+
+    function saveProgress(val) {
+        if(!DB.currentLvl) return;
+        playSfx('tick');
+        const numVal = parseInt(val);
+        DB.progress[DB.currentLvl.name] = numVal;
+        localStorage.setItem('gd_prog', JSON.stringify(DB.progress));
+        updateProgressUI(numVal);
+        
+        const d = dict[DB.currentLang] || dict['it'];
+        const statusBadge = document.getElementById("lvlStatus");
+        const perfMode = document.getElementById('perfCheck').checked;
+
+        if(numVal === 100) { 
+            statusBadge.className = "status-badge st-beaten"; statusBadge.innerText = d.stBeaten; 
+            if(!perfMode && typeof confetti === 'function') confetti({ particleCount: 80, origin: { y: 0.7 } }); 
+        }
+        else if(numVal > 0) { statusBadge.className = "status-badge st-practice"; statusBadge.innerText = d.stPractice; }
+        else { statusBadge.className = "status-badge st-unplayed"; statusBadge.innerText = d.stUnplayed; }
+        
+        renderList(); renderWeekly();
+        window.updateUserRankUI();
+    }
+
+    function generateChallenge() {
+        playSfx('click');
+        const start = Math.floor(Math.random() * 55);
+        const end = Math.min(100, start + Math.floor(Math.random() * 35) + 10);
+        document.getElementById("chalResult").innerText = `🎯 Goal: ${start}% ➔ ${end}%`;
+    }
+
+    let selectedRouletteLvl = null;
+    function openRoulette() {
+        if (!DB.levels || DB.levels.length === 0 || isSpinning) return;
+        playSfx('click');
+        document.getElementById('rouletteModal').classList.add('active');
+        
+        const btnSpin = document.getElementById('btnSpin');
+        btnSpin.style.display = 'inline-flex';
+        btnSpin.style.opacity = '1';
+        btnSpin.style.pointerEvents = 'auto';
+        const d = dict[DB.currentLang] || dict['it'];
+        btnSpin.innerText = d.rSpin;
+        
+        document.getElementById('btnOpenLvl').style.display = 'none';
+        
+        const track = document.getElementById('slotTrack');
+        track.style.transition = 'none';
+        track.style.transform = 'translateY(0px)';
+        track.innerHTML = '';
+        selectedRouletteLvl = null;
+    }
+
+    function closeRoulette() {
+        if(isSpinning) return;
+        playSfx('click');
+        document.getElementById('rouletteModal').classList.remove('active');
+    }
+    window.closeRoulette = closeRoulette;
+
+    function startSpin() {
+        if (isSpinning || !DB.levels || DB.levels.length === 0) return;
+        isSpinning = true;
+        playSfx('click');
+        
+        const btnSpin = document.getElementById('btnSpin');
+        btnSpin.style.opacity = '0.5';
+        btnSpin.style.pointerEvents = 'none';
+        document.getElementById('btnOpenLvl').style.display = 'none';
+        
+        const track = document.getElementById('slotTrack');
+        const perfMode = document.getElementById('perfCheck').checked;
+        const d = dict[DB.currentLang] || dict['it'];
+        
+        let reelHtml = "";
+        const winIdx = 16;
+        let winLvl = null;
+        for(let i = 0; i < 20; i++) {
+            const rndLvl = DB.levels[Math.floor(Math.random() * DB.levels.length)];
+            if(i === winIdx) winLvl = rndLvl;
+            reelHtml += `<div class="slot-card"><img src="${escapeHtml(rndLvl.thumb)}" onerror="this.src='https://via.placeholder.com/100x56/16121e/ff5a1f?text=GD'"><span>${escapeHtml(rndLvl.name)}</span></div>`;
+        }
+        track.innerHTML = reelHtml;
+        track.style.transition = 'none';
+        track.style.transform = 'translateY(0px)';
+        
+        void track.offsetWidth;
+        
+        const cardHeight = 140;
+        const targetY = -(winIdx * cardHeight);
+        track.style.transition = perfMode ? 'transform 0.6s ease-out' : 'transform 3.2s cubic-bezier(0.1, 0.9, 0.2, 1)';
+        track.style.transform = `translateY(${targetY}px)`;
+
+        let ticks = 0;
+        const interval = setInterval(() => {
+            playSfx('tick');
+            ticks++;
+            if(ticks > 16) clearInterval(interval);
+        }, perfMode ? 40 : 150);
+
+        setTimeout(() => {
+            isSpinning = false;
+            selectedRouletteLvl = winLvl;
+            playSfx('win');
+            if(!perfMode && typeof confetti === 'function') confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            
+            btnSpin.style.display = 'inline-flex';
+            btnSpin.style.opacity = '1';
+            btnSpin.style.pointerEvents = 'auto';
+            btnSpin.innerText = d.rRetry;
+            document.getElementById('btnOpenLvl').style.display = 'inline-flex';
+        }, perfMode ? 650 : 3200);
+    }
+
+    function confirmRouletteLvl() {
+        if(isSpinning) return;
+        closeRoulette();
+        if(selectedRouletteLvl) { showDetails(selectedRouletteLvl); showPage('list', document.querySelectorAll('.nav-icon')[0]); }
+    }
+
+    let weeklyTimerInterval;
+    function startWeeklyTimer() {
+        if(weeklyTimerInterval) clearInterval(weeklyTimerInterval);
+        function updateTimer() {
+            const now = Date.now();
+            const weekMillis = 7 * 24 * 60 * 60 * 1000;
+            const currentWeek = Math.floor(now / weekMillis);
+            const nextWeekStart = (currentWeek + 1) * weekMillis;
+            const diff = nextWeekStart - now;
+            
+            if (diff <= 0) { renderWeekly(); return; }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            const mins = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            const secs = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+            
+            const timerEl = document.getElementById('weekly-timer-val');
+            if(timerEl) timerEl.innerText = `${days}d : ${hours}h : ${mins}m : ${secs}s`;
+        }
+        updateTimer();
+        weeklyTimerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function renderWeekly() {
+        const weeklyContainer = document.getElementById('weeklyContent');
+        if(!weeklyContainer || DB.levels.length === 0) return;
+        
+        const d = dict[DB.currentLang] || dict['it'];
+        const week = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
+        const byRank = [...DB.levels].sort((a, b) => a.rank - b.rank);
+        const lvl = byRank[week % byRank.length];
+        const myProg = DB.progress[lvl.name] || 0;
+        
+        const q1Done = myProg >= 15;
+        const q2Done = myProg >= 50;
+        const q3Done = myProg === 100;
+        
+        weeklyContainer.innerHTML = `
+            <div style="width:100%; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:var(--text-muted); font-weight:700;">
+                <span>EVENT #${week % 1000}</span>
+                <span style="color:var(--accent); font-family: 'Space Grotesk'">${lvl.skill || 'Extreme'}</span>
+            </div>
+            <div style="position:relative; width:100%; max-width:480px;">
+                <img src="${escapeHtml(lvl.thumb)}" onerror="this.src='https://via.placeholder.com/400x225/16121e/ff5a1f?text=GD'" style="width:100%; height:210px; object-fit:cover; border-radius:20px; border:1px solid var(--border); box-shadow:0 12px 24px rgba(0,0,0,0.6);">
+            </div>
+            <h3 style="margin:5px 0 0; font-size:2.2rem; color:#fff; font-weight:900;">${escapeHtml(lvl.name)}</h3>
+            
+            <div class="quest-box">
+                <strong style="font-size:0.8rem; font-family: 'Space Grotesk'; color:var(--accent);">${d.qTitle}</strong>
+                <div class="quest-item ${q1Done ? 'completed' : ''}">
+                    <div class="quest-check">${q1Done ? '✓' : ''}</div>
+                    <span>${d.q1}</span>
+                </div>
+                <div class="quest-item ${q2Done ? 'completed' : ''}">
+                    <div class="quest-check">${q2Done ? '✓' : ''}</div>
+                    <span>${d.q2}</span>
+                </div>
+                <div class="quest-item ${q3Done ? 'completed' : ''}">
+                    <div class="quest-check">${q3Done ? '✓' : ''}</div>
+                    <span>${d.q3}</span>
+                </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+                <span style="font-size:0.85rem; color:var(--text-muted)">${d.wProg} <strong style="color:var(--accent); font-size:1.1rem;">${myProg}%</strong></span>
+            </div>
+            <button class="btn-custom" id="btnWeeklyEnter" style="padding:14px 40px; font-size:0.95rem; width:100%; max-width:320px;">${d.wEnter}</button>
+        `;
+        const enterBtn = document.getElementById('btnWeeklyEnter');
+        if (enterBtn) enterBtn.addEventListener('click', () => openWeeklyLevel(lvl.name));
+    }
+
+    function openWeeklyLevel(lvlName) {
+        playSfx('click');
+        const lvl = DB.levels.find(l => l.name === lvlName);
+        if(lvl) { showDetails(lvl); showPage('list', document.querySelectorAll('.nav-icon')[0]); }
+    }
+    window.openWeeklyLevel = openWeeklyLevel;
+
+    // Punti-base per rank in stile Pointercrate/Demon List: il Top 1 vale il massimo,
+    // il punteggio decresce progressivamente. Un 100% su un livello difficile deve valere
+    // molto di piu di un 100% su un livello facile: sommare semplicemente il "percent"
+    // grezzo (come faceva la versione precedente) rendeva la classifica priva di senso.
+    function pointsForRank(rank) {
+        const BASE = 500;
+        const MIN = 5;
+        if (!rank || rank < 1) return MIN;
+        const decayed = BASE * Math.pow(0.965, rank - 1);
+        return Math.max(MIN, Math.round(decayed));
+    }
+
+    function renderHall() {
+        const hof = document.getElementById('hofContent'); hof.innerHTML = "";
+        const d = dict[DB.currentLang] || dict['it'];
+        const rankByName = {};
+        DB.levels.forEach(l => { rankByName[l.name] = l.rank; });
+
+        let scores = {};
+        Object.entries(DB.players).forEach(([lvlName, records]) => {
+            const rank = rankByName[lvlName];
+            const levelPoints = pointsForRank(rank);
+            records.forEach(r => {
+                const pct = Math.max(0, Math.min(100, Number(r.percent) || 0));
+                if(!scores[r.name]) scores[r.name] = { points: 0, cleared: [] };
+                // Punteggio proporzionale alla difficolta del livello e alla percentuale ottenuta.
+                // Solo i completamenti al 100% contano come "cleared".
+                scores[r.name].points += Math.round(levelPoints * (pct / 100));
+                if(pct === 100) scores[r.name].cleared.push(lvlName);
+            });
+        });
+
+        const sorted = Object.entries(scores).sort((a,b) => b[1].points - a[1].points);
+        if(sorted.length === 0) { hof.innerHTML = `<div class="empty-state"><span class="empty-icon">🏆</span><span>${d.noRec}</span></div>`; return; }
+        sorted.forEach(([name, data], i) => {
+            const el = document.createElement("div"); el.className = "card"; el.style.background = "rgba(255,255,255,0.015)";
+            el.style.animationDelay = (Math.min(i,10) * 0.04) + 's';
+            const medal = i === 0 ? '🏆 ' : (i === 1 ? '🥈 ' : (i === 2 ? '🥉 ' : `#${i+1} `));
+            el.innerHTML = `<div style="font-size:1.1rem; font-weight:900; color:${i === 0 ? '#ffb703' : 'var(--accent)'}; margin-bottom:4px;">${medal}${escapeHtml(name)}</div><div style="font-size:0.85rem; color:var(--text-muted)">${d.points}: <strong style="color:#fff;">${data.points}</strong> • ${d.cleared}: <strong>${data.cleared.length}</strong></div>`;
+            hof.appendChild(el);
+        });
+    }
+
+    function showPage(pageId, navEl) {
+        playSfx('click');
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-icon').forEach(n => n.classList.remove('active'));
+        document.getElementById(pageId + 'Page').classList.add('active');
+        if(navEl) navEl.classList.add('active');
+        closeMobileNav();
+        if(pageId === 'social' && window.renderSocialList) window.renderSocialList();
+        document.querySelector('.main-scroll').scrollTop = 0;
+    }
+    window.showPage = showPage;
+
+    function toggleFilter(type) {
+        playSfx('click');
+        if(type === 'unv') { DB.hideUnv = !DB.hideUnv; document.getElementById('btnFilter').classList.toggle('active', DB.hideUnv); }
+        else if(type === 'fav') { DB.showFavsOnly = !DB.showFavsOnly; document.getElementById('btnFavFilter').classList.toggle('active', DB.showFavsOnly); }
+        renderList();
+    }
+    window.toggleFilter = toggleFilter;
+
+    function toggleTheme() { 
+        playSfx('click'); 
+        const isLight = document.body.classList.toggle('light');
+        localStorage.setItem('gd_light', isLight);
+    }
+    window.toggleTheme = toggleTheme;
+
+    function toggleCompact() {
+        playSfx('click');
+        const isCompact = document.body.classList.toggle('compact');
+        localStorage.setItem('gd_compact', isCompact);
+    }
+    window.toggleCompact = toggleCompact;
+    
+    function toggleSetting(key, val) {
+        localStorage.setItem(`gd_${key}`, val);
+        if (key === 'reduceMotion') {
+            document.body.classList.toggle('perf-mode', val || document.getElementById('perfCheck').checked);
+        }
+    }
+    window.toggleSetting = toggleSetting;
+    window.togglePerf = togglePerf;
+
+    function updateDefaultVideo() {
+        const isShowcase = document.getElementById('defVideoCheck').checked;
+        DB.defaultVideoMode = isShowcase ? 'showcase' : 'verifier';
+        localStorage.setItem('gd_defVid', DB.defaultVideoMode);
+    }
+    window.updateDefaultVideo = updateDefaultVideo;
+
+    function setThemeColor(color, glow, el, noSfx) {
+        if(!noSfx) playSfx('click');
+        document.documentElement.style.setProperty('--accent', color);
+        document.documentElement.style.setProperty('--accent-glow', glow);
+        
+        localStorage.setItem('gd_color', color);
+        localStorage.setItem('gd_glow', glow);
+        
+        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+        if(el) {
+            el.classList.add('active');
+        } else {
+            document.querySelectorAll('.color-swatch').forEach(s => {
+                if(s.style.color === color) s.classList.add('active');
+            });
+        }
+    }
+    window.setThemeColor = setThemeColor;
+
+    function setLang(lang, el) {
+        if(el) playSfx('click');
+        DB.currentLang = lang;
+        localStorage.setItem('gd_lang', lang);
+
+        document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
+        if(el) el.classList.add('active');
+        else document.getElementById('lang-' + lang)?.classList.add('active');
+        
+        const d = dict[lang] || dict['it'];
+        const setTxt = (id, val) => { const e = document.getElementById(id); if(e) e.innerText = val; };
+        const setPh = (id, val) => { const e = document.getElementById(id); if(e) e.placeholder = val; };
+        
+        setPh('search', d.search);
+        setPh('searchPlayer', d.searchP);
+        setTxt('btnFilter', d.unv);
+        setTxt('btnFavFilter', d.fav);
+        setTxt('hSub', d.hSub);
+        setTxt('btnSubmit', d.btnSub);
+        setTxt('weeklyTitle', d.weekly);
+        setTxt('weeklyBadge', d.weeklyBadge);
+        setTxt('weeklySub', d.weeklySub);
+        setTxt('lblTimerPrefix', d.timerPrefix);
+        setTxt('hallTitle', d.hall);
+        setTxt('hallSub', d.hallSub);
+        setTxt('sTitle', d.sTitle);
+        setTxt('tLang', d.tLang);
+        setTxt('tColor', d.tColor);
+        setTxt('tPref', d.tPref);
+        setTxt('lblTheme', d.lblTheme);
+        setTxt('lblSfx', d.lblSfx);
+        setTxt('lblCompact', d.lblCompact);
+        setTxt('lblAuto', d.lblAuto);
+        setTxt('lblDefVideo', d.lblDefVideo);
+        setTxt('lblPerf', d.lblPerf);
+        setTxt('lblReduceMotion', d.lblReduceMotion);
+        setTxt('lblReset', d.lblReset);
+        setTxt('btnReset', d.btnReset);
+        setTxt('lblMyProg', d.lblMyProg);
+        setTxt('btnChal', d.btnChal);
+        setTxt('rTitle', d.rTitle);
+        setTxt('rSub', d.rSub);
+        setTxt('btnSpin', d.rSpin);
+        setTxt('btnCancelR', d.rCancel);
+        setTxt('btnOpenLvl', d.rOpen);
+        setTxt('stLvlLabel', d.stLvl);
+        setTxt('stVerLabel', d.stVer);
+        setTxt('stFavLabel', d.stFav);
+        setTxt('lblDifficulty', d.diffTier);
+        setTxt('btnShare', d.share);
+        setTxt('lblCreat', d.lblCreat);
+        setTxt('lblVerif', d.lblVerif);
+        setTxt('lblSong', d.lblSong);
+        setTxt('btnVerifVid', d.btnVerif);
+        setTxt('btnShowVid', d.btnShow);
+        setTxt('btnCopy', d.copyIDBtn);
+        setTxt('profileMainTitle', d.authMain);
+        setTxt('authSubText', d.authSub);
+        setPh('emailInput', d.emailHolder);
+        setPh('passwordInput', d.passHolder);
+        setTxt('btnRegister', d.btnReg);
+        setTxt('btnLogin', d.btnLog);
+        setTxt('btnForgotPw', d.forgotPw);
+        setTxt('socialTitle', d.socialTitle);
+        setTxt('socialSub', d.socialSub);
+        setPh('socialSearchInput', d.socialHolder);
+        setTxt('btnLogout', d.btnLogout);
+        setTxt('btnSaveProfile', d.btnSaveP);
+        setTxt('lblUsername', d.lblUser);
+        setTxt('lblStatus', d.lblStat);
+        setTxt('lblChangeImg', d.lblChange);
+        setTxt('splashText', d.splashLoading);
+        setTxt('tabBrowseLbl', d.tabBrowse);
+        setTxt('tabFriendsLbl', d.tabFriends);
+        setTxt('tabRequestsLbl', d.tabRequests);
+        
+        const navList = document.getElementById('nav-list'); if(navList) navList.title = d.navList;
+        const navWeekly = document.getElementById('nav-weekly'); if(navWeekly) navWeekly.title = d.navWeekly;
+        const navHall = document.getElementById('nav-hall'); if(navHall) navHall.title = d.navHall;
+        const navSettings = document.getElementById('nav-settings'); if(navSettings) navSettings.title = d.navSettings;
+        const navProfile = document.getElementById('nav-profile'); if(navProfile) navProfile.title = d.navProfile;
+
+        if(DB.currentLvl) showDetails(DB.currentLvl);
+        renderWeekly(); renderHall();
+        if(window.renderSocialList) window.renderSocialList();
+    }
+    window.setLang = setLang;
+
+    function shareLevel() {
+        if(!DB.currentLvl) return;
+        playSfx('click');
+        const d = dict[DB.currentLang] || dict['it'];
+        const text = `🔥 Guarda "${DB.currentLvl.name}" (#${DB.currentLvl.rank}) su Extreme Demon List OS!`;
+        if (navigator.share) {
+            navigator.share({ title: DB.currentLvl.name, text: text, url: window.location.href }).catch(()=>{});
+        } else {
+            navigator.clipboard.writeText(`${text} ${window.location.href}`);
+            const btn = document.getElementById('btnShare');
+            btn.innerText = d.copied;
+            setTimeout(() => btn.innerText = d.share, 1500);
+        }
+    }
+    window.shareLevel = shareLevel;
+
+    async function resetAllData() {
+        playSfx('click');
+        const d = dict[DB.currentLang] || dict['it'];
+        const ok = await showConfirm(d.confirmReset);
+        if(ok) {
+            localStorage.clear(); DB.favs = []; DB.progress = {};
+            updateStats(); renderList(); renderWeekly();
+            showToast(d.alertReset, 'success');
+            window.updateUserRankUI();
+            setTimeout(() => location.reload(), 900);
+        }
+    }
+    window.resetAllData = resetAllData;
+
+    function copyID() {
+        if(!DB.currentLvl || !DB.currentLvl.levelID) return;
+        navigator.clipboard.writeText(DB.currentLvl.levelID);
+        playSfx('click');
+        const d = dict[DB.currentLang] || dict['it'];
+        const btn = document.getElementById("btnCopy");
+        btn.innerText = d.copied;
+        setTimeout(() => btn.innerText = d.copyIDBtn, 1500);
+    }
+    window.copyID = copyID;
+
+    function triggerConfetti(e) {
+        e.preventDefault(); playSfx('win');
+        const perfMode = document.getElementById('perfCheck').checked;
+        if(!perfMode && typeof confetti === 'function') confetti({ particleCount: 200, spread: 360, origin: { y: 0.6 } });
+        setTimeout(() => window.open('https://forms.gle/XtbhiKcnvP4yhkN36', '_blank'), 1500);
+    }
+    window.triggerConfetti = triggerConfetti;
+
+    function switchSocialTab(tab) {
+        playSfx('click');
+        DB.socialTab = tab;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+        const searchInput = document.getElementById('socialSearchInput');
+        searchInput.style.display = tab === 'browse' ? 'block' : 'none';
+        if(window.renderSocialList) window.renderSocialList();
+    }
+    window.switchSocialTab = switchSocialTab;
+
+    // Keyboard shortcuts: Escape closes modals/mobile nav
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.getElementById('rouletteModal')?.classList.remove('active');
+            document.getElementById('confirmModal')?.classList.remove('active');
+            closeMobileNav();
+        }
+    });
+
+    init();
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, collection, getDocs, query, limit } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBH2sXzuOfOpY2rOQNlS2zwyQnyfWy0DvA",
+        authDomain: "global-list-inv.firebaseapp.com",
+        projectId: "global-list-inv",
+        storageBucket: "global-list-inv.firebasestorage.app",
+        messagingSenderId: "517402636532",
+        appId: "1:517402636532:web:02c81482fe8b6367782ea1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const storage = getStorage(app);
+    const db = getFirestore(app);
+
+    const authSection = document.getElementById('authSection');
+    const userProfileSection = document.getElementById('userProfileSection');
+    const profileMainTitle = document.getElementById('profileMainTitle');
+    const authError = document.getElementById('authError');
+    
+    function tr() { return (window.DB && window.dict) ? (window.dict[window.DB.currentLang] || window.dict['it']) : null; }
+    function showError(msg) {
+        authError.style.display = 'block';
+        authError.innerHTML = msg;
+    }
+
+    // Backup roster used ONLY when Firestore is genuinely unreachable (offline / rules misconfigured),
+    // so the Social page is never empty. Real accounts always take priority when the read succeeds.
+    const backupGDUsers = [
+        { name: "Zoink", status: "Chilling in Acheron & Tidal Wave", avatar: "Default_Profile.jpg", rank: "👑 GD Legend", id: "backup_zoink" },
+        { name: "Trick", status: "Grinding top 1 extreme demons 🌊", avatar: "Default_Profile.jpg", rank: "👑 GD Legend", id: "backup_trick" },
+        { name: "SpaceUK", status: "Returning to the scene...", avatar: "Default_Profile.jpg", rank: "🟣 Extreme Conqueror", id: "backup_spaceuk" },
+        { name: "Doggie", status: "Editing the next verification video 🎬", avatar: "Default_Profile.jpg", rank: "👑 GD Legend", id: "backup_doggie" },
+        { name: "Riot", status: "Bloodbathed forever 🩸", avatar: "Default_Profile.jpg", rank: "👑 GD Legend", id: "backup_riot" },
+        { name: "Cursed", status: "Playing Silent Clubstep practice", avatar: "Default_Profile.jpg", rank: "🟣 Extreme Conqueror", id: "backup_cursed" },
+        { name: "Technical", status: "Zodiac verification memories ✨", avatar: "Default_Profile.jpg", rank: "👑 GD Legend", id: "backup_technical" },
+        { name: "npesta", status: "Kenos reaction legendary speedrun 😱", avatar: "Default_Profile.jpg", rank: "👑 GD Legend", id: "backup_npesta" },
+        { name: "Diamond", status: "Avernus top verifier 🚀", avatar: "Default_Profile.jpg", rank: "👑 GD Legend", id: "backup_diamond" },
+        { name: "Paqoe", status: "Silent Clubstep verified at last 🧠", avatar: "Default_Profile.jpg", rank: "🟣 Extreme Conqueror", id: "backup_paqoe" },
+        { name: "Viper", status: "Looking for new wave challenges", avatar: "Default_Profile.jpg", rank: "🔵 Advanced Slayer", id: "backup_viper" },
+        { name: "Brandon", status: "Creating a new impossible layout", avatar: "Default_Profile.jpg", rank: "🟡 Hard Worker", id: "backup_brandon" },
+        { name: "Sunix", status: "Sonic Wave infinity grind", avatar: "Default_Profile.jpg", rank: "👑 GD Legend", id: "backup_sunix" },
+        { name: "Nifty", status: "Warming up on entry extreme demons", avatar: "Default_Profile.jpg", rank: "🟢 Novice Demon Slayer", id: "backup_nifty" },
+        { name: "Nexus", status: "Showcase recording in 4K 60FPS", avatar: "Default_Profile.jpg", rank: "👑 GD Legend", id: "backup_nexus" }
+    ];
+
+    let allUsersCache = [];
+    let usersFetchFailed = false;
+    let friendReqPollInterval = null;
+
+    // FIX: previously a single getDocs() failure (e.g. missing/blocking security rules, or a
+    // transient network hiccup) silently discarded ALL real accounts and fell back to the mock
+    // roster - so registered users could never find each other. Now we cache the last good
+    // roster, retry, and only fall back when we truly have nothing.
+    async function fetchAllUsers() {
+        try {
+            const snap = await getDocs(query(collection(db, "users"), limit(200)));
+            const list = [];
+            snap.forEach((docSnap) => {
+                const data = docSnap.data();
+                if (data && (data.name || data.status)) {
+                    list.push({
+                        id: docSnap.id,
+                        name: data.name || "Player Anonimo",
+                        status: data.status || "Nessuno stato in cloud",
+                        avatar: data.avatar || "Default_Profile.jpg",
+                        rank: data.rank || "🟢 Novice Demon Slayer",
+                        friends: data.friends || {},
+                        incoming: data.incoming || {},
+                        outgoing: data.outgoing || {}
+                    });
+                }
+            });
+            allUsersCache = list;
+            usersFetchFailed = false;
+            return list;
+        } catch (e) {
+            console.warn("Firestore users fetch failed, using cached/backup roster:", e && e.code);
+            usersFetchFailed = true;
+            if (allUsersCache.length > 0) return allUsersCache;
+            return backupGDUsers.map(u => ({ ...u, friends: {}, incoming: {}, outgoing: {} }));
+        }
+    }
+
+    function myLocalIdentity() {
+        return {
+            id: auth.currentUser ? auth.currentUser.uid : null,
+            name: localStorage.getItem('gd_username') || null
+        };
+    }
+
+    async function getMyDocData() {
+        if (!auth.currentUser) return null;
+        try {
+            const snap = await getDoc(doc(db, "users", auth.currentUser.uid));
+            return snap.exists() ? snap.data() : null;
+        } catch (e) { return null; }
+    }
+
+    /* ---------------- FRIENDS SYSTEM ---------------- */
+    // Data model: users/{uid}.friends = { [friendUid]: true }
+    //             users/{uid}.incoming = { [fromUid]: { name, avatar } }  <- pending requests received
+    //             users/{uid}.outgoing = { [toUid]: true }               <- pending requests sent
+
+    async function sendFriendRequest(targetId, targetName) {
+        const d = tr();
+        if (!auth.currentUser) { showToast(d ? d.authRequired : 'Sign in required', 'error'); return; }
+        if (targetId === auth.currentUser.uid) { showToast(d ? d.reqFromSelf : "Can't add yourself", 'error'); return; }
+
+        try {
+            const myData = await getMyDocData() || {};
+            if (myData.outgoing && myData.outgoing[targetId]) {
+                showToast(d ? d.reqAlreadySent : 'Already sent', 'error');
+                return;
+            }
+            if (myData.friends && myData.friends[targetId]) {
+                showToast(d ? d.reqAlreadySent : 'Already friends', 'error');
+                return;
+            }
+            const myName = localStorage.getItem('gd_username') || (auth.currentUser.email ? auth.currentUser.email.split('@')[0] : 'Player');
+            const myAvatar = localStorage.getItem('gd_custom_avatar') || 'Default_Profile.jpg';
+
+            await setDoc(doc(db, "users", auth.currentUser.uid), {
+                outgoing: { ...(myData.outgoing || {}), [targetId]: true }
+            }, { merge: true });
+
+            await setDoc(doc(db, "users", targetId), {
+                incoming: { [auth.currentUser.uid]: { name: myName, avatar: myAvatar } }
+            }, { merge: true });
+
+            if (window.playSfx) window.playSfx('notify');
+            showToast(d ? d.reqSent : 'Friend request sent!', 'success', '📨');
+            if (window.renderSocialList) window.renderSocialList();
+        } catch (e) {
+            console.warn("sendFriendRequest failed", e);
+            showToast(d ? d.networkErr : 'Network error', 'error');
+        }
+    }
+
+    async function acceptFriendRequest(fromId) {
+        const d = tr();
+        if (!auth.currentUser) return;
+        try {
+            const myData = await getMyDocData() || {};
+            const newIncoming = { ...(myData.incoming || {}) };
+            delete newIncoming[fromId];
+
+            await setDoc(doc(db, "users", auth.currentUser.uid), {
+                friends: { ...(myData.friends || {}), [fromId]: true },
+                incoming: newIncoming
+            }, { merge: true });
+
+            const theirSnap = await getDoc(doc(db, "users", fromId));
+            const theirData = theirSnap.exists() ? theirSnap.data() : {};
+            const newOutgoing = { ...(theirData.outgoing || {}) };
+            delete newOutgoing[auth.currentUser.uid];
+
+            await setDoc(doc(db, "users", fromId), {
+                friends: { ...(theirData.friends || {}), [auth.currentUser.uid]: true },
+                outgoing: newOutgoing
+            }, { merge: true });
+
+            if (window.playSfx) window.playSfx('win');
+            showToast(d ? d.reqAccepted : 'Request accepted!', 'success', '🤝');
+            if (window.renderSocialList) window.renderSocialList();
+            updateRequestBadge();
+        } catch (e) {
+            console.warn("acceptFriendRequest failed", e);
+            showToast(d ? d.networkErr : 'Network error', 'error');
+        }
+    }
+
+    async function declineFriendRequest(fromId) {
+        const d = tr();
+        if (!auth.currentUser) return;
+        try {
+            const myData = await getMyDocData() || {};
+            const newIncoming = { ...(myData.incoming || {}) };
+            delete newIncoming[fromId];
+            await setDoc(doc(db, "users", auth.currentUser.uid), { incoming: newIncoming }, { merge: true });
+
+            try {
+                const theirSnap = await getDoc(doc(db, "users", fromId));
+                if (theirSnap.exists()) {
+                    const theirData = theirSnap.data();
+                    const newOutgoing = { ...(theirData.outgoing || {}) };
+                    delete newOutgoing[auth.currentUser.uid];
+                    await setDoc(doc(db, "users", fromId), { outgoing: newOutgoing }, { merge: true });
+                }
+            } catch(e) {}
+
+            playSfx('click');
+            showToast(d ? d.reqDeclined : 'Request declined', 'info');
+            if (window.renderSocialList) window.renderSocialList();
+            updateRequestBadge();
+        } catch (e) {
+            console.warn("declineFriendRequest failed", e);
+            showToast(d ? d.networkErr : 'Network error', 'error');
+        }
+    }
+
+    async function removeFriend(friendId) {
+        const d = tr();
+        if (!auth.currentUser) return;
+        try {
+            const myData = await getMyDocData() || {};
+            const newFriends = { ...(myData.friends || {}) };
+            delete newFriends[friendId];
+            await setDoc(doc(db, "users", auth.currentUser.uid), { friends: newFriends }, { merge: true });
+
+            try {
+                const theirSnap = await getDoc(doc(db, "users", friendId));
+                if (theirSnap.exists()) {
+                    const theirData = theirSnap.data();
+                    const theirFriends = { ...(theirData.friends || {}) };
+                    delete theirFriends[auth.currentUser.uid];
+                    await setDoc(doc(db, "users", friendId), { friends: theirFriends }, { merge: true });
+                }
+            } catch(e) {}
+
+            playSfx('click');
+            showToast(d ? d.friendRemoved : 'Friend removed', 'info');
+            if (window.renderSocialList) window.renderSocialList();
+        } catch (e) {
+            console.warn("removeFriend failed", e);
+            showToast(d ? d.networkErr : 'Network error', 'error');
+        }
+    }
+
+    window.sendFriendRequest = sendFriendRequest;
+    window.acceptFriendRequestUI = (fromId) => acceptFriendRequest(fromId);
+    window.declineFriendRequestUI = (fromId) => declineFriendRequest(fromId);
+    window.removeFriendUI = async (friendId, friendName) => {
+        const d = tr();
+        const ok = await showConfirm(d ? `${d.btnRemove.replace('🗑 ','')}: ${friendName}?` : `Remove ${friendName}?`);
+        if (ok) removeFriend(friendId);
+    };
+
+    async function updateRequestBadge() {
+        const badge = document.getElementById('reqBadge');
+        const tabBadge = document.getElementById('requestsCount');
+        if (!badge) return;
+        if (!auth.currentUser) { badge.classList.remove('show'); return; }
+        const myData = await getMyDocData();
+        const count = myData && myData.incoming ? Object.keys(myData.incoming).length : 0;
+        if (count > 0) {
+            badge.innerText = count > 9 ? '9+' : count;
+            badge.classList.add('show');
+        } else {
+            badge.classList.remove('show');
+        }
+        if (tabBadge) {
+            if (count > 0) { tabBadge.innerText = count; tabBadge.style.display = 'inline-block'; }
+            else { tabBadge.style.display = 'none'; }
+        }
+    }
+    window.updateRequestBadge = updateRequestBadge;
+
+    // MOTORE SOCIALE: esplora / amici / richieste
+    window.renderSocialList = async function() {
+        const container = document.getElementById('socialList');
+        if(!container) return;
+        const d = tr() || {};
+        const tab = (window.DB && window.DB.socialTab) || 'browse';
+
+        if (!auth.currentUser && tab !== 'browse') {
+            container.innerHTML = `<div class="empty-state"><span class="empty-icon">🔒</span><span>${d.authRequired || 'Sign in required'}</span></div>`;
+            return;
+        }
+
+        container.innerHTML = `<div style="display:flex;flex-direction:column;gap:10px;"><div class="skeleton" style="height:70px;"></div><div class="skeleton" style="height:70px;"></div><div class="skeleton" style="height:70px;"></div></div>`;
+
+        const usersList = await fetchAllUsers();
+        const localIdentity = myLocalIdentity();
+        const myData = await getMyDocData();
+        const myFriends = (myData && myData.friends) || {};
+        const myOutgoing = (myData && myData.outgoing) || {};
+        const myIncoming = (myData && myData.incoming) || {};
+
+        updateRequestBadge();
+
+        // Ensure local/guest user visible if not authenticated but has a local name and isn't in dataset
+        const localName = localStorage.getItem('gd_username');
+        let workingList = [...usersList];
+        if (!auth.currentUser && localName && !workingList.some(u => u.name.toLowerCase() === localName.toLowerCase())) {
+            workingList.unshift({
+                id: "local_me", name: localName,
+                status: localStorage.getItem('gd_status') || "Nessuno stato",
+                avatar: localStorage.getItem('gd_custom_avatar') || "Default_Profile.jpg",
+                rank: window.updateUserRankUI ? window.updateUserRankUI() : "🟢 Novice Demon Slayer",
+                friends: {}, incoming: {}, outgoing: {}
+            });
+        }
+
+        let displayList = [];
+        if (tab === 'browse') {
+            const q = (document.getElementById('socialSearchInput')?.value || "").trim().toLowerCase();
+            displayList = workingList.filter(u =>
+                u.name.toLowerCase().includes(q) || (u.status && u.status.toLowerCase().includes(q))
+            );
+        } else if (tab === 'friends') {
+            const friendIds = Object.keys(myFriends);
+            displayList = workingList.filter(u => friendIds.includes(u.id));
+        } else if (tab === 'requests') {
+            const incomingIds = Object.keys(myIncoming);
+            displayList = incomingIds.map(id => {
+                const found = workingList.find(u => u.id === id);
+                return found || { id, name: myIncoming[id].name || 'Player', avatar: myIncoming[id].avatar || 'Default_Profile.jpg', status: '', rank: '' };
+            });
+        }
+
+        document.getElementById('friendsCount').innerText = Object.keys(myFriends).length;
+
+        container.innerHTML = "";
+
+        if (displayList.length === 0) {
+            const emptyMsg = tab === 'browse' ? (d.noUsers || 'No users found') : (tab === 'friends' ? (d.noFriends || 'No friends yet') : (d.noRequests || 'No requests'));
+            const emptyIcon = tab === 'browse' ? '🔍' : (tab === 'friends' ? '🤝' : '📩');
+            container.innerHTML = `<div class="empty-state"><span class="empty-icon">${emptyIcon}</span><span>${emptyMsg}</span></div>`;
+            return;
+        }
+
+        displayList.forEach((u, idx) => {
+            const isMe = (auth.currentUser && auth.currentUser.uid === u.id) || (u.name === localName && u.id === 'local_me');
+            const el = document.createElement("div");
+            el.className = "user-card";
+            el.style.animationDelay = (Math.min(idx, 12) * 0.03) + 's';
+
+            let actionHtml = '';
+            if (isMe) {
+                actionHtml = `<span style="color:var(--accent); font-size:0.75rem; font-weight:700;">(Tu)</span>`;
+            } else if (tab === 'requests') {
+                actionHtml = `
+                    <button class="btn-custom" style="padding:8px 14px; font-size:0.78rem;" onclick="window.acceptFriendRequestUI('${u.id}')">${d.btnAccept || '✔ Accept'}</button>
+                    <button class="btn-secondary" style="padding:8px 14px; font-size:0.78rem;" onclick="window.declineFriendRequestUI('${u.id}')">${d.btnDecline || '✖ Decline'}</button>
+                `;
+            } else if (tab === 'friends') {
+                actionHtml = `<button class="btn-secondary" style="padding:8px 14px; font-size:0.78rem;" onclick="window.removeFriendUI('${u.id}', '${(u.name||'').replace(/'/g,"\\'")}')">${d.btnRemove || '🗑 Remove'}</button>`;
+            } else {
+                if (myFriends[u.id]) {
+                    actionHtml = `<span class="btn-secondary active" style="padding:8px 14px; font-size:0.78rem; cursor:default;">🤝 ${d.tabFriends || 'Friends'}</span>`;
+                } else if (myOutgoing[u.id]) {
+                    actionHtml = `<span class="btn-secondary" style="padding:8px 14px; font-size:0.78rem; opacity:0.6; cursor:default;">${d.btnPending || '⏳ Sent'}</span>`;
+                } else if (myIncoming[u.id]) {
+                    actionHtml = `<button class="btn-custom" style="padding:8px 14px; font-size:0.78rem;" onclick="window.acceptFriendRequestUI('${u.id}')">${d.btnAccept || '✔ Accept'}</button>`;
+                } else if (!auth.currentUser) {
+                    actionHtml = `<button class="btn-secondary" style="padding:8px 14px; font-size:0.78rem; opacity:0.7;" onclick="window.showToast && window.showToast('${(d.authRequired || 'Sign in required').replace(/'/g,"\\'")}', 'error')">${d.btnAdd || '➕ Add'}</button>`;
+                } else {
+                    actionHtml = `<button class="btn-secondary" style="padding:8px 14px; font-size:0.78rem;" onclick="window.sendFriendRequest('${u.id}', '${(u.name||'').replace(/'/g,"\\'")}')">${d.btnAdd || '➕ Add'}</button>`;
+                }
+            }
+
+            el.innerHTML = `
+                <div class="user-info">
+                    <img src="${u.avatar}" class="user-avatar" loading="lazy" onerror="this.src='Default_Profile.jpg'">
+                    <div style="min-width:0;">
+                        <strong style="color:var(--text); font-size:1.05rem; display:block;">${u.name} ${isMe ? '<span style="color:var(--accent); font-size:0.75rem;">(Tu)</span>' : ''}</strong>
+                        <span style="font-size:0.68rem; color:var(--accent); font-weight:700;">${u.rank || ''}</span>
+                        ${u.status ? `<div class="user-status">💭 "${u.status}"</div>` : ''}
+                    </div>
+                </div>
+                <div class="user-actions">${actionHtml}</div>
+            `;
+            container.appendChild(el);
+        });
+
+        if (usersFetchFailed) {
+            const notice = document.createElement('div');
+            notice.style.cssText = "font-size:0.72rem; opacity:0.45; text-align:center; padding-top:6px;";
+            notice.innerText = "⚠ Cloud non raggiungibile: mostrando dati locali/cache.";
+            container.appendChild(notice);
+        }
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+        const d = tr() || {};
+        if (user) {
+            authSection.style.display = 'none';
+            userProfileSection.style.display = 'flex';
+            profileMainTitle.innerText = "👤 Profilo Cloud";
+            
+            let cloudName = user.displayName;
+            let cloudStatus = "Nessuno stato";
+            let cloudAvatar = user.photoURL;
+
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if(userDoc.exists()){
+                    const data = userDoc.data();
+                    if(data.name) cloudName = data.name;
+                    if(data.status) cloudStatus = data.status;
+                    if(data.avatar) cloudAvatar = data.avatar;
+                }
+            } catch(e){}
+
+            const finalName = cloudName || localStorage.getItem('gd_username') || 'Player 1';
+            const finalStatus = cloudStatus !== "Nessuno stato" ? cloudStatus : (localStorage.getItem('gd_status') || 'Nessuno stato');
+            const finalAvatar = cloudAvatar || localStorage.getItem('gd_custom_avatar') || 'Default_Profile.jpg';
+
+            document.getElementById('profileNameInput').value = finalName;
+            document.getElementById('sidebarNameText').innerText = finalName;
+            document.getElementById('profileStatusInput').value = finalStatus === 'Nessuno stato' ? '' : finalStatus;
+            document.getElementById('sidebarStatusText').innerText = finalStatus;
+            document.getElementById('pageAvatarPreview').src = finalAvatar;
+            document.getElementById('sidebarAvatarImg').src = finalAvatar;
+            const mobileAvatar = document.getElementById('sidebarAvatarImgMobile');
+            if (mobileAvatar) mobileAvatar.src = finalAvatar;
+
+            localStorage.setItem('gd_username', finalName);
+            localStorage.setItem('gd_status', finalStatus);
+            localStorage.setItem('gd_custom_avatar', finalAvatar);
+
+            updateRequestBadge();
+            if (friendReqPollInterval) clearInterval(friendReqPollInterval);
+            friendReqPollInterval = setInterval(updateRequestBadge, 25000);
+            
+        } else {
+            authSection.style.display = 'flex';
+            userProfileSection.style.display = 'none';
+            profileMainTitle.innerText = d.authMain || "Autenticazione Sistema";
+            
+            const guestName = localStorage.getItem('gd_username') || 'Ospite';
+            document.getElementById('sidebarNameText').innerText = guestName;
+            document.getElementById('profileNameInput').value = guestName === 'Ospite' ? '' : guestName;
+            
+            const guestAvatar = localStorage.getItem('gd_custom_avatar') || 'Default_Profile.jpg';
+            document.getElementById('sidebarAvatarImg').src = guestAvatar;
+            document.getElementById('pageAvatarPreview').src = guestAvatar;
+            const mobileAvatar = document.getElementById('sidebarAvatarImgMobile');
+            if (mobileAvatar) mobileAvatar.src = guestAvatar;
+
+            document.getElementById('reqBadge')?.classList.remove('show');
+            if (friendReqPollInterval) { clearInterval(friendReqPollInterval); friendReqPollInterval = null; }
+        }
+        if (window.updateUserRankUI) window.updateUserRankUI();
+        if (window.renderSocialList) window.renderSocialList();
+    });
+
+    function mapAuthError(error, d) {
+        switch (error.code) {
+            case 'auth/operation-not-allowed': return "❌ Abilita il metodo 'Email/Password' su Firebase console!";
+            case 'auth/email-already-in-use': return d.invalidEmail ? "✉️ Questa email è già registrata." : "Email already registered.";
+            case 'auth/invalid-email': return d.invalidEmail || "Invalid email format.";
+            case 'auth/weak-password': return d.weakPw || "Password too weak.";
+            case 'auth/too-many-requests': return d.tooManyReq || "Too many attempts.";
+            case 'auth/network-request-failed': return d.networkErr || "Network error.";
+            case 'auth/user-not-found':
+            case 'auth/wrong-password':
+            case 'auth/invalid-credential': return "❌ Email o password errati.";
+            default: return "⚠️ Errore: " + error.message;
+        }
+    }
+
+    const firebaseAuthActions = {
+        register: async () => {
+            const d = tr() || {};
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value;
+
+            if (!email || !email.includes('@') || !email.includes('.')) {
+                showError("⚠️ " + (d.invalidEmail || "Inserisci un indirizzo email valido!"));
+                return;
+            }
+            if (password.length < 6) {
+                showError("⚠️ " + (d.weakPw || "La password deve contenere almeno 6 caratteri!"));
+                return;
+            }
+
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, email, password);
+                authError.style.display = 'none';
+                
+                const initialRank = window.updateUserRankUI ? window.updateUserRankUI() : "🟢 Novice Demon Slayer";
+                await setDoc(doc(db, "users", cred.user.uid), {
+                    name: email.split('@')[0],
+                    status: "Appena unito al Cloud OS!",
+                    avatar: "Default_Profile.jpg",
+                    rank: initialRank,
+                    friends: {}, incoming: {}, outgoing: {}
+                });
+
+                showToast("🎉 Account cloud creato con successo!", 'success');
+                if (window.playSfx) window.playSfx('win');
+            } catch (error) {
+                showError(mapAuthError(error, d));
+            }
+        },
+        
+        login: async () => {
+            const d = tr() || {};
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value;
+            if (!email || !password) { showError("⚠️ " + (d.invalidEmail || "Inserisci email e password.")); return; }
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                authError.style.display = 'none';
+                if (window.playSfx) window.playSfx('win');
+            } catch (error) { 
+                showError(mapAuthError(error, d));
+            }
+        },
+
+        forgotPassword: async () => {
+            const d = tr() || {};
+            const email = document.getElementById('emailInput').value.trim();
+            if (!email || !email.includes('@')) {
+                showError("⚠️ " + (d.invalidEmail || "Inserisci prima la tua email nel campo sopra."));
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                authError.style.display = 'none';
+                showToast(d.resetPwSent || "Reset email sent!", 'success', '📧');
+            } catch (error) {
+                showError(mapAuthError(error, d));
+            }
+        },
+        
+        logout: async () => {
+            if (window.playSfx) window.playSfx('click');
+            await signOut(auth);
+        },
+        
+        saveProfile: async () => {
+            if (window.playSfx) window.playSfx('win');
+            const d = tr() || {};
+            
+            const newName = document.getElementById('profileNameInput').value.trim() || 'Player 1';
+            const newStatus = document.getElementById('profileStatusInput').value.trim() || 'Nessuno stato';
+            const currentAvatar = document.getElementById('pageAvatarPreview').src;
+            const currentRank = window.updateUserRankUI ? window.updateUserRankUI() : "🟢 Novice Demon Slayer";
+
+            localStorage.setItem('gd_username', newName);
+            localStorage.setItem('gd_status', newStatus);
+            document.getElementById('sidebarNameText').innerText = newName;
+            document.getElementById('sidebarStatusText').innerText = newStatus;
+
+            if (auth.currentUser) {
+                await updateProfile(auth.currentUser, { displayName: newName });
+                try {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), {
+                        name: newName,
+                        status: newStatus,
+                        avatar: currentAvatar,
+                        rank: currentRank
+                    }, { merge: true });
+                } catch(e) {
+                    console.warn("Impossibile salvare sul cloud DB, modifiche mantenute localmente.");
+                    showToast(d.networkErr || "Network error, saved locally only.", 'error');
+                }
+            }
+            showToast("Profilo e stato cloud aggiornati!", 'success');
+            if (window.updateUserRankUI) window.updateUserRankUI();
+            if (window.renderSocialList) window.renderSocialList();
+        },
+
+        uploadAvatar: async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) {
+                showToast("⚠️ Immagine troppo grande (max 5MB).", 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64Url = e.target.result;
+                document.getElementById('pageAvatarPreview').src = base64Url;
+                document.getElementById('sidebarAvatarImg').src = base64Url;
+                const mobileAvatar = document.getElementById('sidebarAvatarImgMobile');
+                if (mobileAvatar) mobileAvatar.src = base64Url;
+                localStorage.setItem('gd_custom_avatar', base64Url);
+
+                if (auth.currentUser) {
+                    try {
+                        await setDoc(doc(db, "users", auth.currentUser.uid), { avatar: base64Url }, { merge: true });
+                    } catch(err){}
+                }
+            };
+            reader.readAsDataURL(file);
+
+            if (auth.currentUser) {
+                document.getElementById('pageAvatarPreview').style.opacity = '0.5';
+                try {
+                    const storageRef = ref(storage, `avatars/${auth.currentUser.uid}`);
+                    await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(storageRef);
+                    await updateProfile(auth.currentUser, { photoURL: downloadURL });
+                    await setDoc(doc(db, "users", auth.currentUser.uid), { avatar: downloadURL }, { merge: true });
+                } catch (error) {
+                    console.warn("Utilizzo del fallback locale per l'immagine.");
+                } finally {
+                    document.getElementById('pageAvatarPreview').style.opacity = '1';
+                    if(window.renderSocialList) window.renderSocialList();
+                }
+            }
+        }
+    };
+
+    document.getElementById('btnRegister').addEventListener('click', firebaseAuthActions.register);
+    document.getElementById('btnLogin').addEventListener('click', firebaseAuthActions.login);
+    document.getElementById('btnForgotPw').addEventListener('click', firebaseAuthActions.forgotPassword);
+    document.getElementById('btnLogout').addEventListener('click', firebaseAuthActions.logout);
+    document.getElementById('btnSaveProfile').addEventListener('click', firebaseAuthActions.saveProfile);
+    document.getElementById('avatarUpload').addEventListener('change', firebaseAuthActions.uploadAvatar);
+
+    // Allow Enter key to submit login form
+    document.getElementById('passwordInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') firebaseAuthActions.login();
+    });
+</script>
+</body>
+</html>
