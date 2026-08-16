@@ -564,6 +564,7 @@
 <button class="tab-btn active"id="tabBrowse"onclick="switchSocialTab('browse')"><span id="tabBrowseLbl">Esplora</span></button>
 <button class="tab-btn"id="tabFriends"onclick="switchSocialTab('friends')"><span id="tabFriendsLbl">Amici</span><span class="tab-count"id="friendsCount">0</span></button>
 <button class="tab-btn"id="tabRequests"onclick="switchSocialTab('requests')"><span id="tabRequestsLbl">Richieste</span><span class="tab-count"id="requestsCount"style="display:none;">0</span></button>
+<button class="tab-btn"id="tabBlocked"onclick="switchSocialTab('blocked')"><span id="tabBlockedLbl">Bloccati</span></button>
 </div>
  
 <input type="text"id="socialSearchInput"placeholder="Cerca utente per nome o stato..."oninput="if(window.renderSocialList) window.renderSocialList()">
@@ -767,6 +768,25 @@
 </div>
 </div>
 </div>
+<div id="profileViewModal"class="modal-overlay">
+<div class="modal-box"style="width:480px; text-align:left;">
+<div style="display:flex; align-items:center; gap:14px;">
+<img id="pvAvatar"src="Default_Profile.jpg"style="width:64px; height:64px; border-radius:16px; object-fit:cover; border:2px solid var(--accent);">
+<div style="min-width:0; flex:1;">
+<h3 id="pvName"style="margin:0; font-size:1.3rem; color:var(--text); font-weight:900;"></h3>
+<span id="pvRank"style="font-size:0.72rem; font-weight:700; color:var(--accent);"></span>
+</div>
+</div>
+<p id="pvStatus"style="margin:0; font-size:0.85rem; opacity:0.75; font-style:italic;"></p>
+<div style="display:flex; gap:14px; font-size:0.8rem; opacity:0.85;">
+<span><strong id="pvBeatenCount"style="color:var(--accent);">0</strong> <span id="pvBeatenLbl">Livelli Completati</span></span>
+</div>
+<div id="pvLevelsList"style="display:flex; flex-direction:column; gap:8px; max-height:280px; overflow-y:auto; padding-right:6px;"></div>
+<div class="confirm-actions"id="pvActions">
+<button class="btn-secondary"style="flex:1; padding:12px;"id="pvCloseBtn"onclick="window.closeUserProfile()">Chiudi</button>
+</div>
+</div>
+</div>
 <script>
  const mockLevels = [
  { rank: 1, name:"Tidal Wave", thumb:"https://i.ytimg.com/vi/4T3mZ9QG6W0/mqdefault.jpg", videoVerifier:"4T3mZ9QG6W0", videoShowcase:"P75R562qf9c", verified: true, creator:"OniLink", verifier:"Zoink", levelID:"95638150", song:"Shiawase VIP - Dion Timmer", desc:"L'Extreme Demon attuale Top 1. Difficoltà leggendaria guidata interamente dal wave.", skill:"Wave"},
@@ -952,7 +972,8 @@
  alertReset:"Dati resettati con successo!", confirmReset:"Sei sicuro di voler resettare tutti i progressi e preferiti locali?", copyIDBtn:"Copia ID",
  authMain:"Autenticazione Sistema", authSub:"Accedi per salvare i tuoi progressi nel cloud e interagire sui social.", emailHolder:"Inserisci Email...", passHolder:"Inserisci Password...", btnReg:"Registrati", btnLog:"Accedi",
  socialTitle:"Social Network & Cloud", socialSub:"Cerca i giocatori nel network, visualizza il loro stato e interagisci.", socialHolder:"Cerca utente per nome o stato...", btnAdd:"Aggiungi", btnLogout:"Disconnetti", btnSaveP:"Salva in Cloud", lblUser:"Nome Utente:", lblStat:"Il tuo Stato (visibile agli altri):", lblChange:"Cambia",
- tabBrowse:"Esplora", tabFriends:"Amici", tabRequests:"Richieste", btnAccept:"Accetta", btnDecline:"Rifiuta", btnRemove:"Rimuovi", btnPending:"⏳ Inviata", btnMessage:"Messaggio", noFriends:"Nessun amico ancora. Esplora il network e invia richieste!", noRequests:"Nessuna richiesta in sospeso.", noUsers:"Nessun utente trovato nel network.", reqSent:"Richiesta di amicizia inviata!", reqAccepted:"Richiesta accettata! Ora siete amici.", reqDeclined:"Richiesta rifiutata.", friendRemoved:"Amico rimosso.", reqAlreadySent:"Richiesta già inviata a questo utente.", reqFromSelf:"Non puoi aggiungere te stesso.", newReqNotif:"Nuova richiesta di amicizia ricevuta!", loadingUsers:"Caricamento giocatori dal Cloud...", authRequired:"Accedi al tuo account per usare le funzioni social.", lblReduceMotion:"Riduci Animazioni (Accessibilità)", forgotPw:"Password dimenticata?", resetPwSent:"Email di reset inviata! Controlla la posta.", weakPw:"Password troppo debole (minimo 6 caratteri).", invalidEmail:"Formato email non valido.", tooManyReq:"Troppi tentativi, riprova tra poco.", networkErr:"Errore di rete. Controlla la connessione.", splashLoading:"CARICAMENTO SISTEMA..."
+ tabBrowse:"Esplora", tabFriends:"Amici", tabRequests:"Richieste", btnAccept:"Accetta", btnDecline:"Rifiuta", btnRemove:"Rimuovi", btnPending:"⏳ Inviata", btnMessage:"Messaggio", noFriends:"Nessun amico ancora. Esplora il network e invia richieste!", noRequests:"Nessuna richiesta in sospeso.", noUsers:"Nessun utente trovato nel network.", reqSent:"Richiesta di amicizia inviata!", reqAccepted:"Richiesta accettata! Ora siete amici.", reqDeclined:"Richiesta rifiutata.", friendRemoved:"Amico rimosso.", reqAlreadySent:"Richiesta già inviata a questo utente.", reqFromSelf:"Non puoi aggiungere te stesso.", newReqNotif:"Nuova richiesta di amicizia ricevuta!", loadingUsers:"Caricamento giocatori dal Cloud...", authRequired:"Accedi al tuo account per usare le funzioni social.", lblReduceMotion:"Riduci Animazioni (Accessibilità)", forgotPw:"Password dimenticata?", resetPwSent:"Email di reset inviata! Controlla la posta.", weakPw:"Password troppo debole (minimo 6 caratteri).", invalidEmail:"Formato email non valido.", tooManyReq:"Troppi tentativi, riprova tra poco.", networkErr:"Errore di rete. Controlla la connessione.", splashLoading:"CARICAMENTO SISTEMA...",
+ tabBlocked:"Bloccati", btnBlock:"Blocca", btnUnblock:"Sblocca", noBlocked:"Nessun utente bloccato.", userBlocked:"Utente bloccato.", userUnblocked:"Utente sbloccato.", confirmBlock:"Bloccare questo utente? Verrà rimosso dagli amici e non potrà più contattarti.", confirmUnblock:"Sblocca questo utente?", profileTitle:"Profilo Giocatore", profileLevelsBeaten:"Livelli Completati", profileInProgress:"In Pratica", profileNoLevels:"Nessun progresso registrato ancora.", profileClose:"Chiudi", btnViewProfile:"Vedi Profilo"
  },
  en: { 
  search:"Search demon by name...", unv:"Verified Only", fav:"Favorites", hSel:"Select a Level", hSub:"Record Leaderboard", btnSub:"Submit Your Record", searchP:"Search player in level...",
@@ -970,7 +991,8 @@
  alertReset:"All local data reset successfully!", confirmReset:"Are you sure you want to reset all your local progress and favorites?", copyIDBtn:"Copy ID",
  authMain:"System Authentication", authSub:"Sign in to save your progress in the cloud and interact on socials.", emailHolder:"Enter Email...", passHolder:"Enter Password...", btnReg:"Register", btnLog:"Sign In",
  socialTitle:"Social Network & Cloud", socialSub:"Search players across the network, view their status and interact.", socialHolder:"Search user by name or status...", btnAdd:"Add", btnLogout:"Sign Out", btnSaveP:"Save to Cloud", lblUser:"Username:", lblStat:"Your Status (visible to others):", lblChange:"Change",
- tabBrowse:"Browse", tabFriends:"Friends", tabRequests:"Requests", btnAccept:"Accept", btnDecline:"Decline", btnRemove:"Remove", btnPending:"⏳ Sent", btnMessage:"Message", noFriends:"No friends yet. Browse the network and send requests!", noRequests:"No pending requests.", noUsers:"No users found in the network.", reqSent:"Friend request sent!", reqAccepted:"Request accepted! You are now friends.", reqDeclined:"Request declined.", friendRemoved:"Friend removed.", reqAlreadySent:"Request already sent to this user.", reqFromSelf:"You can't add yourself.", newReqNotif:"New friend request received!", loadingUsers:"Loading players from the Cloud...", authRequired:"Sign in to your account to use social features.", lblReduceMotion:"Reduce Motion (Accessibility)", forgotPw:"Forgot password?", resetPwSent:"Reset email sent! Check your inbox.", weakPw:"Password too weak (minimum 6 characters).", invalidEmail:"Invalid email format.", tooManyReq:"Too many attempts, try again soon.", networkErr:"Network error. Check your connection.", splashLoading:"BOOTING SYSTEM..."
+ tabBrowse:"Browse", tabFriends:"Friends", tabRequests:"Requests", btnAccept:"Accept", btnDecline:"Decline", btnRemove:"Remove", btnPending:"⏳ Sent", btnMessage:"Message", noFriends:"No friends yet. Browse the network and send requests!", noRequests:"No pending requests.", noUsers:"No users found in the network.", reqSent:"Friend request sent!", reqAccepted:"Request accepted! You are now friends.", reqDeclined:"Request declined.", friendRemoved:"Friend removed.", reqAlreadySent:"Request already sent to this user.", reqFromSelf:"You can't add yourself.", newReqNotif:"New friend request received!", loadingUsers:"Loading players from the Cloud...", authRequired:"Sign in to your account to use social features.", lblReduceMotion:"Reduce Motion (Accessibility)", forgotPw:"Forgot password?", resetPwSent:"Reset email sent! Check your inbox.", weakPw:"Password too weak (minimum 6 characters).", invalidEmail:"Invalid email format.", tooManyReq:"Too many attempts, try again soon.", networkErr:"Network error. Check your connection.", splashLoading:"BOOTING SYSTEM...",
+ tabBlocked:"Blocked", btnBlock:"Block", btnUnblock:"Unblock", noBlocked:"No blocked users.", userBlocked:"User blocked.", userUnblocked:"User unblocked.", confirmBlock:"Block this user? They will be removed from your friends and won't be able to contact you.", confirmUnblock:"Unblock this user?", profileTitle:"Player Profile", profileLevelsBeaten:"Levels Completed", profileInProgress:"In Progress", profileNoLevels:"No progress recorded yet.", profileClose:"Close", btnViewProfile:"View Profile"
  },
  es: { 
  search:"Buscar demonio por nombre...", unv:"Verificados", fav:"Favoritos", hSel:"Selecciona un Nivel", hSub:"Tabla de Récords", btnSub:"Enviar tu Récord", searchP:"Buscar jugador en el nivel...",
@@ -1288,6 +1310,7 @@
  const numVal = parseInt(val);
  DB.progress[DB.currentLvl.name] = numVal;
  localStorage.setItem('gd_prog', JSON.stringify(DB.progress));
+ if (window.auth && window.auth.currentUser && window.syncProgressToCloud) window.syncProgressToCloud();
  updateProgressUI(numVal);
  
  const d = dict[DB.currentLang] || dict['it'];
@@ -1672,6 +1695,7 @@
  setTxt('tabBrowseLbl', d.tabBrowse);
  setTxt('tabFriendsLbl', d.tabFriends);
  setTxt('tabRequestsLbl', d.tabRequests);
+ setTxt('tabBlockedLbl', d.tabBlocked || 'Bloccati');
  
  const navList = document.getElementById('nav-list'); if(navList) navList.title = d.navList;
  const navWeekly = document.getElementById('nav-weekly'); if(navWeekly) navWeekly.title = d.navWeekly;
@@ -1750,6 +1774,7 @@
  if (e.key ==='Escape') {
  document.getElementById('rouletteModal')?.classList.remove('active');
  document.getElementById('confirmModal')?.classList.remove('active');
+ document.getElementById('profileViewModal')?.classList.remove('active');
  closeMobileNav();
  }
  });
@@ -1776,6 +1801,15 @@
  const auth = getAuth(app);
  const storage = getStorage(app);
  const db = getFirestore(app);
+ window.auth = auth;
+
+ async function syncProgressToCloud() {
+ if (!auth.currentUser) return;
+ try {
+ await setDoc(doc(db,"users", auth.currentUser.uid), { progress: DB.progress }, { merge: true });
+ } catch(e) { console.warn("syncProgressToCloud failed", e); }
+ }
+ window.syncProgressToCloud = syncProgressToCloud;
 
  const authSection = document.getElementById('authSection');
  const userProfileSection = document.getElementById('userProfileSection');
@@ -1831,7 +1865,9 @@
  rank: data.rank ||"Novice Demon Slayer",
  friends: data.friends || {},
  incoming: data.incoming || {},
- outgoing: data.outgoing || {}
+ outgoing: data.outgoing || {},
+ blocked: data.blocked || {},
+ progress: data.progress || {}
  });
  }
  });
@@ -1842,7 +1878,7 @@
  console.warn("Firestore users fetch failed, using cached/backup roster:", e && e.code);
  usersFetchFailed = true;
  if (allUsersCache.length >0) return allUsersCache;
- return backupGDUsers.map(u =>({ ...u, friends: {}, incoming: {}, outgoing: {} }));
+ return backupGDUsers.map(u =>({ ...u, friends: {}, incoming: {}, outgoing: {}, blocked: {}, progress: {} }));
  }
  }
 
@@ -1991,6 +2027,114 @@
  }
  }
 
+ async function blockUser(targetId) {
+ const d = tr();
+ if (!auth.currentUser) return;
+ try {
+ const myData = await getMyDocData() || {};
+ const newBlocked = { ...(myData.blocked || {}), [targetId]: true };
+ const newFriends = { ...(myData.friends || {}) };
+ delete newFriends[targetId];
+ const newIncoming = { ...(myData.incoming || {}) };
+ delete newIncoming[targetId];
+ const newOutgoing = { ...(myData.outgoing || {}) };
+ delete newOutgoing[targetId];
+ await setDoc(doc(db,"users", auth.currentUser.uid), { blocked: newBlocked, friends: newFriends, incoming: newIncoming, outgoing: newOutgoing }, { merge: true });
+
+ try {
+ const theirSnap = await getDoc(doc(db,"users", targetId));
+ if (theirSnap.exists()) {
+ const theirData = theirSnap.data();
+ const theirFriends = { ...(theirData.friends || {}) };
+ delete theirFriends[auth.currentUser.uid];
+ const theirIncoming = { ...(theirData.incoming || {}) };
+ delete theirIncoming[auth.currentUser.uid];
+ const theirOutgoing = { ...(theirData.outgoing || {}) };
+ delete theirOutgoing[auth.currentUser.uid];
+ await setDoc(doc(db,"users", targetId), { friends: theirFriends, incoming: theirIncoming, outgoing: theirOutgoing }, { merge: true });
+ }
+ } catch(e) {}
+
+ playSfx('click');
+ showToast(d ? d.userBlocked :'User blocked','info');
+ window.closeUserProfile();
+ if (window.renderSocialList) window.renderSocialList();
+ } catch (e) {
+ console.warn("blockUser failed", e);
+ showToast(d ? d.networkErr :'Network error','error');
+ }
+ }
+
+ async function unblockUser(targetId) {
+ const d = tr();
+ if (!auth.currentUser) return;
+ try {
+ const myData = await getMyDocData() || {};
+ const newBlocked = { ...(myData.blocked || {}) };
+ delete newBlocked[targetId];
+ await setDoc(doc(db,"users", auth.currentUser.uid), { blocked: newBlocked }, { merge: true });
+ playSfx('click');
+ showToast(d ? d.userUnblocked :'User unblocked','info');
+ if (window.renderSocialList) window.renderSocialList();
+ } catch (e) {
+ console.warn("unblockUser failed", e);
+ showToast(d ? d.networkErr :'Network error','error');
+ }
+ }
+
+ function openUserProfile(targetId) {
+ const u = (window._socialUserCache && window._socialUserCache[targetId]) || null;
+ if (!u) return;
+ const d = tr() || {};
+
+ document.getElementById('pvAvatar').src = u.avatar ||'Default_Profile.jpg';
+ document.getElementById('pvName').innerText = u.name ||'Player';
+ document.getElementById('pvRank').innerText = u.rank ||'';
+ document.getElementById('pvStatus').innerText = u.status ?`"${u.status}"`:'';
+ document.getElementById('pvBeatenLbl').innerText = d.profileLevelsBeaten ||'Levels Completed';
+
+ const progress = u.progress || {};
+ const levels = (window.DB && window.DB.levels) || [];
+ const beaten = [];
+ const inProgress = [];
+ levels.forEach(lvl =>{
+ const p = progress[lvl.name];
+ if (p === 100) beaten.push(lvl);
+ else if (p >0) inProgress.push({ ...lvl, percent: p });
+ });
+ document.getElementById('pvBeatenCount').innerText = beaten.length;
+
+ const listEl = document.getElementById('pvLevelsList');
+ if (beaten.length === 0 && inProgress.length === 0) {
+ listEl.innerHTML =`<p style="opacity:0.5; font-size:0.85rem; text-align:center;">${d.profileNoLevels ||'No progress recorded yet.'}</p>`;
+ } else {
+ let html ='';
+ beaten.forEach(l =>{
+ html +=`<div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:rgba(var(--shine),0.04); border-radius:10px;"><span style="font-size:0.85rem;">${window.escapeHtml(l.name)}</span><span class="status-badge st-beaten"style="font-size:0.65rem;">100%</span></div>`;
+ });
+ inProgress.sort((a,b) =>b.percent - a.percent).forEach(l =>{
+ html +=`<div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:rgba(var(--shine),0.03); border-radius:10px;"><span style="font-size:0.85rem; opacity:0.8;">${window.escapeHtml(l.name)}</span><span style="font-size:0.7rem; opacity:0.6;">${l.percent}%</span></div>`;
+ });
+ listEl.innerHTML = html;
+ }
+
+ const actionsEl = document.getElementById('pvActions');
+ let btns =`<button class="btn-secondary"style="flex:1; padding:12px;"onclick="window.closeUserProfile()">${d.profileClose ||'Close'}</button>`;
+ const isMe = auth.currentUser && auth.currentUser.uid === targetId;
+ if (!isMe && auth.currentUser) {
+ btns +=`<button class="btn-secondary"style="flex:1; padding:12px; color:#ff5a6a;"onclick="window.blockUserUI('${targetId}','${(u.name||'').replace(/'/g,"\\'")}')">${d.btnBlock ||'Block'}</button>`;
+ }
+ actionsEl.innerHTML = btns;
+
+ playSfx('click');
+ document.getElementById('profileViewModal').classList.add('active');
+ }
+ function closeUserProfile() {
+ document.getElementById('profileViewModal').classList.remove('active');
+ }
+ window.openUserProfile = openUserProfile;
+ window.closeUserProfile = closeUserProfile;
+
  window.sendFriendRequest = sendFriendRequest;
  window.acceptFriendRequestUI = (fromId) =>acceptFriendRequest(fromId);
  window.declineFriendRequestUI = (fromId) =>declineFriendRequest(fromId);
@@ -1998,6 +2142,16 @@
  const d = tr();
  const ok = await showConfirm(d ?`${d.btnRemove.replace('','')}: ${friendName}?`:`Remove ${friendName}?`);
  if (ok) removeFriend(friendId);
+ };
+ window.blockUserUI = async (targetId, targetName) =>{
+ const d = tr();
+ const ok = await showConfirm((d && d.confirmBlock ?d.confirmBlock :`Block ${targetName}? They will be removed from your friends.`));
+ if (ok) blockUser(targetId);
+ };
+ window.unblockUserUI = async (targetId) =>{
+ const d = tr();
+ const ok = await showConfirm((d && d.confirmUnblock ?d.confirmUnblock :'Unblock this user?'));
+ if (ok) unblockUser(targetId);
  };
 
  async function updateRequestBadge() {
@@ -2040,6 +2194,7 @@
  const myFriends = (myData && myData.friends) || {};
  const myOutgoing = (myData && myData.outgoing) || {};
  const myIncoming = (myData && myData.incoming) || {};
+ const myBlocked = (myData && myData.blocked) || {};
 
  updateRequestBadge();
 
@@ -2052,16 +2207,22 @@
  status: localStorage.getItem('gd_status') ||"Nessuno stato",
  avatar: localStorage.getItem('gd_custom_avatar') ||"Default_Profile.jpg",
  rank: window.updateUserRankUI ? window.updateUserRankUI() :"Novice Demon Slayer",
- friends: {}, incoming: {}, outgoing: {}
+ friends: {}, incoming: {}, outgoing: {}, blocked: {}, progress: DB.progress
  });
  }
+
+ // Cache full user objects for profile modal lookups
+ window._socialUserCache = window._socialUserCache || {};
+ workingList.forEach(u =>{ window._socialUserCache[u.id] = u; });
 
  let displayList = [];
  if (tab ==='browse') {
  const q = (document.getElementById('socialSearchInput')?.value ||"").trim().toLowerCase();
- displayList = workingList.filter(u =>
- u.name.toLowerCase().includes(q) || (u.status && u.status.toLowerCase().includes(q))
- );
+ displayList = workingList.filter(u =>{
+ if (myBlocked[u.id]) return false; // hide users I blocked
+ if (u.blocked && auth.currentUser && u.blocked[auth.currentUser.uid]) return false; // hide users who blocked me
+ return u.name.toLowerCase().includes(q) || (u.status && u.status.toLowerCase().includes(q));
+ });
  } else if (tab ==='friends') {
  const friendIds = Object.keys(myFriends);
  displayList = workingList.filter(u =>friendIds.includes(u.id));
@@ -2071,6 +2232,12 @@
  const found = workingList.find(u =>u.id === id);
  return found || { id, name: myIncoming[id].name ||'Player', avatar: myIncoming[id].avatar ||'Default_Profile.jpg', status:'', rank:''};
  });
+ } else if (tab ==='blocked') {
+ const blockedIds = Object.keys(myBlocked);
+ displayList = blockedIds.map(id =>{
+ const found = workingList.find(u =>u.id === id);
+ return found || { id, name:'Player', avatar:'Default_Profile.jpg', status:'', rank:''};
+ });
  }
 
  document.getElementById('friendsCount').innerText = Object.keys(myFriends).length;
@@ -2078,7 +2245,7 @@
  container.innerHTML ="";
 
  if (displayList.length === 0) {
- const emptyMsg = tab ==='browse'? (d.noUsers ||'No users found') : (tab ==='friends'? (d.noFriends ||'No friends yet') : (d.noRequests ||'No requests'));
+ const emptyMsg = tab ==='browse'? (d.noUsers ||'No users found') : (tab ==='friends'? (d.noFriends ||'No friends yet') : (tab ==='requests'? (d.noRequests ||'No requests') : (d.noBlocked ||'No blocked users')));
  const emptyIcon = tab ==='browse'?`<svg class="icon-svg"viewBox="0 0 24 24"><circle cx="10.5"cy="10.5"r="6.5"/><path d="M20 20l-4.5-4.5"/></svg>`: (tab ==='friends'?`<svg class="icon-svg"viewBox="0 0 24 24"><circle cx="8.5"cy="8"r="3"/><circle cx="17.5"cy="8.5"r="2.4"/><path d="M2.5 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M15.6 13.7c2.6.3 4.9 2.2 4.9 5.3"/></svg>`:`<svg class="icon-svg"viewBox="0 0 24 24"><rect x="3"y="5"width="18"height="14"rx="2"/><path d="M3 6l9 6 9-6"/></svg>`);
  container.innerHTML =`<div class="empty-state"><span class="empty-icon">${emptyIcon}</span><span>${emptyMsg}</span></div>`;
  return;
@@ -2099,23 +2266,31 @@
 <button class="btn-secondary"style="padding:8px 14px; font-size:0.78rem;"onclick="window.declineFriendRequestUI('${u.id}')">${d.btnDecline ||'Decline'}</button>
 `;
  } else if (tab ==='friends') {
- actionHtml =`<button class="btn-secondary"style="padding:8px 14px; font-size:0.78rem;"onclick="window.removeFriendUI('${u.id}','${(u.name||'').replace(/'/g,"\\'")}')">${d.btnRemove ||'Remove'}</button>`;
+ actionHtml =`
+<button class="btn-secondary"style="padding:8px 14px; font-size:0.78rem;"onclick="window.removeFriendUI('${u.id}','${(u.name||'').replace(/'/g,"\\'")}')">${d.btnRemove ||'Remove'}</button>
+<button class="btn-secondary"style="padding:8px 14px; font-size:0.78rem; color:#ff5a6a;"onclick="window.blockUserUI('${u.id}','${(u.name||'').replace(/'/g,"\\'")}')">${d.btnBlock ||'Block'}</button>
+`;
+ } else if (tab ==='blocked') {
+ actionHtml =`<button class="btn-secondary"style="padding:8px 14px; font-size:0.78rem;"onclick="window.unblockUserUI('${u.id}')">${d.btnUnblock ||'Unblock'}</button>`;
  } else {
+ let friendActionHtml ='';
  if (myFriends[u.id]) {
- actionHtml =`<span class="btn-secondary active"style="padding:8px 14px; font-size:0.78rem; cursor:default;">${d.tabFriends ||'Friends'}</span>`;
+ friendActionHtml =`<span class="btn-secondary active"style="padding:8px 14px; font-size:0.78rem; cursor:default;">${d.tabFriends ||'Friends'}</span>`;
  } else if (myOutgoing[u.id]) {
- actionHtml =`<span class="btn-secondary"style="padding:8px 14px; font-size:0.78rem; opacity:0.6; cursor:default;">${d.btnPending ||'⏳ Sent'}</span>`;
+ friendActionHtml =`<span class="btn-secondary"style="padding:8px 14px; font-size:0.78rem; opacity:0.6; cursor:default;">${d.btnPending ||'⏳ Sent'}</span>`;
  } else if (myIncoming[u.id]) {
- actionHtml =`<button class="btn-custom"style="padding:8px 14px; font-size:0.78rem;"onclick="window.acceptFriendRequestUI('${u.id}')">${d.btnAccept ||'Accept'}</button>`;
+ friendActionHtml =`<button class="btn-custom"style="padding:8px 14px; font-size:0.78rem;"onclick="window.acceptFriendRequestUI('${u.id}')">${d.btnAccept ||'Accept'}</button>`;
  } else if (!auth.currentUser) {
- actionHtml =`<button class="btn-secondary"style="padding:8px 14px; font-size:0.78rem; opacity:0.7;"onclick="window.showToast && window.showToast('${(d.authRequired ||'Sign in required').replace(/'/g,"\\'")}','error')">${d.btnAdd ||'Add'}</button>`;
+ friendActionHtml =`<button class="btn-secondary"style="padding:8px 14px; font-size:0.78rem; opacity:0.7;"onclick="window.showToast && window.showToast('${(d.authRequired ||'Sign in required').replace(/'/g,"\\'")}','error')">${d.btnAdd ||'Add'}</button>`;
  } else {
- actionHtml =`<button class="btn-secondary"style="padding:8px 14px; font-size:0.78rem;"onclick="window.sendFriendRequest('${u.id}','${(u.name||'').replace(/'/g,"\\'")}')">${d.btnAdd ||'Add'}</button>`;
+ friendActionHtml =`<button class="btn-secondary"style="padding:8px 14px; font-size:0.78rem;"onclick="window.sendFriendRequest('${u.id}','${(u.name||'').replace(/'/g,"\\'")}')">${d.btnAdd ||'Add'}</button>`;
  }
+ const blockActionHtml = auth.currentUser ?`<button class="btn-secondary"style="padding:8px 14px; font-size:0.78rem; color:#ff5a6a;"onclick="window.blockUserUI('${u.id}','${(u.name||'').replace(/'/g,"\\'")}')">${d.btnBlock ||'Block'}</button>`:'';
+ actionHtml = friendActionHtml + blockActionHtml;
  }
 
  el.innerHTML =`
-<div class="user-info">
+<div class="user-info"style="cursor:pointer;"onclick="window.openUserProfile('${u.id}')">
 <img src="${u.avatar}"class="user-avatar"loading="lazy"onerror="this.src='Default_Profile.jpg'">
 <div style="min-width:0;">
 <strong style="color:var(--text); font-size:1.05rem; display:block;">${u.name} ${isMe ?'<span style="color:var(--accent); font-size:0.75rem;">(Tu)</span>':''}</strong>
@@ -2123,7 +2298,7 @@
  ${u.status ?`<div class="user-status">"${u.status}"</div>`:''}
 </div>
 </div>
-<div class="user-actions">${actionHtml}</div>
+<div class="user-actions"style="display:flex; gap:8px;">${actionHtml}</div>
 `;
  container.appendChild(el);
  });
